@@ -784,13 +784,6 @@ if __name__ == '__main__':
         db.create_all()
     app.run(debug=False, host='0.0.0.0', port=5000)
 
-    except Exception as e:
-        # Any other error
-        app.logger.error(f"PDF generation error: {str(e)}")
-        # Fallback to HTML download
-        flash(f'Error generating PDF. Downloading HTML version instead.', 'warning')
-        return download_html_fallback(valuation_id, valuation)
-
 def download_html_fallback(valuation_id, valuation):
     """Fallback function to download HTML version when PDF generation fails"""
     # Get photo paths and convert to base64
