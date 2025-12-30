@@ -49,13 +49,15 @@
     <div class="letterhead">
         <div class="contact-info">
             Mobile: 9371218146<br>
-            Email: {{ current_user.email if current_user else 'vipul@gmail.com' }}<br>
+            Email: jogeshwari2@yahoo.com<br>
             Consultancy No: [Your License No.]
         </div>
 
-        <div class="company-name">{{ current_user.username.upper() if current_user else 'VIPUL' }}</div>
-        <div class="professional-title">Consulting Engineer & Approved Valuer</div>
-        <div>FIE, MIE, FIV, MRICS (Optional - if applicable)</div>
+        <div class="company-name">Jogeshwari</div>
+        <div class="professional-title">Consultancy</div>
+        <div>PRASHANT R.PATIL(M.E.)</div>
+        <div>CONSULTING ENGINEER</div>
+        <div>9371218146</div>
     </div>
 
     <div class="report-title">
@@ -548,9 +550,9 @@
 
     <!-- Footer -->
     <div class="footer">
-        This is a confidential document prepared for valuation purposes only.<br>
-        <!-- FIXED: Use existing dates instead of datetime.now().year -->
-        Copyright © {{ valuation.submission_date.year if valuation.submission_date else valuation.valuation_date.year if valuation.valuation_date else '2025' }} {{ current_user.username if current_user else 'VIPUL' }} Consulting. All rights reserved.<br>
+        Register no. with CBDT / CCIT: - [66/13(Imm.Prop.)]/CAT-I/2013-14, FIV-14202, FCET, MIE.<br>
+        PLANING / DESIGN / VALUER<br>
+        Viththal Mandir Ward, Deshmukh Building, Bhusawal 425 201 (O) 221594 E-Mail: jogeshwari2@yahoo.com<br>
         <div class="page-number"></div>
     </div>
 </body>
