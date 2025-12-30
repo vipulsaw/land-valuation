@@ -468,6 +468,22 @@
         </tr>
     </table>
 
+    <div class="page-break"></div>
+
+    <div class="section-title">XI. PROPERTY IMAGES</div>
+    <div class="image-gallery" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 20px;">
+        {% if encoded_photos %}
+            {% for photo in encoded_photos %}
+                <div style="border: 1px solid #eee; padding: 10px; text-align: center;">
+                    <img src="{{ photo }}" style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
+                    <p style="margin-top: 10px; font-size: 10pt; color: #555;">Image {{ loop.index }}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No images uploaded for this property.</p>
+        {% endif %}
+    </div>
+
     <div class="section-title">IX. VALUATION ASSUMPTIONS & LIMITATIONS</div>
 
     <div class="remarks-box">
