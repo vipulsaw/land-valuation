@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hero">
+    <h2>Welcome to Land Valuation System</h2>
+    <p>
+        <i class="fas fa-chart-line"></i> Modern platform for professional land valuation management
+    </p>
+    <div class="hero-buttons">
+        <a href="{{ url_for('register') }}" class="btn btn-success">
+            <i class="fas fa-rocket"></i> Get Started
+        </a>
+        <a href="{{ url_for('login') }}" class="btn btn-secondary">
+            <i class="fas fa-sign-in-alt"></i> Login
+        </a>
+    </div>
+</div>
+
+<div class="feature-grid">
+    <div class="card feature-card">
+        <i class="fas fa-shield-alt" style="background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
+        <h3>Secure & Reliable</h3>
+        <p>Enterprise-grade security protecting your sensitive valuation data</p>
+    </div>
+    <div class="card feature-card">
+        <i class="fas fa-file-pdf" style="color: var(--danger);"></i>
+        <h3>Instant PDF Reports</h3>
+        <p>Generate professional reports with just one click</p>
+    </div>
+    <div class="card feature-card">
+        <i class="fas fa-cloud-upload-alt" style="color: var(--success);"></i>
+        <h3>Smart Upload</h3>
+        <p>Drag and drop photos with automatic processing</p>
+    </div>
+</div>
+{% endblock %}

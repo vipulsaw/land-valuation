@@ -1,0 +1,538 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Valuation - Land Valuation System{% endblock %}
+
+{% block content %}
+<div style="max-width: 900px; margin: 0 auto;">
+    <div style="text-align: center; margin-bottom: 3rem;">
+        <i class="fas fa-edit" style="font-size: 4rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
+        <h2 style="margin-top: 1.5rem;">Edit Valuation Report</h2>
+        <p style="color: #666; font-size: 1.1rem;">Update the details of valuation report #VAL/{{ "%04d"|format(valuation.id) }}/{{ valuation.submission_date.year }}</p>
+    </div>
+
+    <form method="POST" enctype="multipart/form-data">
+        <!-- SECTION 1: Header Information -->
+        <div class="card">
+            <h3 style="margin-bottom: 1.5rem; color: var(--dark); font-size: 1.5rem; border-bottom: 2px solid var(--primary); padding-bottom: 0.5rem;">
+                <i class="fas fa-building"></i> Valuer & Reference Details
+            </h3>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="valuation_requested_by"><i class="fas fa-bank"></i> Valuation Requested By</label>
+                    <input type="text" id="valuation_requested_by" name="valuation_requested_by" required 
+                           value="{{ valuation.valuation_requested_by }}" placeholder="e.g., DCB Bank Limited">
+                </div>
+                
+                <div class="form-group">
+                    <label for="valuation_purpose"><i class="fas fa-bullseye"></i> Purpose of Valuation</label>
+                    <input type="text" id="valuation_purpose" name="valuation_purpose" required 
+                           value="{{ valuation.valuation_purpose }}" placeholder="e.g., For collateral security">
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="inspection_date"><i class="fas fa-calendar-check"></i> Date of Inspection</label>
+                    <input type="date" id="inspection_date" name="inspection_date" required 
+                           value="{{ valuation.inspection_date.strftime('%Y-%m-%d') if valuation.inspection_date else '' }}">
+                </div>
+                
+                <div class="form-group">
+                    <label for="valuation_date"><i class="fas fa-calendar-alt"></i> Date of Valuation</label>
+                    <input type="date" id="valuation_date" name="valuation_date" required 
+                           value="{{ valuation.valuation_date.strftime('%Y-%m-%d') if valuation.valuation_date else '' }}">
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 2: Client Information -->
+        <div class="card">
+            <h3 style="margin-bottom: 1.5rem; color: var(--dark); font-size: 1.5rem; border-bottom: 2px solid var(--primary); padding-bottom: 0.5rem;">
+                <i class="fas fa-user-tie"></i> Client Information
+            </h3>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="client_name"><i class="fas fa-user"></i> Client Name</label>
+                    <input type="text" id="client_name" name="client_name" required 
+                           value="{{ valuation.client_name }}" placeholder="Client's full name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="case_number"><i class="fas fa-hashtag"></i> Case Number</label>
+                    <input type="text" id="case_number" name="case_number" 
+                           value="{{ valuation.case_number or '' }}" placeholder="Case/File number">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="loan_type"><i class="fas fa-hand-holding-usd"></i> Type of Loan</label>
+                <select id="loan_type" name="loan_type" required>
+                    <option value="">Select Loan Type</option>
+                    <option value="Home Loan" {% if valuation.loan_type == 'Home Loan' %}selected{% endif %}>Home Loan</option>
+                    <option value="Business Loan" {% if valuation.loan_type == 'Business Loan' %}selected{% endif %}>Business Loan</option>
+                    <option value="Personal Loan" {% if valuation.loan_type == 'Personal Loan' %}selected{% endif %}>Personal Loan</option>
+                    <option value="Loan Against Property" {% if valuation.loan_type == 'Loan Against Property' %}selected{% endif %}>Loan Against Property</option>
+                    <option value="Construction Loan" {% if valuation.loan_type == 'Construction Loan' %}selected{% endif %}>Construction Loan</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- SECTION 3: Property Information -->
+        <div class="card">
+            <h3 style="margin-bottom: 1.5rem; color: var(--dark); font-size: 1.5rem; border-bottom: 2px solid var(--primary); padding-bottom: 0.5rem;">
+                <i class="fas fa-home"></i> Property Information
+            </h3>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="property_owner"><i class="fas fa-user-check"></i> Property Owner (as per documents)</label>
+                    <input type="text" id="property_owner" name="property_owner" required 
+                           value="{{ valuation.property_owner }}" placeholder="Legal owner name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="property_type"><i class="fas fa-tag"></i> Type of Property</label>
+                    <select id="property_type" name="property_type" required>
+                        <option value="">Select Property Type</option>
+                        <option value="Independent House" {% if valuation.property_type == 'Independent House' %}selected{% endif %}>Independent House</option>
+                        <option value="Flat" {% if valuation.property_type == 'Flat' %}selected{% endif %}>Flat</option>
+                        <option value="Office" {% if valuation.property_type == 'Office' %}selected{% endif %}>Office</option>
+                        <option value="Shop" {% if valuation.property_type == 'Shop' %}selected{% endif %}>Shop</option>
+                        <option value="Plot" {% if valuation.property_type == 'Plot' %}selected{% endif %}>Plot</option>
+                        <option value="Commercial Building" {% if valuation.property_type == 'Commercial Building' %}selected{% endif %}>Commercial Building</option>
+                        <option value="Agricultural Land" {% if valuation.property_type == 'Agricultural Land' %}selected{% endif %}>Agricultural Land</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="property_address"><i class="fas fa-map-marker-alt"></i> Property Address</label>
+                <textarea id="property_address" name="property_address" required rows="3" 
+                          placeholder="Complete address with city, taluka, district and PIN code">{{ valuation.property_address }}</textarea>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="survey_number"><i class="fas fa-map"></i> Survey/Gat Number</label>
+                    <input type="text" id="survey_number" name="survey_number" 
+                           value="{{ valuation.survey_number or '' }}" placeholder="e.g., 389/2">
+                </div>
+                
+                <div class="form-group">
+                    <label for="plot_number"><i class="fas fa-th"></i> Plot Number</label>
+                    <input type="text" id="plot_number" name="plot_number" 
+                           value="{{ valuation.plot_number or '' }}" placeholder="e.g., 09 (East part)">
+                </div>
+                
+                <div class="form-group">
+                    <label for="cts_number"><i class="fas fa-hashtag"></i> CTS Number</label>
+                    <input type="text" id="cts_number" name="cts_number" 
+                           value="{{ valuation.cts_number or '' }}" placeholder="CTS number if applicable">
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 4: Plot Area & Dimensions -->
+        <div class="card">
+            <h3 style="margin-bottom: 1.5rem; color: var(--dark); font-size: 1.5rem; border-bottom: 2px solid var(--primary); padding-bottom: 0.5rem;">
+                <i class="fas fa-ruler-combined"></i> Plot Area & Boundaries
+            </h3>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="plot_area_sqm"><i class="fas fa-square"></i> Plot Area (Sqm)</label>
+                    <input type="number" id="plot_area_sqm" name="plot_area_sqm" step="0.01" required 
+                           value="{{ valuation.plot_area_sqm or 0 }}" placeholder="e.g., 76.25">
+                </div>
+                
+                <div class="form-group">
+                    <label for="plot_area_sqft"><i class="fas fa-expand"></i> Plot Area (Sqft)</label>
+                    <input type="number" id="plot_area_sqft" name="plot_area_sqft" step="0.01" required 
+                           value="{{ valuation.plot_area_sqft or 0 }}" placeholder="e.g., 820.45">
+                </div>
+            </div>
+            
+            <h4 style="margin: 1.5rem 0 1rem 0; color: #555; font-size: 1.1rem;">Boundary Details</h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="east_boundary"><i class="fas fa-compass"></i> East Boundary</label>
+                    <input type="text" id="east_boundary" name="east_boundary" 
+                           value="{{ valuation.east_boundary or '' }}" placeholder="e.g., Plot No. 10">
+                </div>
+                
+                <div class="form-group">
+                    <label for="west_boundary"><i class="fas fa-compass"></i> West Boundary</label>
+                    <input type="text" id="west_boundary" name="west_boundary" 
+                           value="{{ valuation.west_boundary or '' }}" placeholder="e.g., Remaining part of...">
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="north_boundary"><i class="fas fa-compass"></i> North Boundary</label>
+                    <input type="text" id="north_boundary" name="north_boundary" 
+                           value="{{ valuation.north_boundary or '' }}" placeholder="e.g., Plot No. 05">
+                </div>
+                
+                <div class="form-group">
+                    <label for="south_boundary"><i class="fas fa-compass"></i> South Boundary</label>
+                    <input type="text" id="south_boundary" name="south_boundary" 
+                           value="{{ valuation.south_boundary or '' }}" placeholder="e.g., Colony Road">
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 5: Location & Access -->
+        <div class="card">
+            <h3 style="margin-bottom: 1.5rem; color: var(--dark); font-size: 1.5rem; border-bottom: 2px solid var(--primary); padding-bottom: 0.5rem;">
+                <i class="fas fa-map-pin"></i> Location & Access Details
+            </h3>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="railway_distance"><i class="fas fa-train"></i> Distance from Railway Station</label>
+                    <input type="text" id="railway_distance" name="railway_distance" 
+                           value="{{ valuation.railway_distance or '' }}" placeholder="e.g., 1.1 Km">
+                </div>
+                
+                <div class="form-group">
+                    <label for="bus_stand_distance"><i class="fas fa-bus"></i> Distance from Bus Stand</label>
+                    <input type="text" id="bus_stand_distance" name="bus_stand_distance" 
+                           value="{{ valuation.bus_stand_distance or '' }}" placeholder="e.g., 1.0 Km">
+                </div>
+                
+                <div class="form-group">
+                    <label for="hospital_distance"><i class="fas fa-hospital"></i> Distance from Hospital</label>
+                    <input type="text" id="hospital_distance" name="hospital_distance" 
+                           value="{{ valuation.hospital_distance or '' }}" placeholder="e.g., 1.0 Km">
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="branch_distance"><i class="fas fa-university"></i> Distance from Bank Branch</label>
+                    <input type="text" id="branch_distance" name="branch_distance" 
+                           value="{{ valuation.branch_distance or '' }}" placeholder="e.g., 34.5 Km">
+                </div>
+                
+                <div class="form-group">
+                    <label for="locality_classification"><i class="fas fa-city"></i> Classification of Locality</label>
+                    <select id="locality_classification" name="locality_classification">
+                        <option value="">Select Classification</option>
+                        <option value="High Class" {% if valuation.locality_classification == 'High Class' %}selected{% endif %}>High Class</option>
+                        <option value="Upper Middle Class" {% if valuation.locality_classification == 'Upper Middle Class' %}selected{% endif %}>Upper Middle Class</option>
+                        <option value="Middle Class" {% if valuation.locality_classification == 'Middle Class' %}selected{% endif %}>Middle Class</option>
+                        <option value="Lower Middle Class" {% if valuation.locality_classification == 'Lower Middle Class' %}selected{% endif %}>Lower Middle Class</option>
+                        <option value="Developing Area" {% if valuation.locality_classification == 'Developing Area' %}selected{% endif %}>Developing Area</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="geo_latitude"><i class="fas fa-globe"></i> GPS Latitude</label>
+                    <input type="text" id="geo_latitude" name="geo_latitude" 
+                           value="{{ valuation.geo_latitude or '' }}" placeholder="e.g., 20.806830">
+                </div>
+                
+                <div class="form-group">
+                    <label for="geo_longitude"><i class="fas fa-globe"></i> GPS Longitude</label>
+                    <input type="text" id="geo_longitude" name="geo_longitude" 
+                           value="{{ valuation.geo_longitude or '' }}" placeholder="e.g., 75.769419">
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 6: Construction Details -->
+        <div class="card">
+            <h3 style="margin-bottom: 1.5rem; color: var(--dark); font-size: 1.5rem; border-bottom: 2px solid var(--primary); padding-bottom: 0.5rem;">
+                <i class="fas fa-hard-hat"></i> Construction Details
+            </h3>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="construction_year"><i class="fas fa-calendar"></i> Year of Construction</label>
+                    <input type="number" id="construction_year" name="construction_year" min="1900" max="2025" 
+                           value="{{ valuation.construction_year or '' }}" placeholder="e.g., 1997">
+                </div>
+                
+                <div class="form-group">
+                    <label for="property_age"><i class="fas fa-history"></i> Age of Property (Years)</label>
+                    <input type="number" id="property_age" name="property_age" min="0" 
+                           value="{{ valuation.property_age or '' }}" placeholder="e.g., 28">
+                </div>
+                
+                <div class="form-group">
+                    <label for="estimated_future_life"><i class="fas fa-clock"></i> Estimated Future Life (Years)</label>
+                    <input type="number" id="estimated_future_life" name="estimated_future_life" min="0" 
+                           value="{{ valuation.estimated_future_life or '' }}" placeholder="e.g., 22">
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="present_condition"><i class="fas fa-clipboard-check"></i> Present Condition</label>
+                    <select id="present_condition" name="present_condition">
+                        <option value="">Select Condition</option>
+                        <option value="Excellent" {% if valuation.present_condition == 'Excellent' %}selected{% endif %}>Excellent</option>
+                        <option value="Good" {% if valuation.present_condition == 'Good' %}selected{% endif %}>Good</option>
+                        <option value="Average" {% if valuation.present_condition == 'Average' %}selected{% endif %}>Average</option>
+                        <option value="Fair" {% if valuation.present_condition == 'Fair' %}selected{% endif %}>Fair</option>
+                        <option value="Poor" {% if valuation.present_condition == 'Poor' %}selected{% endif %}>Poor</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="construction_type"><i class="fas fa-building"></i> Type of Construction</label>
+                    <input type="text" id="construction_type" name="construction_type" 
+                           value="{{ valuation.construction_type or '' }}" placeholder="e.g., Load Bearing structure with BBM walls">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="repairs_required"><i class="fas fa-tools"></i> Immediate Repairs Required</label>
+                <textarea id="repairs_required" name="repairs_required" rows="2" 
+                          placeholder="Describe repairs needed and estimated cost">{{ valuation.repairs_required or '' }}</textarea>
+            </div>
+        </div>
+
+        <!-- SECTION 7: Building Area Details -->
+        <div class="card">
+            <h3 style="margin-bottom: 1.5rem; color: var(--dark); font-size: 1.5rem; border-bottom: 2px solid var(--primary); padding-bottom: 0.5rem;">
+                <i class="fas fa-layer-group"></i> Building Area Details (Sqft)
+            </h3>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="ground_floor_area"><i class="fas fa-home"></i> Ground Floor Area</label>
+                    <input type="number" id="ground_floor_area" name="ground_floor_area" step="0.01" 
+                           value="{{ valuation.ground_floor_area or 0 }}" placeholder="e.g., 325.49">
+                </div>
+                
+                <div class="form-group">
+                    <label for="first_floor_area"><i class="fas fa-building"></i> First Floor Area</label>
+                    <input type="number" id="first_floor_area" name="first_floor_area" step="0.01" 
+                           value="{{ valuation.first_floor_area or 0 }}" placeholder="e.g., 0.00">
+                </div>
+                
+                <div class="form-group">
+                    <label for="second_floor_area"><i class="fas fa-building"></i> Second Floor Area</label>
+                    <input type="number" id="second_floor_area" name="second_floor_area" step="0.01" 
+                           value="{{ valuation.second_floor_area or 0 }}" placeholder="e.g., 0.00">
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="third_floor_area"><i class="fas fa-building"></i> Third Floor Area</label>
+                    <input type="number" id="third_floor_area" name="third_floor_area" step="0.01" 
+                           value="{{ valuation.third_floor_area or 0 }}" placeholder="e.g., 0.00">
+                </div>
+                
+                <div class="form-group">
+                    <label for="basement_area"><i class="fas fa-door-closed"></i> Basement Area</label>
+                    <input type="number" id="basement_area" name="basement_area" step="0.01" 
+                           value="{{ valuation.basement_area or 0 }}" placeholder="e.g., 0.00">
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="built_up_area"><i class="fas fa-calculator"></i> Built-up Area</label>
+                    <input type="number" id="built_up_area" name="built_up_area" step="0.01" 
+                           value="{{ valuation.built_up_area or 0 }}" placeholder="Total built-up area">
+                </div>
+                
+                <div class="form-group">
+                    <label for="carpet_area"><i class="fas fa-border-style"></i> Carpet Area</label>
+                    <input type="number" id="carpet_area" name="carpet_area" step="0.01" 
+                           value="{{ valuation.carpet_area or 0 }}" placeholder="Total carpet area">
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 8: Valuation & Rates -->
+        <div class="card">
+            <h3 style="margin-bottom: 1.5rem; color: var(--dark); font-size: 1.5rem; border-bottom: 2px solid var(--primary); padding-bottom: 0.5rem;">
+                <i class="fas fa-chart-line"></i> Valuation & Market Rates
+            </h3>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="market_rate_min"><i class="fas fa-rupee-sign"></i> Market Rate Min (₹/Sqft)</label>
+                    <input type="number" id="market_rate_min" name="market_rate_min" step="0.01" 
+                           value="{{ valuation.market_rate_min or 0 }}" placeholder="e.g., 2800">
+                </div>
+                
+                <div class="form-group">
+                    <label for="market_rate_max"><i class="fas fa-rupee-sign"></i> Market Rate Max (₹/Sqft)</label>
+                    <input type="number" id="market_rate_max" name="market_rate_max" step="0.01" 
+                           value="{{ valuation.market_rate_max or 0 }}" placeholder="e.g., 3800">
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="rate_adopted"><i class="fas fa-balance-scale"></i> Rate Adopted (₹/Sqft)</label>
+                    <input type="number" id="rate_adopted" name="rate_adopted" step="0.01" required 
+                           value="{{ valuation.rate_adopted or 0 }}" placeholder="e.g., 3500">
+                </div>
+                
+                <div class="form-group">
+                    <label for="land_value"><i class="fas fa-money-bill-wave"></i> Land Value (₹)</label>
+                    <input type="number" id="land_value" name="land_value" step="0.01" required 
+                           value="{{ valuation.land_value or 0 }}" placeholder="e.g., 2871575">
+                </div>
+                
+                <div class="form-group">
+                    <label for="building_value"><i class="fas fa-hard-hat"></i> Building Value (₹)</label>
+                    <input type="number" id="building_value" name="building_value" step="0.01" 
+                           value="{{ valuation.building_value or 0 }}" placeholder="e.g., 455686">
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="repairs_deduction"><i class="fas fa-wrench"></i> Repairs Deduction (₹)</label>
+                    <input type="number" id="repairs_deduction" name="repairs_deduction" step="0.01" 
+                           value="{{ valuation.repairs_deduction or 0 }}" placeholder="Repairs deduction amount">
+                </div>
+                
+                <div class="form-group">
+                    <label for="total_value"><i class="fas fa-calculator"></i> Total Value (₹)</label>
+                    <input type="number" id="total_value" name="total_value" step="0.01" required 
+                           value="{{ valuation.total_value or 0 }}" placeholder="e.g., 3327261">
+                </div>
+                
+                <div class="form-group">
+                    <label for="insurance_value"><i class="fas fa-shield-alt"></i> Insurance Value (₹)</label>
+                    <input type="number" id="insurance_value" name="insurance_value" step="0.01" 
+                           value="{{ valuation.insurance_value or 0 }}" placeholder="e.g., 364548.80">
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="distress_sale_value"><i class="fas fa-exclamation-triangle"></i> Distress Sale Value (₹)</label>
+                    <input type="number" id="distress_sale_value" name="distress_sale_value" step="0.01" 
+                           value="{{ valuation.distress_sale_value or 0 }}" placeholder="e.g., 2495445.75">
+                </div>
+                
+                <div class="form-group">
+                    <label for="percentage_completion"><i class="fas fa-percentage"></i> Percentage Completion</label>
+                    <input type="number" id="percentage_completion" name="percentage_completion" min="0" max="100" step="0.01" 
+                           value="{{ valuation.percentage_completion or 100 }}" placeholder="e.g., 100">
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 9: Marketability -->
+        <div class="card">
+            <h3 style="margin-bottom: 1.5rem; color: var(--dark); font-size: 1.5rem; border-bottom: 2px solid var(--primary); padding-bottom: 0.5rem;">
+                <i class="fas fa-chart-bar"></i> Marketability Assessment
+            </h3>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="sale_marketability"><i class="fas fa-tags"></i> Marketability for Sale</label>
+                    <select id="sale_marketability" name="sale_marketability">
+                        <option value="">Select Rating</option>
+                        <option value="Good" {% if valuation.sale_marketability == 'Good' %}selected{% endif %}>Good</option>
+                        <option value="Average" {% if valuation.sale_marketability == 'Average' %}selected{% endif %}>Average</option>
+                        <option value="Poor" {% if valuation.sale_marketability == 'Poor' %}selected{% endif %}>Poor</option>
+                        <option value="Very Good" {% if valuation.sale_marketability == 'Very Good' %}selected{% endif %}>Very Good</option>
+                        <option value="Excellent" {% if valuation.sale_marketability == 'Excellent' %}selected{% endif %}>Excellent</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="lease_marketability"><i class="fas fa-handshake"></i> Marketability for Lease</label>
+                    <select id="lease_marketability" name="lease_marketability">
+                        <option value="">Select Rating</option>
+                        <option value="Good" {% if valuation.lease_marketability == 'Good' %}selected{% endif %}>Good</option>
+                        <option value="Average" {% if valuation.lease_marketability == 'Average' %}selected{% endif %}>Average</option>
+                        <option value="Poor" {% if valuation.lease_marketability == 'Poor' %}selected{% endif %}>Poor</option>
+                        <option value="Very Good" {% if valuation.lease_marketability == 'Very Good' %}selected{% endif %}>Very Good</option>
+                        <option value="Excellent" {% if valuation.lease_marketability == 'Excellent' %}selected{% endif %}>Excellent</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 10: Documentation -->
+        <div class="card">
+            <h3 style="margin-bottom: 1.5rem; color: var(--dark); font-size: 1.5rem; border-bottom: 2px solid var(--primary); padding-bottom: 0.5rem;">
+                <i class="fas fa-camera"></i> Documentation & Photos
+            </h3>
+            
+            <div class="form-group">
+                <label for="land_photos"><i class="fas fa-images"></i> Update Property Photos (Optional)</label>
+                <input type="file" id="land_photos" name="land_photos" accept="image/*" multiple>
+                <small style="color: #666; display: block; margin-top: 0.7rem; font-size: 0.9rem;">
+                    <i class="fas fa-info-circle"></i> Leave empty to keep existing photos. Upload new photos to replace existing ones.
+                </small>
+            </div>
+            
+            <div class="form-group">
+                <label for="additional_notes"><i class="fas fa-sticky-note"></i> Additional Notes & Remarks</label>
+                <textarea id="additional_notes" name="additional_notes" rows="4" 
+                          placeholder="Any additional information, assumptions, or special remarks...">{{ valuation.additional_notes or '' }}</textarea>
+            </div>
+        </div>
+
+        <!-- SECTION 11: Submit Button -->
+        <div style="display: flex; gap: 1.5rem; justify-content: center; margin-top: 2.5rem; flex-wrap: wrap;">
+            <button type="submit" class="btn btn-success" style="padding: 1.2rem 3.5rem;">
+                <i class="fas fa-save"></i> Update Valuation Report
+            </button>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary" style="padding: 1.2rem 2.5rem;">
+                <i class="fas fa-times"></i> Cancel
+            </a>
+            <a href="{{ url_for('download_pdf', valuation_id=valuation.id) }}" class="btn" style="padding: 1.2rem 2.5rem; background: var(--primary);">
+                <i class="fas fa-file-pdf"></i> Download Current PDF
+            </a>
+        </div>
+    </form>
+</div>
+
+<script>
+// Auto-calculate plot area in sqft when sqm is entered
+document.getElementById('plot_area_sqm').addEventListener('input', function() {
+    const sqm = parseFloat(this.value) || 0;
+    const sqft = sqm * 10.7639; // Conversion factor
+    document.getElementById('plot_area_sqft').value = sqft.toFixed(2);
+});
+
+// Auto-calculate plot area in sqm when sqft is entered
+document.getElementById('plot_area_sqft').addEventListener('input', function() {
+    const sqft = parseFloat(this.value) || 0;
+    const sqm = sqft / 10.7639; // Conversion factor
+    document.getElementById('plot_area_sqm').value = sqm.toFixed(2);
+});
+
+// Calculate age based on construction year
+document.getElementById('construction_year').addEventListener('input', function() {
+    const year = parseInt(this.value);
+    if (year && year >= 1900 && year <= 2025) {
+        const age = 2025 - year; // Current year
+        document.getElementById('property_age').value = age;
+    }
+});
+
+// Auto-calculate total value
+document.getElementById('land_value').addEventListener('input', calculateTotal);
+document.getElementById('building_value').addEventListener('input', calculateTotal);
+document.getElementById('repairs_deduction').addEventListener('input', calculateTotal);
+
+function calculateTotal() {
+    const landValue = parseFloat(document.getElementById('land_value').value) || 0;
+    const buildingValue = parseFloat(document.getElementById('building_value').value) || 0;
+    const repairs = parseFloat(document.getElementById('repairs_deduction').value) || 0;
+    
+    const total = landValue + buildingValue - repairs;
+    document.getElementById('total_value').value = total.toFixed(2);
+}
+</script>
+{% endblock %}
