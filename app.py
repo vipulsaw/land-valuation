@@ -609,6 +609,30 @@ def delete_valuation(valuation_id):
     flash('Valuation deleted successfully!', 'success')
     return redirect(url_for('dashboard'))
 
+def get_base64_encoded_image(image_path, default_mime_type='image/png'):
+    if not os.path.exists(image_path):
+        app.logger.warning(f"Image file not found: {image_path}")
+        return None
+    try:
+        with open(image_path, 'rb') as f:
+            encoded_string = base64.b64encode(f.read()).decode('utf-8')
+            mime_type = default_mime_type
+            if image_path.lower().endswith(('.jpg', '.jpeg')):
+                mime_type = 'image/jpeg'
+            elif image_path.lower().endswith('.png'):
+                mime_type = 'image/png'
+            elif image_path.lower().endswith('.gif'):
+                mime_type = 'image/gif'
+            elif image_path.lower().endswith('.webp'):
+                mime_type = 'image/webp'
+            return f'data:{mime_type};base64,{encoded_string}'
+    except Exception as e:
+        app.logger.error(f"Error encoding image {image_path}: {str(e)}")
+        return None
+
+# Pre-encode logo for global access
+LOGO_BASE64 = get_base64_encoded_image(os.path.join(app.config['STATIC_FOLDER'], 'images', 'jogeshwari_logo.png'))
+
 @app.route('/download/<int:valuation_id>')
 @login_required
 def download_pdf(valuation_id):
@@ -636,15 +660,16 @@ def download_pdf(valuation_id):
         html_content = render_template(
             'professional_report.html',
             valuation=valuation,
-            encoded_photos=encoded_photos
+            encoded_photos=encoded_photos,
+            logo_base64=LOGO_BASE64
         )
-
+        
         # Generate PDF using WeasyPrint - SIMPLIFIED VERSION
         # Import weasyprint directly
         import weasyprint
         
         # Create PDF from HTML
-        pdf_document = weasyprint.HTML(string=html_content)
+        pdf_document = weasyprint.HTML(string=html_content, base_url=request.url_root)
         pdf_bytes = pdf_document.write_pdf()
         
         # Create response with proper headers for download
@@ -659,6 +684,105 @@ def download_pdf(valuation_id):
         response.headers['Expires'] = '0'
         
         return response
+
+    except Exception as e:
+        # Any other error
+        app.logger.error(f"PDF generation error: {str(e)}")
+        # Fallback to HTML download
+        flash(f'Error generating PDF. Downloading HTML version instead.', 'warning')
+        return download_html_fallback(valuation_id, valuation)
+
+def download_html_fallback(valuation_id, valuation):
+    """Fallback function to download HTML version when PDF generation fails"""
+    # Get photo paths and convert to base64
+    photo_paths = []
+    if valuation.photos_path:
+        try:
+            photo_paths = json.loads(valuation.photos_path)
+        except:
+            pass
+
+    encoded_photos = convert_photos_to_base64(photo_paths)
+    
+    # Render HTML template
+    html_content = render_template(
+        'professional_report.html',
+        valuation=valuation,
+        encoded_photos=encoded_photos,
+        logo_base64=LOGO_BASE64
+    )
+    
+    # Create response with HTML content
+    filename = f"Land_Valuation_Report_{valuation.case_number or valuation_id}_{valuation.client_name.replace(' ', '_')}.html"
+    filename = secure_filename(filename)
+    
+    response = make_response(html_content)
+    response.headers['Content-Type'] = 'text/html'
+    response.headers['Content-Disposition'] = f'attachment; filename="{filename}"'
+    
+    return response
+
+@app.route('/view-report/<int:valuation_id>')
+@login_required
+def view_report(valuation_id):
+    """View report in browser (HTML version)"""
+    valuation = LandValuation.query.get_or_404(valuation_id)
+
+    if valuation.user_id != current_user.id:
+        flash('Unauthorized access', 'error')
+        return redirect(url_for('dashboard'))
+
+    # Get photo paths and convert to base64 for HTML viewing
+    photo_paths = []
+    if valuation.photos_path:
+        try:
+            photo_paths = json.loads(valuation.photos_path)
+        except:
+            pass
+
+    encoded_photos = convert_photos_to_base64(photo_paths)
+
+    return render_template(
+        'professional_report.html',
+        valuation=valuation,
+        encoded_photos=encoded_photos,
+        logo_base64=LOGO_BASE64
+    )
+
+@app.route('/check-images/<int:valuation_id>')
+@login_required
+def check_images(valuation_id):
+    valuation = LandValuation.query.get_or_404(valuation_id)
+
+    if valuation.user_id != current_user.id:
+        return "Unauthorized", 403
+
+    result = f"""
+    <h1>Image Debug for Valuation #{valuation_id}</h1>
+    <p>Client: {valuation.client_name}</p>
+    <p>Photos Path: {valuation.photos_path}</p>
+    """
+
+    if valuation.photos_path:
+        try:
+            photos = json.loads(valuation.photos_path)
+            result += f"<p>Number of photos: {len(photos)}</p>"
+            result += "<ul>"
+            for i, photo_path in enumerate(photos):
+                exists = "✅ EXISTS" if os.path.exists(photo_path) else "❌ MISSING"
+                result += f"<li>Photo {i+1}: {photo_path} - {exists}</li>"
+            result += "</ul>"
+        except Exception as e:
+            result += f"<p>Error parsing photos: {str(e)}</p>"
+    else:
+        result += "<p>No photos found</p>"
+
+    return result
+
+if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
+    app.run(debug=False, host='0.0.0.0', port=5000)
 
     except Exception as e:
         # Any other error
