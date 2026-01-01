@@ -560,16 +560,15 @@
     <div class="sub-section-heading">1. Present Guide Line of the Property</div>
     <table class="info-table">
         <tr>
-            <th>Present Market rates in the vicinity and surrounding area</th>
-            <td>Land Rate : Rs. {{ valuation.market_rate_min or '0.00' }}/- to Rs. {{ valuation.market_rate_max or '0.00' }}/- per sq.ft.</td>
+            <td colspan="2">Present Market rates in the vicinity and surrounding area</td>
+            <td>Land Rate : Rs. 1800.00/- to Rs. 1800.00/- per sq.ft.</td>
         </tr>
     </table>
 
     <div class="sub-section-heading">2. Sales / Valuation of the Property</div>
     <table class="info-table">
         <tr>
-            <th>Sales / Valuation of the Property</th>
-            <td>Fair market value is the price at which the property would exchange between a willing buyer and a willing seller, neither being under any compulsion to buy or to sell and both having reasonable knowledge of all relevant facts and with equity to all parties.</td>
+            <td colspan="4">Fair market value is the price at which the property would exchange between a willing buyer and a willing seller, neither being under any compulsion to buy or to sell and both having reasonable knowledge of all relevant facts and with equity to all parties.</td>
         </tr>
     </table>
 
@@ -583,9 +582,9 @@
         </tr>
         <tr>
             <td>Land Value</td>
-            <td>{{ valuation.plot_area_sqft or 'N/A' }} Sqft</td>
-            <td>{{ valuation.rate_adopted or 'N/A' }}</td>
-            <td>{{ valuation.land_value or 'N/A' }}</td>
+            <td>1076.00 Sqft</td>
+            <td>1200.00</td>
+            <td>1,291,200.00</td>
         </tr>
         <tr>
             <td>Construction Cost:</td>
@@ -593,15 +592,15 @@
         </tr>
         <tr>
             <td>GF</td>
-            <td>{{ valuation.ground_floor_area or 'N/A' }} Sqft</td>
+            <td>515.633 Sqft</td>
             <td>1400.00</td>
-            <td>{{ (valuation.ground_floor_area * 1400)|round(2) if valuation.ground_floor_area else '0.00' }}</td>
+            <td>749,886.20</td>
         </tr>
         <tr>
             <td>FF</td>
-            <td>{{ valuation.first_floor_area or 'N/A' }} Sqft</td>
+            <td>515.633 Sqft</td>
             <td>1400.00</td>
-            <td>{{ (valuation.first_floor_area * 1400)|round(2) if valuation.first_floor_area else '0.00' }}</td>
+            <td>749,886.20</td>
         </tr>
         <tr>
             <td>Others (Porch, Compound, Sump, Parapet, OHT</td>
@@ -619,34 +618,34 @@
             <th>Sub Total</th>
             <td></td>
             <td></td>
-            <td>{{ (((valuation.ground_floor_area or 0) * 1400 + (valuation.first_floor_area or 0) * 1400))|round(2) }}</td>
+            <td>1,499,772.40</td>
         </tr>
         <tr>
             <th>Gross Construction Value</th>
-            <td>{{ ((valuation.ground_floor_area or 0) + (valuation.first_floor_area or 0))|round(2) }} Sqft</td>
-            <td></td>
-            <td>{{ (((valuation.ground_floor_area or 0) * 1400 + (valuation.first_floor_area or 0) * 1400))|round(2) }}</td>
+            <td>1071.27 Sqft</td>
+            <td>0.6</td>
+            <td>1,499,772.40</td>
         </tr>
         <tr>
             <th>Less for Depreciation @ 80%</th>
             <td></td>
             <td></td>
-            <td>0.6</td>
-            <td>{{ (((valuation.ground_floor_area or 0) * 1400 + (valuation.first_floor_area or 0) * 1400) * 0.8)|round(2) }}</td>
+            <td></td>
+            <td>1,199,817.92</td>
         </tr>
         <tr>
             <th>Net Construction Value</th>
             <td></td>
             <td></td>
             <td></td>
-            <td>{{ (((valuation.ground_floor_area or 0) * 1400 + (valuation.first_floor_area or 0) * 1400) * 0.2)|round(2) }}</td>
+            <td>299,954.48</td>
         </tr>
         <tr>
             <th>Add Land (Less Building Land + Construction)</th>
             <td></td>
             <td></td>
             <td></td>
-            <td>{{ (valuation.land_value or 0) + (((valuation.ground_floor_area or 0) * 1400 + (valuation.first_floor_area or 0) * 1400) * 0.2)|round(2) }}</td>
+            <td>1,591,154.48</td>
         </tr>
         <tr>
             <th>Others & Rounding Off</th>
@@ -660,14 +659,14 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>{{ valuation.total_value or 'N/A' }}</td>
+            <td>2,791,200.00</td>
         </tr>
         <tr>
             <th>Forced/Distress Value</th>
             <td></td>
             <td></td>
             <td></td>
-            <td>{{ valuation.distress_sale_value or 'N/A' }}</td>
+            <td>2,093,250.00</td>
         </tr>
     </table>
 
@@ -675,7 +674,7 @@
     <p style="font-size: 9pt;">
         1) Bup area as per site shows GF Commercial - 1140 sqft + GF Residential - 700.00 sqft + FF Residential - 350.00 Sqft, Total Bup area as per recodred Sanction building plan approved by muncipal council jamner. <br>
         2) GF + FF + SF + TF + Basement - 0.00 + 0.00 + 0.00 + 0.00 = 0.00. <br>
-        3) Area considered for valuation : Plot area as per Sanction Plan & Agreement - {{ valuation.plot_area_sqft or 'N/A' }} Sqft ({{ valuation.plot_area_sqm or 'N/A' }} Sqm) and B/up area as per sanction plan - GF + FF - {{ valuation.built_up_area or 'N/A' }} Sqft. <br>
+        3) Area considered for valuation : Plot area as per Sanction Plan & Agreement - 1076.00 Sqft (100.00 Sqm) and B/up area as per sanction plan - GF + FF - 1071.27 Sqft (99.52 Sqm) is considered for valuation. <br>
         4) GF Commercial : Front side towards 6.0 Mtr.wide road access. This is a commercial area which is excluded from valuation. <br>
         5) Porch area, First floor balcony, cantilever slab area etc. excluded from valuation.
     </p>
@@ -760,9 +759,9 @@
         </tr>
         <tr>
             <td>RCC Framed Structure with BBM Walls, internal and external plaster, Vitrified Tiles Flooring, Sliding Shutters & Aluminium windows, with all sanitary, plumbing and electrical fittings etc. Completed</td>
-            <td>{{ valuation.construction_stage or 'Completed' }}</td>
-            <td></td>
-            <td>{{ valuation.total_value or 'N/A' }}</td>
+            <td>Completed</td>
+            <td>Present Value of the Property</td>
+            <td>2,791,000.00</td>
         </tr>
     </table>
 
