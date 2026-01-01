@@ -28,7 +28,8 @@
                     <label for="bank_name"><i class="fas fa-bank"></i> Bank Name</label>
                     <select id="bank_name" name="bank_name" required>
                         <option value="">Select Bank</option>
-                        <option value="Ujjivan" {% if valuation.bank_name == 'Ujjivan' %}selected{% endif %}>Ujjivan Small Finance Bank</option>
+                        <option value="Ujjivan">Ujjivan Small Finance Bank</option>
+                        <option value="HDFC" {% if valuation.bank_name == 'HDFC' %}selected{% endif %}>HDFC Bank</option>
                         <option value="HDFC" {% if valuation.bank_name == 'HDFC' %}selected{% endif %}>HDFC Bank</option>
                         <option value="ICICI" {% if valuation.bank_name == 'ICICI' %}selected{% endif %}>ICICI Bank</option>
                         <option value="SBI" {% if valuation.bank_name == 'SBI' %}selected{% endif %}>State Bank of India</option>

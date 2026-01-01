@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Technical Report on Immovable Property - UJJIVAN SMALL FINANCE BANK</title>
+    <style>
+        @page { size: A4; margin: 1.5cm; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.4; color: #333; font-size: 10pt; }
+        .header-section { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; padding-bottom: 5px; border-bottom: 3px solid #2c3e50; }
+        .logo-details { display: flex; align-items: center; }
+        .bank-name { font-size: 14pt; font-weight: bold; color: #333; margin-top: 5px; }
+        .consultancy-name { font-size: 10pt; color: #7f8c8d; }
+        .valuer-details { text-align: right; font-size: 9pt; }
+        .valuer-name { font-weight: bold; color: #2c3e50; margin-bottom: 2px; }
+        .report-main-title { text-align: center; margin: 10px 0; background-color: #f8f9fa; padding: 8px; border-bottom: 1px solid #ddd; }
+        .report-main-title h1 { font-size: 16pt; color: #2c3e50; margin: 0; }
+        .report-subtitle { font-size: 10pt; color: #7f8c8d; margin-top: 3px; }
+
+        .info-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; font-size: 9pt; }
+        .info-table th, .info-table td { border: 1px solid #ddd; padding: 4px 8px; text-align: left; }
+        .info-table th { background-color: #f2f2f2; font-weight: bold; width: 30%; }
+        .info-table td strong { font-weight: bold; }
+
+        .section-heading { background-color: #e0e0e0; padding: 5px 10px; margin-top: 15px; margin-bottom: 8px; font-weight: bold; font-size: 11pt; border-left: 5px solid #3498db; }
+        .sub-section-heading { margin-top: 10px; margin-bottom: 5px; font-weight: bold; font-size: 10pt; color: #555; }
+        
+        table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 9pt; }
+        th { background-color: #2c3e50; color: white; padding: 6px 8px; text-align: left; font-weight: 600; }
+        td { padding: 4px 8px; border: 1px solid #ddd; vertical-align: top; }
+        
+        .no-border-table td { border: none; padding: 2px 5px; }
+        .remarks { font-style: italic; color: #666; font-size: 8pt; }
+        .page-break { page-break-before: always; }
+        .footer { position: fixed; bottom: 0; width: 100%; text-align: center; font-size: 8pt; color: #7f8c8d; border-top: 1px solid #ecf0f1; padding: 3px; background-color: white; }
+        .page-number:after { content: "Page " counter(page); }
+        
+        .image-gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px; }
+        .image-gallery img { max-width: 100%; height: auto; display: block; margin: 0 auto; border: 1px solid #eee; }
+        .image-gallery p { text-align: center; font-size: 8pt; color: #555; margin-top: 5px; }
+    </style>
+</head>
+<body>
+    <div class="header-section">
+        <div class="logo-details">
+            <img src="{{ logo_base64 }}" alt="Jogeshwari Logo" style="height: 60px; margin-right: 10px;">
+            <div>
+                <div class="bank-name">Ujjivan Small Finance Bank</div>
+                <div class="consultancy-name">Jogeshwari Consultancy</div>
+            </div>
+        </div>
+        <div class="valuer-details">
+            <div class="valuer-name">PRASHANT R.PATIL(M.E.)</div>
+            <div>CONSULTING ENGINEER</div>
+            <div>9371218146</div>
+        </div>
+    </div>
+
+    <div class="report-main-title">
+        <h1>Technical Report on Immovable Property</h1>
+        <div class="report-subtitle">To UJJIVAN SMALL FINANCE BANK</div>
+    </div>
+
+    <table class="info-table">
+        <tr>
+            <th>Name of Vendor:</th>
+            <td>Mr. Prashant R Patil</td>
+            <th>Name Of Applicant:</th>
+            <td>Devanand Vasant Kolhe</td>
+        </tr>
+    </table>
+
+    <div class="section-heading">Report on Valuation: To Ascertain fair market value of the property</div>
+
+    <table class="info-table">
+        <tr>
+            <th>Ref No:</th>
+            <td>VAL/Ujjivan / December / 2025</td>
+            <th>Case Type</th>
+            <td>HL Purchase</td>
+        </tr>
+        <tr>
+            <th>Name of Contact Person:</th>
+            <td>Mr. Amit Kulkarni</td>
+            <th>Date</th>
+            <td>12/2025</td>
+        </tr>
+        <tr>
+            <th>Date of Inspection & Valuation:</th>
+            <td>{{ valuation.inspection_date.strftime('%d-%m-%Y') if valuation.inspection_date else 'N/A' }}</td>
+            <th>Name of Borrower / Acquire by</th>
+            <td>Devanand Vasant Kolhe</td>
+        </tr>
+        <tr>
+            <th>Name of Vendor</th>
+            <td>Mr. Sunil Anil Mali</td>
+            <th>Project Name (if any)</th>
+            <td>Not Available</td>
+        </tr>
+        <tr>
+            <th>Flat No. / Villa No. / B.T.R. No.</th>
+            <td>Plot no. 37 (South Part)</td>
+            <th>Property Address (Actual)</th>
+            <td>Gat No. 723/1, Plot No. 37 (South Part), NPH No. 3453/37/1, Rajmata Jijau Nagar, At. Jamner Tal. Jamner Dist. Jalgaon 424206</td>
+        </tr>
+        <tr>
+            <th>Legal Access to Property is demarcated</th>
+            <td>Yes</td>
+            <th>Plot Number</th>
+            <td>37</td>
+        </tr>
+        <tr>
+            <th>Nearest Land Mark</th>
+            <td>Near Gajanan Maharaj Mandir, Bhusawal Road</td>
+            <th>All weather road for access to property</th>
+            <td>Yes</td>
+        </tr>
+        <tr>
+            <th>Locality Classification</th>
+            <td>Residential</td>
+            <th>Jurisdiction</th>
+            <td>Within Jamner Municipal Council Limit.</td>
+        </tr>
+        <tr>
+            <th>Zonal Classification</th>
+            <td>Residential</td>
+            <th>FSI</th>
+            <td>80%</td>
+        </tr>
+    </table>
+
+    <div class="section-heading">Basic Layout Amenities</div>
+    <table>
+        <thead>
+            <tr>
+                <th>Amenities</th>
+                <th>Underground Drainage</th>
+                <th>Roads</th>
+                <th>Electricity</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Yes</td>
+                <td>{{ 'Yes' if valuation.underground_drainage else 'No' }}</td>
+                <td>{{ 'Yes' if valuation.roads else 'No' }}</td>
+                <td>{{ 'Yes' if valuation.electricity else 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="section-heading">Class of Locality</div>
+    <table>
+        <thead>
+            <tr>
+                <th>Class</th>
+                <th>VIP / VVIP</th>
+                <th>Push</th>
+                <th>Upper Middle Class</th>
+                <th>Middle Class</th>
+                <th>Lower</th>
+                <th>Negative</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>{{ '✓' if valuation.locality_classification == 'Middle Class' else '' }}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="section-heading">Marketability of the Property</div>
+    <table>
+        <thead>
+            <tr>
+                <th>Aspect</th>
+                <th>EXCELLENT</th>
+                <th>VERY GOOD</th>
+                <th>GOOD</th>
+                <th>POOR</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Sale Marketability</td>
+                <td></td>
+                <td></td>
+                <td>{{ '✓' if valuation.sale_marketability == 'Good' else '' }}</td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="section-heading">Accessibility from important places</div>
+    <table class="info-table">
+        <tr>
+            <th>Distance from Nashik Branch</th>
+            <td>{{ valuation.branch_distance or 'N/A' }} Km</td>
+            <th>Bus Stand, School, Hospital etc</th>
+            <td>{{ valuation.bus_stand_distance or 'N/A' }}</td>
+        </tr>
+    </table>
+
+    <div class="section-heading">Schedule of Property</div>
+    <table class="info-table">
+        <tr>
+            <th>As per map</th>
+            <td>East By</td>
+            <td>Open Space</td>
+            <td>Gross Approved Area</td>
+            <td>{{ valuation.plot_area_sqm or 'N/A' }} Sqm</td>
+            <td>Carpet Area (in Sqft)</td>
+            <td>0.00</td>
+        </tr>
+        <tr>
+            <td>West By</td>
+            <td>6.0 M.W Colony Road</td>
+            <td>Gross Built Up Area</td>
+            <td>{{ valuation.built_up_area or 'N/A' }}</td>
+        </tr>
+        <tr>
+            <td>North By</td>
+            <td>Remaining part of Survey plot no. 37</td>
+            <td>Remaining part of Survey plot no. 37</td>
+            <td>Boundaries are Matched</td>
+        </tr>
+        <tr>
+            <td>South By</td>
+            <td>Plot No. 38</td>
+            <td>Plot No. 38</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Site Dimensions</td>
+            <td>E – W – 7.75 M – 4.75 M</td>
+            <td>E – W – 7.75 M – 4.75 M</td>
+            <td>Site Dimensions are Matched</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>N – S – 15.00 M – 15.00 M</td>
+            <td>N – S – 15.00 M – 15.00 M</td>
+            <td></td>
+        </tr>
+    </table>
+
+    <div class="page-break"></div>
+
+    <!-- Page 2 - Technical Details -->
+    <div class="header-section">
+        <div class="logo-details">
+            <img src="{{ logo_base64 }}" alt="Jogeshwari Logo" style="height: 60px; margin-right: 10px;">
+            <div>
+                <div class="bank-name">Ujjivan Small Finance Bank</div>
+                <div class="consultancy-name">Jogeshwari Consultancy</div>
+            </div>
+        </div>
+        <div class="valuer-details">
+            <div class="valuer-name">PRASHANT R.PATIL(M.E.)</div>
+            <div>CONSULTING ENGINEER</div>
+            <div>9371218146</div>
+        </div>
+    </div>
+    <div class="report-main-title">
+        <h1>Technical Report on Immovable Property</h1>
+        <div class="report-subtitle">To UJJIVAN SMALL FINANCE BANK</div>
+    </div>
+    
+    <div class="section-heading">Technical Details</div>
+    <table class="info-table">
+        <tr>
+            <th>Type of Construction</th>
+            <td>RCC Framed</td>
+            <th>Load Bearing</th>
+            <td>Good</td>
+            <th>Composite</th>
+            <td>Pre Engineered</td>
+        </tr>
+        <tr>
+            <th>Quality of Construction</th>
+            <td>Very good</td>
+            <td>Standard</td>
+            <td>Good</td>
+            <td>Average</td>
+            <td>Poor</td>
+            <td>Dilapidated</td>
+            <td>Superior</td>
+        </tr>
+        <tr>
+            <th>Water Supply Facilities</th>
+            <td>Yes</td>
+            <td>No</td>
+            <th>Sanitary Fittings</th>
+            <td>Standard</td>
+            <td>Superior</td>
+        </tr>
+        <tr>
+            <th>Lifts</th>
+            <td>Yes</td>
+            <td>No</td>
+            <th>Compound Wall</th>
+            <td>Yes</td>
+            <td>No</td>
+        </tr>
+        <tr>
+            <th>Type of Structure</th>
+            <td colspan="7">RCC framed structure with BBM walls</td>
+        </tr>
+        <tr>
+            <th>Roof</th>
+            <td colspan="7">RCC slab</td>
+        </tr>
+        <tr>
+            <th>Doors & Windows</th>
+            <td colspan="7">Solid Shutters and Aluminium Frame Windows with grill</td>
+        </tr>
+        <tr>
+            <th>Flooring</th>
+            <td colspan="7">Vitrified Tiles Flooring</td>
+        </tr>
+        <tr>
+            <th>Painting</th>
+            <td>Good</td>
+            <td>Bad</td>
+            <td>Poor</td>
+            <td></td>
+            <td>Average</td>
+            <td>Very Good</td>
+            <td>Good</td>
+            <td>Satisfactory</td>
+        </tr>
+        <tr>
+            <th>Other Amenities & special amenities</th>
+            <td colspan="7">N.A.</td>
+        </tr>
+        <tr>
+            <th>External Condition</th>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <th>Age by the Building</th>
+            <td>{{ valuation.property_age or 'N/A' }} Years</td>
+            <td>Months</td>
+            <td></td>
+            <th>Future Life</th>
+            <td>{{ valuation.estimated_future_life or 'N/A' }} Years</td>
+        </tr>
+        <tr>
+            <th>Structure/ Building is</th>
+            <td colspan="7"></td>
+        </tr>
+    </table>
+
+    <div class="section-heading">Area Details</div>
+    <table class="info-table">
+        <tr>
+            <th>Site Area as per Schedule</th>
+            <td>Total Plot Area</td>
+            <td>{{ valuation.plot_area_sqm or 'N/A' }}</td>
+            <td>Sqm</td>
+            <td>{{ valuation.plot_area_sqft or 'N/A' }}</td>
+            <td>Sqft</td>
+            <th>Applicant Plot Area</th>
+            <td>100.00 Sqm</td>
+        </tr>
+        <tr>
+            <th></th>
+            <td>Total BUP Area</td>
+            <td>{{ valuation.built_up_area or 'N/A' }}</td>
+            <td>Sqm</td>
+            <td>{{ (valuation.built_up_area * 10.7639)|round(2) if valuation.built_up_area else 'N/A' }}</td>
+            <td>Sqft</td>
+            <th></th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>Site Area as per Plan</th>
+            <td>Plot Area</td>
+            <td>{{ valuation.plot_area_sqm or 'N/A' }}</td>
+            <td>Sqm</td>
+            <td>{{ valuation.plot_area_sqft or 'N/A' }}</td>
+            <td>Sqft</td>
+            <th></th>
+            <td></td>
+        </tr>
+        <tr>
+            <th></th>
+            <td>Built Up Area</td>
+            <td>{{ valuation.built_up_area or 'N/A' }}</td>
+            <td>Sqm</td>
+            <td>{{ (valuation.built_up_area * 10.7639)|round(2) if valuation.built_up_area else 'N/A' }}</td>
+            <td>Sqft</td>
+            <th></th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>Site Area as per Actual</th>
+            <td>Plot Area</td>
+            <td>{{ valuation.plot_area_sqm or 'N/A' }}</td>
+            <td>Sqm</td>
+            <td>{{ valuation.plot_area_sqft or 'N/A' }}</td>
+            <td>Sqft</td>
+            <th></th>
+            <td></td>
+        </tr>
+        <tr>
+            <th></th>
+            <td>Built Up Area</td>
+            <td>{{ valuation.built_up_area or 'N/A' }}</td>
+            <td>Sqm</td>
+            <td>{{ (valuation.built_up_area * 10.7639)|round(2) if valuation.built_up_area else 'N/A' }}</td>
+            <td>Sqft</td>
+            <th>Carpet Area</th>
+            <td>{{ valuation.carpet_area or 'N/A' }}</td>
+        </tr>
+    </table>
+
+    <div class="section-heading">Statutory Approval Details</div>
+    <table class="info-table">
+        <tr>
+            <th>Approval Number and Date</th>
+            <td>No. 474/2018 Dated: 07/06/2018</td>
+            <th>Approval Authority</th>
+            <td>Jamner Municipal Council</td>
+        </tr>
+        <tr>
+            <th>If the Plot is Sub – Divided, then approved by the</th>
+            <td colspan="3"></td>
+        </tr>
+        <tr>
+            <th>FSI Consumed</th>
+            <td>{{ valuation.fsi_used or 'N/A' }}</td>
+            <th>Occupation Certificate</th>
+            <td>Not Provided</td>
+        </tr>
+        <tr>
+            <th>Permitted use of Property</th>
+            <td>{{ valuation.permitted_use or 'N/A' }}</td>
+            <th>Actual use of the Property</th>
+            <td>{{ valuation.actual_use or 'N/A' }}</td>
+        </tr>
+        <tr>
+            <th>Approved No of Floors</th>
+            <td>{{ valuation.no_of_floors or 'N/A' }}</td>
+            <th>Whether the property and locality where the property is situated fall under Urban Development Management Authority (UDMA) guidelines</th>
+            <td>No</td>
+        </tr>
+        <tr>
+            <th>Whether the building adheres to the National building code/norms formulated by the Bureau of Indian Standards (BIS)</th>
+            <td>Yes</td>
+            <td>No</td>
+            <th></th>
+            <td></td>
+        </tr>
+    </table>
+
+    <div class="section-heading">Area of Property (permitted as per Approval Plan / Building)</div>
+    <table class="info-table">
+        <tr>
+            <th>Floor</th>
+            <th>Gross Approved Area</th>
+            <th>Gross Built Up Area</th>
+            <th>Carpet Area (in Sqft)</th>
+        </tr>
+        <tr>
+            <td>Ground Floor Commercial</td>
+            <td>0.00</td>
+            <td>0.00</td>
+            <td>0.00</td>
+        </tr>
+        <tr>
+            <td>Ground Floor Residential</td>
+            <td>{{ valuation.ground_floor_area or 'N/A' }}</td>
+            <td>{{ valuation.ground_floor_area or 'N/A' }}</td>
+            <td>{{ (valuation.ground_floor_area * 0.85)|round(2) if valuation.ground_floor_area else 'N/A' }}</td>
+        </tr>
+        <tr>
+            <td>First Floor Residential</td>
+            <td>{{ valuation.first_floor_area or 'N/A' }}</td>
+            <td>{{ valuation.first_floor_area or 'N/A' }}</td>
+            <td>{{ (valuation.first_floor_area * 0.85)|round(2) if valuation.first_floor_area else 'N/A' }}</td>
+        </tr>
+        <tr>
+            <td>Total</td>
+            <td>{{ (((valuation.ground_floor_area or 0) + (valuation.first_floor_area or 0)))|round(2) }}</td>
+            <td>{{ (((valuation.ground_floor_area or 0) + (valuation.first_floor_area or 0)))|round(2) }}</td>
+            <td>{{ ((((valuation.ground_floor_area or 0) + (valuation.first_floor_area or 0))) * 0.85)|round(2) }}</td>
+        </tr>
+    </table>
+
+    <div class="section-heading">Adherence to Sanction Plan / Building Bye Laws</div>
+    <table class="info-table">
+        <tr>
+            <th>Deviation from sanction Plan/Building Bye Laws (if any)</th>
+            <td>N.A</td>
+        </tr>
+    </table>
+
+    <div class="section-heading">Risk of Demolition (Valuers views)</div>
+    <table class="info-table">
+        <tr>
+            <th>Risk of Demolition</th>
+            <td>No</td>
+            <th>Low</th>
+            <td>Medium</td>
+            <td>High</td>
+            <td>N.A.</td>
+        </tr>
+    </table>
+
+    <div class="section-heading">Property Type: Land / Free Hold</div>
+    <table class="info-table">
+        <tr>
+            <th>Land Tenure</th>
+            <td>Free Hold</td>
+            <th>Internal Composition</th>
+            <td>{{ valuation.property_description or 'N/A' }}</td>
+        </tr>
+        <tr>
+            <th>Present Occupancy (Owner Occupied or Tenanted)</th>
+            <td>{{ valuation.currently_occupied_by or 'Owner' }}</td>
+        </tr>
+    </table>
+
+    <div class="page-break"></div>
+
+    <!-- Page 3 - Valuation Calculation -->
+    <div class="header-section">
+        <div class="logo-details">
+            <img src="{{ logo_base64 }}" alt="Jogeshwari Logo" style="height: 60px; margin-right: 10px;">
+            <div>
+                <div class="bank-name">Ujjivan Small Finance Bank</div>
+                <div class="consultancy-name">Jogeshwari Consultancy</div>
+            </div>
+        </div>
+        <div class="valuer-details">
+            <div class="valuer-name">PRASHANT R.PATIL(M.E.)</div>
+            <div>CONSULTING ENGINEER</div>
+            <div>9371218146</div>
+        </div>
+    </div>
+    <div class="report-main-title">
+        <h1>Technical Report on Immovable Property</h1>
+        <div class="report-subtitle">To UJJIVAN SMALL FINANCE BANK</div>
+    </div>
+
+    <div class="section-heading">Valuation Calculation</div>
+
+    <div class="sub-section-heading">1. Present Guide Line of the Property</div>
+    <table class="info-table">
+        <tr>
+            <th>Present Market rates in the vicinity and surrounding area</th>
+            <td>Land Rate : Rs. {{ valuation.market_rate_min or '0.00' }}/- to Rs. {{ valuation.market_rate_max or '0.00' }}/- per sq.ft.</td>
+        </tr>
+    </table>
+
+    <div class="sub-section-heading">2. Sales / Valuation of the Property</div>
+    <table class="info-table">
+        <tr>
+            <th>Sales / Valuation of the Property</th>
+            <td>Fair market value is the price at which the property would exchange between a willing buyer and a willing seller, neither being under any compulsion to buy or to sell and both having reasonable knowledge of all relevant facts and with equity to all parties.</td>
+        </tr>
+    </table>
+
+    <div class="sub-section-heading">3. Land & Building Method:</div>
+    <table class="info-table">
+        <tr>
+            <th>Particulars</th>
+            <th>Unit</th>
+            <th>Rate</th>
+            <th>Amount in INR</th>
+        </tr>
+        <tr>
+            <td>Land Value</td>
+            <td>{{ valuation.plot_area_sqft or 'N/A' }} Sqft</td>
+            <td>{{ valuation.rate_adopted or 'N/A' }}</td>
+            <td>{{ valuation.land_value or 'N/A' }}</td>
+        </tr>
+        <tr>
+            <td>Construction Cost:</td>
+            <td colspan="3"></td>
+        </tr>
+        <tr>
+            <td>GF</td>
+            <td>{{ valuation.ground_floor_area or 'N/A' }} Sqft</td>
+            <td>1400.00</td>
+            <td>{{ (valuation.ground_floor_area * 1400)|round(2) if valuation.ground_floor_area else '0.00' }}</td>
+        </tr>
+        <tr>
+            <td>FF</td>
+            <td>{{ valuation.first_floor_area or 'N/A' }} Sqft</td>
+            <td>1400.00</td>
+            <td>{{ (valuation.first_floor_area * 1400)|round(2) if valuation.first_floor_area else '0.00' }}</td>
+        </tr>
+        <tr>
+            <td>Others (Porch, Compound, Sump, Parapet, OHT</td>
+            <td></td>
+            <td></td>
+            <td>0.00</td>
+        </tr>
+        <tr>
+            <td>Elevation Treatment</td>
+            <td></td>
+            <td></td>
+            <td>0.00</td>
+        </tr>
+        <tr>
+            <th>Sub Total</th>
+            <td></td>
+            <td></td>
+            <td>{{ (((valuation.ground_floor_area or 0) * 1400 + (valuation.first_floor_area or 0) * 1400))|round(2) }}</td>
+        </tr>
+        <tr>
+            <th>Gross Construction Value</th>
+            <td>{{ ((valuation.ground_floor_area or 0) + (valuation.first_floor_area or 0))|round(2) }} Sqft</td>
+            <td></td>
+            <td>{{ (((valuation.ground_floor_area or 0) * 1400 + (valuation.first_floor_area or 0) * 1400))|round(2) }}</td>
+        </tr>
+        <tr>
+            <th>Less for Depreciation @ 80%</th>
+            <td></td>
+            <td></td>
+            <td>0.6</td>
+            <td>{{ (((valuation.ground_floor_area or 0) * 1400 + (valuation.first_floor_area or 0) * 1400) * 0.8)|round(2) }}</td>
+        </tr>
+        <tr>
+            <th>Net Construction Value</th>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>{{ (((valuation.ground_floor_area or 0) * 1400 + (valuation.first_floor_area or 0) * 1400) * 0.2)|round(2) }}</td>
+        </tr>
+        <tr>
+            <th>Add Land (Less Building Land + Construction)</th>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>{{ (valuation.land_value or 0) + (((valuation.ground_floor_area or 0) * 1400 + (valuation.first_floor_area or 0) * 1400) * 0.2)|round(2) }}</td>
+        </tr>
+        <tr>
+            <th>Others & Rounding Off</th>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>27.60</td>
+        </tr>
+        <tr>
+            <th>Total Value (Land + Property) (Rounded)</th>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>{{ valuation.total_value or 'N/A' }}</td>
+        </tr>
+        <tr>
+            <th>Forced/Distress Value</th>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>{{ valuation.distress_sale_value or 'N/A' }}</td>
+        </tr>
+    </table>
+
+    <div class="sub-section-heading">Area Considered for valuation</div>
+    <p style="font-size: 9pt;">
+        1) Bup area as per site shows GF Commercial - 1140 sqft + GF Residential - 700.00 sqft + FF Residential - 350.00 Sqft, Total Bup area as per recodred Sanction building plan approved by muncipal council jamner. <br>
+        2) GF + FF + SF + TF + Basement - 0.00 + 0.00 + 0.00 + 0.00 = 0.00. <br>
+        3) Area considered for valuation : Plot area as per Sanction Plan & Agreement - {{ valuation.plot_area_sqft or 'N/A' }} Sqft ({{ valuation.plot_area_sqm or 'N/A' }} Sqm) and B/up area as per sanction plan - GF + FF - {{ valuation.built_up_area or 'N/A' }} Sqft. <br>
+        4) GF Commercial : Front side towards 6.0 Mtr.wide road access. This is a commercial area which is excluded from valuation. <br>
+        5) Porch area, First floor balcony, cantilever slab area etc. excluded from valuation.
+    </p>
+
+    <div class="sub-section-heading">Documents Provided : Sale Agreement, Sanction Plan & Permissions / 7-12 / Survey No. LAND/10873/SR/2/88, Layout etc.</div>
+
+    <div class="sub-section-heading">Technical Stage</div>
+    <table class="info-table">
+        <tr>
+            <th>Particulars</th>
+            <th>To be Started</th>
+            <th>Under Progress</th>
+            <th>Completed</th>
+            <th>Present Status of Work</th>
+            <th>Remark</th>
+        </tr>
+        <tr>
+            <td>Plinth Level</td>
+            <td></td>
+            <td></td>
+            <td>Completed</td>
+            <td>Completed</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Super Structure</td>
+            <td></td>
+            <td></td>
+            <td>Completed</td>
+            <td>Completed</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Internal Finishing</td>
+            <td></td>
+            <td></td>
+            <td>Completed</td>
+            <td>Completed</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Toilet Finishing</td>
+            <td></td>
+            <td></td>
+            <td>Completed</td>
+            <td>Completed</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Electrical Fitting etc.</td>
+            <td></td>
+            <td></td>
+            <td>Completed</td>
+            <td>Completed</td>
+            <td></td>
+        </tr>
+        <tr>
+            <th>Water Tank</th>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <th>Total</th>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+
+    <div class="section-heading">Present Value of the Property</div>
+    <table class="info-table">
+        <tr>
+            <th>Description</th>
+            <th>Work Status</th>
+            <th>As a result of my appraisal and valuation, I have come to the present market value of the</th>
+            <th>Value (₹)</th>
+        </tr>
+        <tr>
+            <td>RCC Framed Structure with BBM Walls, internal and external plaster, Vitrified Tiles Flooring, Sliding Shutters & Aluminium windows, with all sanitary, plumbing and electrical fittings etc. Completed</td>
+            <td>{{ valuation.construction_stage or 'Completed' }}</td>
+            <td></td>
+            <td>{{ valuation.total_value or 'N/A' }}</td>
+        </tr>
+    </table>
+
+    <div class="sub-section-heading">Valuation As Per 1st Recommendation</div>
+    <table class="info-table">
+        <tr>
+            <th>Particulars</th>
+            <th>%</th>
+            <th>Accommodation</th>
+        </tr>
+        <tr>
+            <td>Civil</td>
+            <td>100%</td>
+            <td>100%</td>
+        </tr>
+        <tr>
+            <td>Structure</td>
+            <td>100%</td>
+            <td>100%</td>
+        </tr>
+        <tr>
+            <td>Architectural</td>
+            <td>100%</td>
+            <td>100%</td>
+        </tr>
+        <tr>
+            <td>Total</td>
+            <td>100%</td>
+            <td>100%</td>
+        </tr>
+    </table>
+
+    <table class="info-table no-border-table" style="margin-top: 20px;">
+        <tr>
+            <td style="width: 50%;"><strong>Latitude & Longitude:</strong> {{ valuation.geo_latitude or 'N/A' }}, {{ valuation.geo_longitude or 'N/A' }}</td>
+            <td style="width: 50%; text-align: right;"><strong>Name of the valuer & Reg. no.</strong></td>
+        </tr>
+        <tr>
+            <td><strong>Date:</strong> {{ valuation.submission_date.strftime('%d/%m/%Y') if valuation.submission_date else valuation.valuation_date.strftime('%d/%m/%Y') if valuation.valuation_date else 'N/A' }}</td>
+            <td style="text-align: right;">Mr. Prashant Patil, F-14202</td>
+        </tr>
+        <tr>
+            <td><strong>Place:</strong> Jalgaon</td>
+            <td></td>
+        </tr>
+    </table>
+
+    <div class="page-break"></div>
+
+    <!-- Page 4 - Declarations and Photos -->
+    <div class="header-section">
+        <div class="logo-details">
+            <img src="{{ logo_base64 }}" alt="Jogeshwari Logo" style="height: 60px; margin-right: 10px;">
+            <div>
+                <div class="bank-name">Ujjivan Small Finance Bank</div>
+                <div class="consultancy-name">Jogeshwari Consultancy</div>
+            </div>
+        </div>
+        <div class="valuer-details">
+            <div class="valuer-name">PRASHANT R.PATIL(M.E.)</div>
+            <div>CONSULTING ENGINEER</div>
+            <div>9371218146</div>
+        </div>
+    </div>
+    <div class="report-main-title">
+        <h1>Technical Report on Immovable Property</h1>
+        <div class="report-subtitle">To UJJIVAN SMALL FINANCE BANK</div>
+    </div>
+
+    <div class="section-heading">Fair Market Value - Definition</div>
+    <p style="font-size: 9pt;">
+        The term "Fair Market Value" as used herein, is defined as the price, expressed in terms of money at which the property would exchange between a willing buyer and a willing seller, neither being under any compulsion to buy or to sell and both having reasonable knowledge of all relevant facts and with equity to all parties. For value to be 'fair', it is assumed that:
+        <br>1) Both parties are well informed or well advised and acting prudently.
+        <br>2) A reasonable period of time to find a purchaser.
+        <br>3) Payment is made in cash or its equivalent consideration. The term of sale whether favorable or unfavorable would undoubtedly influence the price and should be disregarded in estimating fair market.
+        <br>It is therefore assumed that the property is good & market & that would be transferable without unreasonable restrictions.
+    </p>
+
+    <div class="section-heading">Note - Distress / Liquidation value shall be on less than above, depending on day & numerous other influencing factor’s.</div>
+
+    <div class="section-heading">Declaration</div>
+    <ul style="font-size: 9pt; list-style-type: decimal; padding-left: 20px;">
+        <li>Our Engineer Inspected the property.</li>
+        <li>We have no direct / indirect interest in property value.</li>
+        <li>Identification and Authentication of actual property on site and records, title, legal opinion, physical possession for mortgage is responsibility of Bank / Financial Institution.</li>
+        <li>The information furnished in the report is true and correct to the best of my knowledge and belief and is according to copies of documents provided by client and as per the property inspection. If any discrepancy in future, client / bank / financial institution is to be considered. The concern financial institution is requested to verify the extent shown in this valuation report with respect to the latest legal opinion.</li>
+        <li>This opinion doesn't attract / warrants any violation of any law either civil / criminal nature. As all parties concerned are free to outright reject / accept this opinion. This is only a valuation if asked by you.</li>
+        <li>Photos are produced & Site visit by.</li>
+        <li>Structure has been constructed using standard construction techniques such as RCC Framed Structure or load-bearing masonry, which generally ensure structural stability. However, no formal structural stability certificate has been issued or is currently available.</li>
+    </ul>
+
+    <div class="section-heading">Remarks</div>
+    <p style="font-size: 9pt;">
+        Prepared By: Mr. Yuvraj B. Borwankar (B.E. Civil)
+    </p>
+
+    <div class="section-heading">Photos</div>
+    <div class="image-gallery">
+        {% if encoded_photos %}
+            {% for photo in encoded_photos %}
+                <div>
+                    <img src="{{ photo }}" alt="Property Image {{ loop.index }}">
+                    <p>Image {{ loop.index }}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No images uploaded for this property.</p>
+        {% endif %}
+    </div>
+
+    <div class="footer">
+        Register no. with CBDT / CCIT: - [66/13(Imm.Prop.)]/CAT-I/2013-14, FIV-14202, FCET, MIE.<br>
+        PLANING / DESIGN / VALUER<br>
+        Viththal Mandir Ward, Deshmukh Building, Bhusawal 425 201 (O) 221594 E-Mail: jogeshwari2@yahoo.com<br>
+        <div class="page-number"></div>
+    </div>
+</body>
+</html>
