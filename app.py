@@ -1,4 +1,3 @@
-
 from flask import Flask, render_template, request, redirect, url_for, flash, send_file, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
@@ -6,7 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 import os
 import json
-from datetime import datetime, date
+from datetime import datetime, date # Import date
 import base64
 
 app = Flask(__name__)
@@ -45,7 +44,7 @@ class LandValuation(db.Model):
     case_number = db.Column(db.String(50))
     loan_type = db.Column(db.String(100))
     project_name = db.Column(db.String(100))
-    bank_name = db.Column(db.String(100)) # New column for bank name
+    bank_name = db.Column(db.String(100))
 
     # Property Details
     property_owner = db.Column(db.String(100), nullable=False)
@@ -68,7 +67,7 @@ class LandValuation(db.Model):
     geo_longitude = db.Column(db.String(50))
 
     # Land Details
-    land_ownership = db.Column(db.String(50))  # Freehold/Leasehold
+    land_ownership = db.Column(db.String(50))
     municipal_jurisdiction = db.Column(db.String(200))
     approvals_status = db.Column(db.String(100))
 
@@ -97,8 +96,8 @@ class LandValuation(db.Model):
     flooring_type = db.Column(db.String(100))
     toilet_finishing = db.Column(db.String(100))
     kitchen_platform = db.Column(db.String(100))
-    plumbing_fittings = db.Column(db.String(100))
-    electrical_fittings = db.Column(db.String(100))
+    plumbing_fittings = db.Column(db.Boolean, default=False)
+    electrical_fittings = db.Column(db.Boolean, default=False)
     demolition_risk = db.Column(db.String(50))
     currently_occupied_by = db.Column(db.String(100))
 
@@ -142,7 +141,7 @@ class LandValuation(db.Model):
     # Additional Fields
     additional_notes = db.Column(db.Text)
     photos_path = db.Column(db.Text)  # Store multiple photo paths as JSON
-    submission_date = db.Column(db.DateTime, default=datetime.utcnow)
+    submission_date = db.Column(db.Date, default=date.today) # Changed to Date
 
     # Declarations
     structural_survey_done = db.Column(db.Boolean, default=False)
@@ -323,6 +322,14 @@ def new_valuation():
         # Convert date strings to date objects
         inspection_date = datetime.strptime(request.form.get('inspection_date'), '%Y-%m-%d').date()
         valuation_date = datetime.strptime(request.form.get('valuation_date'), '%Y-%m-%d').date()
+        submission_date = datetime.strptime(request.form.get('submission_date'), '%Y-%m-%d').date()
+
+        # Get boolean values from checkboxes
+        property_identifiable = 'property_identifiable' in request.form
+        underground_drainage = 'underground_drainage' in request.form
+        electrical_fittings = 'electrical_fittings' in request.form
+        compound_wall = 'compound_wall' in request.form
+        structural_survey_done = 'structural_survey_done' in request.form
 
         # Calculate total built up area
         ground_floor = float(request.form.get('ground_floor_area') or 0)
@@ -331,13 +338,13 @@ def new_valuation():
         third_floor = float(request.form.get('third_floor_area') or 0)
         basement = float(request.form.get('basement_area') or 0)
 
-        built_up_area = ground_floor + first_floor + second_floor + third_floor + basement
+        built_up_area_calc = ground_floor + first_floor + second_floor + third_floor + basement
 
-        # If built_up_area not provided, calculate from form
-        if not request.form.get('built_up_area'):
-            built_up_area = built_up_area
-        else:
-            built_up_area = float(request.form.get('built_up_area') or 0)
+        # Use provided built_up_area or calculate it
+        built_up_area = float(request.form.get('built_up_area') or built_up_area_calc)
+        
+        # Use provided carpet_area or calculate it as 85% of built_up_area
+        carpet_area = float(request.form.get('carpet_area') or (built_up_area * 0.85))
 
         valuation = LandValuation(
             user_id=current_user.id,
@@ -352,6 +359,7 @@ def new_valuation():
             loan_type=request.form.get('loan_type'),
             project_name=request.form.get('project_name'),
             bank_name=request.form.get('bank_name'),
+            submission_date=submission_date,
 
             # Property Details
             property_owner=request.form.get('property_owner'),
@@ -369,12 +377,12 @@ def new_valuation():
             bus_stand_distance=request.form.get('bus_stand_distance'),
             hospital_distance=request.form.get('hospital_distance'),
             branch_distance=request.form.get('branch_distance'),
-            property_identifiable=True,
+            property_identifiable=property_identifiable,
             geo_latitude=request.form.get('geo_latitude'),
             geo_longitude=request.form.get('geo_longitude'),
 
             # Land Details
-            land_ownership=request.form.get('land_ownership') or 'Freehold',
+            land_ownership=request.form.get('land_ownership') or 'Free Hold',
             municipal_jurisdiction=request.form.get('municipal_jurisdiction'),
             approvals_status=request.form.get('approvals_status') or 'Yes',
 
@@ -390,22 +398,22 @@ def new_valuation():
             estimated_future_life=int(request.form.get('estimated_future_life') or 0),
             present_condition=request.form.get('present_condition') or 'Good',
             repairs_required=request.form.get('repairs_required') or 'No',
-            construction_type=request.form.get('construction_type') or 'Load Bearing structure',
+            construction_type=request.form.get('construction_type') or 'RCC Framed',
             permitted_use=request.form.get('permitted_use') or 'Residential',
             actual_use=request.form.get('actual_use') or 'Residential',
             no_of_floors=int(request.form.get('no_of_floors') or 1),
-            compound_wall=bool(request.form.get('compound_wall')),
+            compound_wall=compound_wall,
             other_amenities=request.form.get('other_amenities'),
 
             # Specifications
-            walls_plaster_painting=request.form.get('walls_plaster_painting') or 'Internal & External Completed',
-            doors_windows=request.form.get('doors_windows') or 'Solid Flush Doors And Al Section Window',
-            flooring_type=request.form.get('flooring_type') or 'Vitrified Tiles',
-            toilet_finishing=request.form.get('toilet_finishing') or 'Ceramic',
+            walls_plaster_painting=request.form.get('walls_plaster_painting') or 'Good',
+            doors_windows=request.form.get('doors_windows') or 'Solid Shutters and Aluminium Frame Windows with grill',
+            flooring_type=request.form.get('flooring_type') or 'Vitrified Tiles Flooring',
+            toilet_finishing=request.form.get('toilet_finishing') or 'Standard',
             kitchen_platform=request.form.get('kitchen_platform') or 'Granite & Stainless Steel Sink',
-            plumbing_fittings=request.form.get('plumbing_fittings') or 'Concealed Plumbing Fitting',
-            electrical_fittings=request.form.get('electrical_fittings') or 'Concealed Electrical Fitting',
-            demolition_risk=request.form.get('demolition_risk') or 'Low',
+            plumbing_fittings=plumbing_fittings,
+            electrical_fittings=electrical_fittings,
+            demolition_risk=request.form.get('demolition_risk') or 'No',
             currently_occupied_by=request.form.get('currently_occupied_by') or 'Owner',
 
             # Accommodation Details
@@ -419,8 +427,8 @@ def new_valuation():
             plot_area_sqm=float(request.form.get('plot_area_sqm') or 0),
             plot_area_sqft=float(request.form.get('plot_area_sqft') or 0),
             built_up_area=built_up_area,
-            carpet_area=float(request.form.get('carpet_area') or (built_up_area * 0.85)),
-            permissible_area=float(request.form.get('permissible_area') or built_up_area),
+            carpet_area=carpet_area,
+            permissible_area=float(request.form.get('permissible_area') or 0),
             plot_coverage=float(request.form.get('plot_coverage') or 0),
             fsi_used=float(request.form.get('fsi_used') or 0),
 
@@ -450,8 +458,8 @@ def new_valuation():
             photos_path=json.dumps(photo_paths) if photo_paths else None,
 
             # Declarations
-            structural_survey_done=False,
-            report_validity_days=90
+            structural_survey_done=structural_survey_done,
+            report_validity_days=int(request.form.get('report_validity_days') or 90)
         )
 
         db.session.add(valuation)
@@ -498,11 +506,20 @@ def edit_valuation(valuation_id):
             if photo_paths:
                 valuation.photos_path = json.dumps(photo_paths)
 
-        # Update dates
+        # Convert date strings to date objects and update
         if request.form.get('inspection_date'):
             valuation.inspection_date = datetime.strptime(request.form.get('inspection_date'), '%Y-%m-%d').date()
         if request.form.get('valuation_date'):
             valuation.valuation_date = datetime.strptime(request.form.get('valuation_date'), '%Y-%m-%d').date()
+        if request.form.get('submission_date'):
+            valuation.submission_date = datetime.strptime(request.form.get('submission_date'), '%Y-%m-%d').date()
+
+        # Get boolean values from checkboxes
+        valuation.property_identifiable = 'property_identifiable' in request.form
+        valuation.underground_drainage = 'underground_drainage' in request.form
+        valuation.electrical_fittings = 'electrical_fittings' in request.form
+        valuation.compound_wall = 'compound_wall' in request.form
+        valuation.structural_survey_done = 'structural_survey_done' in request.form
 
         # Update all other fields
         valuation.valuation_purpose = request.form.get('valuation_purpose')
@@ -542,15 +559,12 @@ def edit_valuation(valuation_id):
         valuation.permitted_use = request.form.get('permitted_use')
         valuation.actual_use = request.form.get('actual_use')
         valuation.no_of_floors = int(request.form.get('no_of_floors') or 1)
-        valuation.compound_wall = bool(request.form.get('compound_wall'))
         valuation.other_amenities = request.form.get('other_amenities')
         valuation.walls_plaster_painting = request.form.get('walls_plaster_painting')
         valuation.doors_windows = request.form.get('doors_windows')
         valuation.flooring_type = request.form.get('flooring_type')
         valuation.toilet_finishing = request.form.get('toilet_finishing')
         valuation.kitchen_platform = request.form.get('kitchen_platform')
-        valuation.plumbing_fittings = request.form.get('plumbing_fittings')
-        valuation.electrical_fittings = request.form.get('electrical_fittings')
         valuation.demolition_risk = request.form.get('demolition_risk')
         valuation.currently_occupied_by = request.form.get('currently_occupied_by')
         valuation.ground_floor_area = float(request.form.get('ground_floor_area') or 0)
@@ -579,7 +593,6 @@ def edit_valuation(valuation_id):
         valuation.sale_marketability = request.form.get('sale_marketability')
         valuation.lease_marketability = request.form.get('lease_marketability')
         valuation.additional_notes = request.form.get('additional_notes')
-        valuation.structural_survey_done = bool(request.form.get('structural_survey_done'))
         valuation.report_validity_days = int(request.form.get('report_validity_days') or 90)
 
         db.session.commit()

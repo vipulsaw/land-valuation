@@ -3,7 +3,7 @@
 {% block title %}Edit Valuation - Land Valuation System{% endblock %}
 
 {% block content %}
-<div style="max-width: 900px; margin: 0 auto;">
+<div style="max-width: 1200px; margin: 0 auto;">
     <div style="text-align: center; margin-bottom: 3rem;">
         <i class="fas fa-edit" style="font-size: 4rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
         <h2 style="margin-top: 1.5rem;">Edit Valuation Report</h2>
@@ -28,8 +28,7 @@
                     <label for="bank_name"><i class="fas fa-bank"></i> Bank Name</label>
                     <select id="bank_name" name="bank_name" required>
                         <option value="">Select Bank</option>
-                        <option value="Ujjivan">Ujjivan Small Finance Bank</option>
-                        <option value="HDFC" {% if valuation.bank_name == 'HDFC' %}selected{% endif %}>HDFC Bank</option>
+                        <option value="Ujjivan" {% if valuation.bank_name == 'Ujjivan' %}selected{% endif %}>Ujjivan Small Finance Bank</option>
                         <option value="HDFC" {% if valuation.bank_name == 'HDFC' %}selected{% endif %}>HDFC Bank</option>
                         <option value="ICICI" {% if valuation.bank_name == 'ICICI' %}selected{% endif %}>ICICI Bank</option>
                         <option value="SBI" {% if valuation.bank_name == 'SBI' %}selected{% endif %}>State Bank of India</option>
@@ -43,6 +42,12 @@
                     <label for="valuation_purpose"><i class="fas fa-bullseye"></i> Purpose of Valuation</label>
                     <input type="text" id="valuation_purpose" name="valuation_purpose" required 
                            value="{{ valuation.valuation_purpose }}" placeholder="e.g., For collateral security">
+                </div>
+                
+                <div class="form-group">
+                    <label for="submission_date"><i class="fas fa-calendar-alt"></i> Submission Date</label>
+                    <input type="date" id="submission_date" name="submission_date" required 
+                           value="{{ valuation.submission_date.strftime('%Y-%m-%d') if valuation.submission_date else '' }}">
                 </div>
             </div>
             
@@ -90,7 +95,12 @@
                     <option value="Personal Loan" {% if valuation.loan_type == 'Personal Loan' %}selected{% endif %}>Personal Loan</option>
                     <option value="Loan Against Property" {% if valuation.loan_type == 'Loan Against Property' %}selected{% endif %}>Loan Against Property</option>
                     <option value="Construction Loan" {% if valuation.loan_type == 'Construction Loan' %}selected{% endif %}>Construction Loan</option>
+                    <option value="HL Purchase" {% if valuation.loan_type == 'HL Purchase' %}selected{% endif %}>HL Purchase</option>
                 </select>
+            </div>
+            <div class="form-group">
+                <label for="project_name"><i class="fas fa-project-diagram"></i> Project Name (if any)</label>
+                <input type="text" id="project_name" name="project_name" value="{{ valuation.project_name or '' }}" placeholder="Project Name (if applicable)">
             </div>
         </div>
 
@@ -118,6 +128,7 @@
                         <option value="Plot" {% if valuation.property_type == 'Plot' %}selected{% endif %}>Plot</option>
                         <option value="Commercial Building" {% if valuation.property_type == 'Commercial Building' %}selected{% endif %}>Commercial Building</option>
                         <option value="Agricultural Land" {% if valuation.property_type == 'Agricultural Land' %}selected{% endif %}>Agricultural Land</option>
+                        <option value="Residential" {% if valuation.property_type == 'Residential' %}selected{% endif %}>Residential</option>
                     </select>
                 </div>
             </div>
@@ -147,11 +158,27 @@
                            value="{{ valuation.cts_number or '' }}" placeholder="CTS number if applicable">
                 </div>
             </div>
+            <div class="form-group">
+                <label for="property_identifiable"><i class="fas fa-search"></i> Legal Access to Property is demarcated</label>
+                <input type="checkbox" id="property_identifiable" name="property_identifiable" value="True" {% if valuation.property_identifiable %}checked{% endif %}>
+            </div>
+            <div class="form-group">
+                <label for="access_road_name"><i class="fas fa-road"></i> Nearest Land Mark / All weather road for access to property</label>
+                <input type="text" id="access_road_name" name="access_road_name" value="{{ valuation.access_road_name or '' }}" placeholder="e.g., Near Gajanan Maharaj Mandir, Bhusawal Road">
+            </div>
+            <div class="form-group">
+                <label for="municipal_jurisdiction"><i class="fas fa-map-marked-alt"></i> Jurisdiction</label>
+                <input type="text" id="municipal_jurisdiction" name="municipal_jurisdiction" value="{{ valuation.municipal_jurisdiction or '' }}" placeholder="e.g., Within Jamner Municipal Council Limit.">
+            </div>
+            <div class="form-group">
+                <label for="fsi_used"><i class="fas fa-chart-area"></i> FSI (Floor Space Index) Used (%)</label>
+                <input type="number" id="fsi_used" name="fsi_used" step="0.01" value="{{ valuation.fsi_used or '' }}" placeholder="e.g., 80">
+            </div>
         </div>
 
         <!-- SECTION 4: Plot Area & Dimensions -->
         <div class="card">
-            <h3 style="margin-bottom: 1.5rem; color: var(--dark); font-size: 1.5rem; border-bottom: 2px solid var(--primary); padding-bottom: 0.5rem;">
+            <h3 style="margin-bottom: 1.5rem; color: var(--dark); font-size: 1.5tr; border-bottom: 2px solid var(--primary); padding-bottom: 0.5rem;">
                 <i class="fas fa-ruler-combined"></i> Plot Area & Boundaries
             </h3>
             
@@ -236,11 +263,12 @@
                     <label for="locality_classification"><i class="fas fa-city"></i> Classification of Locality</label>
                     <select id="locality_classification" name="locality_classification">
                         <option value="">Select Classification</option>
-                        <option value="High Class" {% if valuation.locality_classification == 'High Class' %}selected{% endif %}>High Class</option>
+                        <option value="VIP / VVIP" {% if valuation.locality_classification == 'VIP / VVIP' %}selected{% endif %}>VIP / VVIP</option>
+                        <option value="Push" {% if valuation.locality_classification == 'Push' %}selected{% endif %}>Push</option>
                         <option value="Upper Middle Class" {% if valuation.locality_classification == 'Upper Middle Class' %}selected{% endif %}>Upper Middle Class</option>
                         <option value="Middle Class" {% if valuation.locality_classification == 'Middle Class' %}selected{% endif %}>Middle Class</option>
-                        <option value="Lower Middle Class" {% if valuation.locality_classification == 'Lower Middle Class' %}selected{% endif %}>Lower Middle Class</option>
-                        <option value="Developing Area" {% if valuation.locality_classification == 'Developing Area' %}selected{% endif %}>Developing Area</option>
+                        <option value="Lower" {% if valuation.locality_classification == 'Lower' %}selected{% endif %}>Lower</option>
+                        <option value="Negative" {% if valuation.locality_classification == 'Negative' %}selected{% endif %}>Negative</option>
                     </select>
                 </div>
             </div>
@@ -292,18 +320,74 @@
                     <select id="present_condition" name="present_condition">
                         <option value="">Select Condition</option>
                         <option value="Excellent" {% if valuation.present_condition == 'Excellent' %}selected{% endif %}>Excellent</option>
+                        <option value="Very Good" {% if valuation.present_condition == 'Very Good' %}selected{% endif %}>Very Good</option>
                         <option value="Good" {% if valuation.present_condition == 'Good' %}selected{% endif %}>Good</option>
                         <option value="Average" {% if valuation.present_condition == 'Average' %}selected{% endif %}>Average</option>
                         <option value="Fair" {% if valuation.present_condition == 'Fair' %}selected{% endif %}>Fair</option>
                         <option value="Poor" {% if valuation.present_condition == 'Poor' %}selected{% endif %}>Poor</option>
+                        <option value="Dilapidated" {% if valuation.present_condition == 'Dilapidated' %}selected{% endif %}>Dilapidated</option>
+                        <option value="Superior" {% if valuation.present_condition == 'Superior' %}selected{% endif %}>Superior</option>
                     </select>
                 </div>
                 
                 <div class="form-group">
                     <label for="construction_type"><i class="fas fa-building"></i> Type of Construction</label>
-                    <input type="text" id="construction_type" name="construction_type" 
-                           value="{{ valuation.construction_type or '' }}" placeholder="e.g., Load Bearing structure with BBM walls">
+                    <select id="construction_type" name="construction_type">
+                        <option value="">Select Type</option>
+                        <option value="RCC Framed" {% if valuation.construction_type == 'RCC Framed' %}selected{% endif %}>RCC Framed</option>
+                        <option value="Load Bearing" {% if valuation.construction_type == 'Load Bearing' %}selected{% endif %}>Load Bearing</option>
+                        <option value="Composite" {% if valuation.construction_type == 'Composite' %}selected{% endif %}>Composite</option>
+                        <option value="Pre Engineered" {% if valuation.construction_type == 'Pre Engineered' %}selected{% endif %}>Pre Engineered</option>
+                    </select>
                 </div>
+            </div>
+            <div class="form-group">
+                <label for="roof_type"><i class="fas fa-building"></i> Roof Type</label>
+                <input type="text" id="roof_type" name="roof_type" value="{{ valuation.roof_type or '' }}" placeholder="e.g., RCC slab">
+            </div>
+            <div class="form-group">
+                <label for="doors_windows"><i class="fas fa-door-open"></i> Doors & Windows</label>
+                <input type="text" id="doors_windows" name="doors_windows" value="{{ valuation.doors_windows or '' }}" placeholder="e.g., Solid Shutters and Aluminium Frame Windows with grill">
+            </div>
+            <div class="form-group">
+                <label for="flooring_type"><i class="fas fa-floor-plan"></i> Flooring Type</label>
+                <input type="text" id="flooring_type" name="flooring_type" value="{{ valuation.flooring_type or '' }}" placeholder="e.g., Vitrified Tiles Flooring">
+            </div>
+            <div class="form-group">
+                <label for="walls_plaster_painting"><i class="fas fa-paint-roller"></i> Walls, Plaster & Painting</label>
+                <select id="walls_plaster_painting" name="walls_plaster_painting">
+                    <option value="">Select Quality</option>
+                    <option value="Good" {% if valuation.walls_plaster_painting == 'Good' %}selected{% endif %}>Good</option>
+                    <option value="Bad" {% if valuation.walls_plaster_painting == 'Bad' %}selected{% endif %}>Bad</option>
+                    <option value="Poor" {% if valuation.walls_plaster_painting == 'Poor' %}selected{% endif %}>Poor</option>
+                    <option value="Average" {% if valuation.walls_plaster_painting == 'Average' %}selected{% endif %}>Average</option>
+                    <option value="Very Good" {% if valuation.walls_plaster_painting == 'Very Good' %}selected{% endif %}>Very Good</option>
+                    <option value="Satisfactory" {% if valuation.walls_plaster_painting == 'Satisfactory' %}selected{% endif %}>Satisfactory</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="plumbing_fittings"><i class="fas fa-water"></i> Water Supply Facilities (Plumbing & Fittings)</label>
+                <input type="checkbox" id="plumbing_fittings" name="plumbing_fittings" value="True" {% if valuation.plumbing_fittings %}checked{% endif %}>
+            </div>
+            <div class="form-group">
+                <label for="electrical_fittings"><i class="fas fa-lightbulb"></i> Electrical Fittings</label>
+                <input type="checkbox" id="electrical_fittings" name="electrical_fittings" value="True" {% if valuation.electrical_fittings %}checked{% endif %}>
+            </div>
+            <div class="form-group">
+                <label for="toilet_finishing"><i class="fas fa-toilet"></i> Sanitary Fittings (Toilet Finishing)</label>
+                <select id="toilet_finishing" name="toilet_finishing">
+                    <option value="">Select Quality</option>
+                    <option value="Standard" {% if valuation.toilet_finishing == 'Standard' %}selected{% endif %}>Standard</option>
+                    <option value="Superior" {% if valuation.toilet_finishing == 'Superior' %}selected{% endif %}>Superior</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="compound_wall"><i class="fas fa-fence"></i> Compound Wall Available</label>
+                <input type="checkbox" id="compound_wall" name="compound_wall" value="True" {% if valuation.compound_wall %}checked{% endif %}>
+            </div>
+            <div class="form-group">
+                <label for="other_amenities"><i class="fas fa-concierge-bell"></i> Other Amenities & special amenities</label>
+                <textarea id="other_amenities" name="other_amenities" rows="2" placeholder="Describe any other amenities">{{ valuation.other_amenities or '' }}</textarea>
             </div>
             
             <div class="form-group">
@@ -365,6 +449,39 @@
                     <input type="number" id="carpet_area" name="carpet_area" step="0.01" 
                            value="{{ valuation.carpet_area or 0 }}" placeholder="Total carpet area">
                 </div>
+            </div>
+            <div class="form-group">
+                <label for="no_of_floors"><i class="fas fa-layer-group"></i> Approved No of Floors</label>
+                <input type="number" id="no_of_floors" name="no_of_floors" min="0" value="{{ valuation.no_of_floors or '' }}" placeholder="e.g., 2">
+            </div>
+            <div class="form-group">
+                <label for="permitted_use"><i class="fas fa-file-contract"></i> Permitted use of Property</label>
+                <input type="text" id="permitted_use" name="permitted_use" value="{{ valuation.permitted_use or '' }}" placeholder="e.g., Residential">
+            </div>
+            <div class="form-group">
+                <label for="actual_use"><i class="fas fa-building"></i> Actual use of the Property</label>
+                <input type="text" id="actual_use" name="actual_use" value="{{ valuation.actual_use or '' }}" placeholder="e.g., Residential">
+            </div>
+            <div class="form-group">
+                <label for="approvals_status"><i class="fas fa-certificate"></i> Adheres to BIS National Building Code/Norms</label>
+                <select id="approvals_status" name="approvals_status">
+                    <option value="">Select Status</option>
+                    <option value="Yes" {% if valuation.approvals_status == 'Yes' %}selected{% endif %}>Yes</option>
+                    <option value="No" {% if valuation.approvals_status == 'No' %}selected{% endif %}>No</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="construction_stage"><i class="fas fa-tasks"></i> Construction Stage</label>
+                <select id="construction_stage" name="construction_stage">
+                    <option value="">Select Stage</option>
+                    <option value="To be Started" {% if valuation.construction_stage == 'To be Started' %}selected{% endif %}>To be Started</option>
+                    <option value="Under Progress" {% if valuation.construction_stage == 'Under Progress' %}selected{% endif %}>Under Progress</option>
+                    <option value="Completed" {% if valuation.construction_stage == 'Completed' %}selected{% endif %}>Completed</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="structural_survey_done"><i class="fas fa-clipboard-list"></i> Structural Survey Done (Civil/Structure/Architectural) </label>
+                <input type="checkbox" id="structural_survey_done" name="structural_survey_done" value="True" {% if valuation.structural_survey_done %}checked{% endif %}>
             </div>
         </div>
 
@@ -476,7 +593,78 @@
             </div>
         </div>
 
-        <!-- SECTION 10: Documentation -->
+        <!-- SECTION 10: Other Property Details -->
+        <div class="card">
+            <h3 style="margin-bottom: 1.5rem; color: var(--dark); font-size: 1.5rem; border-bottom: 2px solid var(--primary); padding-bottom: 0.5rem;">
+                <i class="fas fa-info-circle"></i> Other Property Details
+            </h3>
+            <div class="form-group">
+                <label for="land_ownership"><i class="fas fa-file-invoice-dollar"></i> Land Tenure</label>
+                <select id="land_ownership" name="land_ownership">
+                    <option value="">Select Land Tenure</option>
+                    <option value="Free Hold" {% if valuation.land_ownership == 'Free Hold' %}selected{% endif %}>Free Hold</option>
+                    <option value="Lease Hold" {% if valuation.land_ownership == 'Lease Hold' %}selected{% endif %}>Lease Hold</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="property_description"><i class="fas fa-file-alt"></i> Internal Composition / Property Description</label>
+                <textarea id="property_description" name="property_description" rows="3" placeholder="Detailed description of internal composition and property features.">{{ valuation.property_description or '' }}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="currently_occupied_by"><i class="fas fa-users"></i> Present Occupancy</label>
+                <select id="currently_occupied_by" name="currently_occupied_by">
+                    <option value="">Select Occupancy</option>
+                    <option value="Owner" {% if valuation.currently_occupied_by == 'Owner' %}selected{% endif %}>Owner Occupied</option>
+                    <option value="Tenanted" {% if valuation.currently_occupied_by == 'Tenanted' %}selected{% endif %}>Tenanted</option>
+                    <option value="Vacant" {% if valuation.currently_occupied_by == 'Vacant' %}selected{% endif %}>Vacant</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="demolition_risk"><i class="fas fa-bomb"></i> Risk of Demolition</label>
+                <select id="demolition_risk" name="demolition_risk">
+                    <option value="">Select Risk Level</option>
+                    <option value="No" {% if valuation.demolition_risk == 'No' %}selected{% endif %}>No</option>
+                    <option value="Low" {% if valuation.demolition_risk == 'Low' %}selected{% endif %}>Low</option>
+                    <option value="Medium" {% if valuation.demolition_risk == 'Medium' %}selected{% endif %}>Medium</option>
+                    <option value="High" {% if valuation.demolition_risk == 'High' %}selected{% endif %}>High</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="no_of_floors"><i class="fas fa-layer-group"></i> Approved No of Floors</label>
+                <input type="number" id="no_of_floors" name="no_of_floors" min="0" value="{{ valuation.no_of_floors or '' }}" placeholder="e.g., 2">
+            </div>
+            <div class="form-group">
+                <label for="permitted_use"><i class="fas fa-file-contract"></i> Permitted use of Property</label>
+                <input type="text" id="permitted_use" name="permitted_use" value="{{ valuation.permitted_use or '' }}" placeholder="e.g., Residential">
+            </div>
+            <div class="form-group">
+                <label for="actual_use"><i class="fas fa-building"></i> Actual use of the Property</label>
+                <input type="text" id="actual_use" name="actual_use" value="{{ valuation.actual_use or '' }}" placeholder="e.g., Residential">
+            </div>
+            <div class="form-group">
+                <label for="approvals_status"><i class="fas fa-certificate"></i> Adheres to BIS National Building Code/Norms</label>
+                <select id="approvals_status" name="approvals_status">
+                    <option value="">Select Status</option>
+                    <option value="Yes" {% if valuation.approvals_status == 'Yes' %}selected{% endif %}>Yes</option>
+                    <option value="No" {% if valuation.approvals_status == 'No' %}selected{% endif %}>No</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="construction_stage"><i class="fas fa-tasks"></i> Construction Stage</label>
+                <select id="construction_stage" name="construction_stage">
+                    <option value="">Select Stage</option>
+                    <option value="To be Started" {% if valuation.construction_stage == 'To be Started' %}selected{% endif %}>To be Started</option>
+                    <option value="Under Progress" {% if valuation.construction_stage == 'Under Progress' %}selected{% endif %}>Under Progress</option>
+                    <option value="Completed" {% if valuation.construction_stage == 'Completed' %}selected{% endif %}>Completed</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="structural_survey_done"><i class="fas fa-clipboard-list"></i> Structural Survey Done (Civil/Structure/Architectural) </label>
+                <input type="checkbox" id="structural_survey_done" name="structural_survey_done" value="True" {% if valuation.structural_survey_done %}checked{% endif %}>
+            </div>
+        </div>
+
+        <!-- SECTION 11: Documentation -->
         <div class="card">
             <h3 style="margin-bottom: 1.5rem; color: var(--dark); font-size: 1.5rem; border-bottom: 2px solid var(--primary); padding-bottom: 0.5rem;">
                 <i class="fas fa-camera"></i> Documentation & Photos
@@ -497,7 +685,7 @@
             </div>
         </div>
 
-        <!-- SECTION 11: Submit Button -->
+        <!-- SECTION 12: Submit Button -->
         <div style="display: flex; gap: 1.5rem; justify-content: center; margin-top: 2.5rem; flex-wrap: wrap;">
             <button type="submit" class="btn btn-success" style="padding: 1.2rem 3.5rem;">
                 <i class="fas fa-save"></i> Update Valuation Report
@@ -530,8 +718,8 @@ document.getElementById('plot_area_sqft').addEventListener('input', function() {
 // Calculate age based on construction year
 document.getElementById('construction_year').addEventListener('input', function() {
     const year = parseInt(this.value);
-    if (year && year >= 1900 && year <= 2025) {
-        const age = 2025 - year; // Current year
+    if (year && year >= 1900 && year <= new Date().getFullYear()) {
+        const age = new Date().getFullYear() - year; // Current year
         document.getElementById('property_age').value = age;
     }
 });

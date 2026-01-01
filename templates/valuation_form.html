@@ -29,7 +29,6 @@
                         <option value="">Select Bank</option>
                         <option value="Ujjivan">Ujjivan Small Finance Bank</option>
                         <option value="HDFC">HDFC Bank</option>
-                        <option value="HDFC">HDFC Bank</option>
                         <option value="ICICI">ICICI Bank</option>
                         <option value="SBI">State Bank of India</option>
                         <option value="Axis">Axis Bank</option>
@@ -41,6 +40,11 @@
                 <div class="form-group">
                     <label for="valuation_purpose"><i class="fas fa-bullseye"></i> Purpose of Valuation</label>
                     <input type="text" id="valuation_purpose" name="valuation_purpose" required placeholder="e.g., For collateral security">
+                </div>
+                
+                <div class="form-group">
+                    <label for="submission_date"><i class="fas fa-calendar-alt"></i> Submission Date</label>
+                    <input type="date" id="submission_date" name="submission_date" required>
                 </div>
             </div>
             
@@ -84,7 +88,12 @@
                     <option value="Personal Loan">Personal Loan</option>
                     <option value="Loan Against Property">Loan Against Property</option>
                     <option value="Construction Loan">Construction Loan</option>
+                    <option value="HL Purchase">HL Purchase</option>
                 </select>
+            </div>
+            <div class="form-group">
+                <label for="project_name"><i class="fas fa-project-diagram"></i> Project Name (if any)</label>
+                <input type="text" id="project_name" name="project_name" placeholder="Project Name (if applicable)">
             </div>
         </div>
 
@@ -111,6 +120,7 @@
                         <option value="Plot">Plot</option>
                         <option value="Commercial Building">Commercial Building</option>
                         <option value="Agricultural Land">Agricultural Land</option>
+                        <option value="Residential">Residential</option>
                     </select>
                 </div>
             </div>
@@ -134,7 +144,23 @@
                 <div class="form-group">
                     <label for="cts_number"><i class="fas fa-hashtag"></i> CTS Number</label>
                     <input type="text" id="cts_number" name="cts_number" placeholder="CTS number if applicable">
-                </div>
+                </div
+            ></div>
+            <div class="form-group">
+                <label for="property_identifiable"><i class="fas fa-search"></i> Legal Access to Property is demarcated</label>
+                <input type="checkbox" id="property_identifiable" name="property_identifiable" value="True">
+            </div>
+            <div class="form-group">
+                <label for="access_road_name"><i class="fas fa-road"></i> Nearest Land Mark / All weather road for access to property</label>
+                <input type="text" id="access_road_name" name="access_road_name" placeholder="e.g., Near Gajanan Maharaj Mandir, Bhusawal Road">
+            </div>
+            <div class="form-group">
+                <label for="municipal_jurisdiction"><i class="fas fa-map-marked-alt"></i> Jurisdiction</label>
+                <input type="text" id="municipal_jurisdiction" name="municipal_jurisdiction" placeholder="e.g., Within Jamner Municipal Council Limit.">
+            </div>
+            <div class="form-group">
+                <label for="fsi_used"><i class="fas fa-chart-area"></i> FSI (Floor Space Index) Used (%)</label>
+                <input type="number" id="fsi_used" name="fsi_used" step="0.01" placeholder="e.g., 80">
             </div>
         </div>
 
@@ -215,11 +241,12 @@
                     <label for="locality_classification"><i class="fas fa-city"></i> Classification of Locality</label>
                     <select id="locality_classification" name="locality_classification">
                         <option value="">Select Classification</option>
-                        <option value="High Class">High Class</option>
+                        <option value="VIP / VVIP">VIP / VVIP</option>
+                        <option value="Push">Push</option>
                         <option value="Upper Middle Class">Upper Middle Class</option>
                         <option value="Middle Class">Middle Class</option>
-                        <option value="Lower Middle Class">Lower Middle Class</option>
-                        <option value="Developing Area">Developing Area</option>
+                        <option value="Lower">Lower</option>
+                        <option value="Negative">Negative</option>
                     </select>
                 </div>
             </div>
@@ -266,17 +293,74 @@
                     <select id="present_condition" name="present_condition">
                         <option value="">Select Condition</option>
                         <option value="Excellent">Excellent</option>
+                        <option value="Very Good">Very Good</option>
                         <option value="Good">Good</option>
                         <option value="Average">Average</option>
                         <option value="Fair">Fair</option>
                         <option value="Poor">Poor</option>
+                        <option value="Dilapidated">Dilapidated</option>
+                        <option value="Superior">Superior</option>
                     </select>
                 </div>
                 
                 <div class="form-group">
                     <label for="construction_type"><i class="fas fa-building"></i> Type of Construction</label>
-                    <input type="text" id="construction_type" name="construction_type" placeholder="e.g., Load Bearing structure with BBM walls">
+                    <select id="construction_type" name="construction_type">
+                        <option value="">Select Type</option>
+                        <option value="RCC Framed">RCC Framed</option>
+                        <option value="Load Bearing">Load Bearing</option>
+                        <option value="Composite">Composite</option>
+                        <option value="Pre Engineered">Pre Engineered</option>
+                    </select>
                 </div>
+            </div>
+            <div class="form-group">
+                <label for="roof_type"><i class="fas fa-building"></i> Roof Type</label>
+                <input type="text" id="roof_type" name="roof_type" placeholder="e.g., RCC slab">
+            </div>
+            <div class="form-group">
+                <label for="doors_windows"><i class="fas fa-door-open"></i> Doors & Windows</label>
+                <input type="text" id="doors_windows" name="doors_windows" placeholder="e.g., Solid Shutters and Aluminium Frame Windows with grill">
+            </div>
+            <div class="form-group">
+                <label for="flooring_type"><i class="fas fa-floor-plan"></i> Flooring Type</label>
+                <input type="text" id="flooring_type" name="flooring_type" placeholder="e.g., Vitrified Tiles Flooring">
+            </div>
+            <div class="form-group">
+                <label for="walls_plaster_painting"><i class="fas fa-paint-roller"></i> Walls, Plaster & Painting</label>
+                <select id="walls_plaster_painting" name="walls_plaster_painting">
+                    <option value="">Select Quality</option>
+                    <option value="Good">Good</option>
+                    <option value="Bad">Bad</option>
+                    <option value="Poor">Poor</option>
+                    <option value="Average">Average</option>
+                    <option value="Very Good">Very Good</option>
+                    <option value="Satisfactory">Satisfactory</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="plumbing_fittings"><i class="fas fa-water"></i> Water Supply Facilities (Plumbing & Fittings)</label>
+                <input type="checkbox" id="plumbing_fittings" name="plumbing_fittings" value="True">
+            </div>
+            <div class="form-group">
+                <label for="electrical_fittings"><i class="fas fa-lightbulb"></i> Electrical Fittings</label>
+                <input type="checkbox" id="electrical_fittings" name="electrical_fittings" value="True">
+            </div>
+            <div class="form-group">
+                <label for="toilet_finishing"><i class="fas fa-toilet"></i> Sanitary Fittings (Toilet Finishing)</label>
+                <select id="toilet_finishing" name="toilet_finishing">
+                    <option value="">Select Quality</option>
+                    <option value="Standard">Standard</option>
+                    <option value="Superior">Superior</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="compound_wall"><i class="fas fa-fence"></i> Compound Wall Available</label>
+                <input type="checkbox" id="compound_wall" name="compound_wall" value="True">
+            </div>
+            <div class="form-group">
+                <label for="other_amenities"><i class="fas fa-concierge-bell"></i> Other Amenities & special amenities</label>
+                <textarea id="other_amenities" name="other_amenities" rows="2" placeholder="Describe any other amenities"></textarea>
             </div>
             
             <div class="form-group">
@@ -330,6 +414,39 @@
                     <label for="carpet_area"><i class="fas fa-border-style"></i> Carpet Area</label>
                     <input type="number" id="carpet_area" name="carpet_area" step="0.01" placeholder="Total carpet area">
                 </div>
+            </div>
+            <div class="form-group">
+                <label for="no_of_floors"><i class="fas fa-layer-group"></i> Approved No of Floors</label>
+                <input type="number" id="no_of_floors" name="no_of_floors" min="0" placeholder="e.g., 2">
+            </div>
+            <div class="form-group">
+                <label for="permitted_use"><i class="fas fa-file-contract"></i> Permitted use of Property</label>
+                <input type="text" id="permitted_use" name="permitted_use" placeholder="e.g., Residential">
+            </div>
+            <div class="form-group">
+                <label for="actual_use"><i class="fas fa-building"></i> Actual use of the Property</label>
+                <input type="text" id="actual_use" name="actual_use" placeholder="e.g., Residential">
+            </div>
+            <div class="form-group">
+                <label for="approvals_status"><i class="fas fa-certificate"></i> Adheres to BIS National Building Code/Norms</label>
+                <select id="approvals_status" name="approvals_status">
+                    <option value="">Select Status</option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="construction_stage"><i class="fas fa-tasks"></i> Construction Stage</label>
+                <select id="construction_stage" name="construction_stage">
+                    <option value="">Select Stage</option>
+                    <option value="To be Started">To be Started</option>
+                    <option value="Under Progress">Under Progress</option>
+                    <option value="Completed">Completed</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="structural_survey_done"><i class="fas fa-clipboard-list"></i> Structural Survey Done (Civil/Structure/Architectural) </label>
+                <input type="checkbox" id="structural_survey_done" name="structural_survey_done" value="True">
             </div>
         </div>
 
@@ -431,7 +548,78 @@
             </div>
         </div>
 
-        <!-- SECTION 10: Documentation -->
+        <!-- SECTION 10: Other Property Details -->
+        <div class="card">
+            <h3 style="margin-bottom: 1.5rem; color: var(--dark); font-size: 1.5rem; border-bottom: 2px solid var(--primary); padding-bottom: 0.5rem;">
+                <i class="fas fa-info-circle"></i> Other Property Details
+            </h3>
+            <div class="form-group">
+                <label for="land_ownership"><i class="fas fa-file-invoice-dollar"></i> Land Tenure</label>
+                <select id="land_ownership" name="land_ownership">
+                    <option value="">Select Land Tenure</option>
+                    <option value="Free Hold">Free Hold</option>
+                    <option value="Lease Hold">Lease Hold</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="property_description"><i class="fas fa-file-alt"></i> Internal Composition / Property Description</label>
+                <textarea id="property_description" name="property_description" rows="3" placeholder="Detailed description of internal composition and property features."></textarea>
+            </div>
+            <div class="form-group">
+                <label for="currently_occupied_by"><i class="fas fa-users"></i> Present Occupancy</label>
+                <select id="currently_occupied_by" name="currently_occupied_by">
+                    <option value="">Select Occupancy</option>
+                    <option value="Owner">Owner Occupied</option>
+                    <option value="Tenanted">Tenanted</option>
+                    <option value="Vacant">Vacant</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="demolition_risk"><i class="fas fa-bomb"></i> Risk of Demolition</label>
+                <select id="demolition_risk" name="demolition_risk">
+                    <option value="">Select Risk Level</option>
+                    <option value="No">No</option>
+                    <option value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="no_of_floors"><i class="fas fa-layer-group"></i> Approved No of Floors</label>
+                <input type="number" id="no_of_floors" name="no_of_floors" min="0" placeholder="e.g., 2">
+            </div>
+            <div class="form-group">
+                <label for="permitted_use"><i class="fas fa-file-contract"></i> Permitted use of Property</label>
+                <input type="text" id="permitted_use" name="permitted_use" placeholder="e.g., Residential">
+            </div>
+            <div class="form-group">
+                <label for="actual_use"><i class="fas fa-building"></i> Actual use of the Property</label>
+                <input type="text" id="actual_use" name="actual_use" placeholder="e.g., Residential">
+            </div>
+            <div class="form-group">
+                <label for="approvals_status"><i class="fas fa-certificate"></i> Adheres to BIS National Building Code/Norms</label>
+                <select id="approvals_status" name="approvals_status">
+                    <option value="">Select Status</option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="construction_stage"><i class="fas fa-tasks"></i> Construction Stage</label>
+                <select id="construction_stage" name="construction_stage">
+                    <option value="">Select Stage</option>
+                    <option value="To be Started">To be Started</option>
+                    <option value="Under Progress">Under Progress</option>
+                    <option value="Completed">Completed</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="structural_survey_done"><i class="fas fa-clipboard-list"></i> Structural Survey Done (Civil/Structure/Architectural) </label>
+                <input type="checkbox" id="structural_survey_done" name="structural_survey_done" value="True">
+            </div>
+        </div>
+
+        <!-- SECTION 11: Documentation -->
         <div class="card">
             <h3 style="margin-bottom: 1.5rem; color: var(--dark); font-size: 1.5rem; border-bottom: 2px solid var(--primary); padding-bottom: 0.5rem;">
                 <i class="fas fa-camera"></i> Documentation & Photos
@@ -451,7 +639,7 @@
             </div>
         </div>
 
-        <!-- SECTION 11: Submit Button -->
+        <!-- SECTION 12: Submit Button -->
         <div style="display: flex; gap: 1.5rem; justify-content: center; margin-top: 2.5rem; flex-wrap: wrap;">
             <button type="submit" class="btn btn-success" style="padding: 1.2rem 3.5rem;">
                 <i class="fas fa-file-pdf"></i> Generate Valuation Report
@@ -481,8 +669,8 @@ document.getElementById('plot_area_sqft').addEventListener('input', function() {
 // Calculate age based on construction year
 document.getElementById('construction_year').addEventListener('input', function() {
     const year = parseInt(this.value);
-    if (year && year >= 1900 && year <= 2025) {
-        const age = 2025 - year; // Current year
+    if (year && year >= 1900 && year <= new Date().getFullYear()) {
+        const age = new Date().getFullYear() - year; // Current year
         document.getElementById('property_age').value = age;
     }
 });
