@@ -44,6 +44,7 @@ class LandValuation(db.Model):
     case_number = db.Column(db.String(50))
     loan_type = db.Column(db.String(100))
     project_name = db.Column(db.String(100))
+    bank_name = db.Column(db.String(100)) # New column for bank name
 
     # Property Details
     property_owner = db.Column(db.String(100), nullable=False)
@@ -349,6 +350,7 @@ def new_valuation():
             case_number=request.form.get('case_number'),
             loan_type=request.form.get('loan_type'),
             project_name=request.form.get('project_name'),
+            bank_name=request.form.get('bank_name'),
 
             # Property Details
             property_owner=request.form.get('property_owner'),
@@ -508,6 +510,7 @@ def edit_valuation(valuation_id):
         valuation.case_number = request.form.get('case_number')
         valuation.loan_type = request.form.get('loan_type')
         valuation.project_name = request.form.get('project_name')
+        valuation.bank_name = request.form.get('bank_name')
         valuation.property_owner = request.form.get('property_owner')
         valuation.property_address = request.form.get('property_address')
         valuation.property_type = request.form.get('property_type')
@@ -656,9 +659,14 @@ def download_pdf(valuation_id):
         # Convert photos to base64 for embedding in PDF
         encoded_photos = convert_photos_to_base64(photo_paths)
 
+        # Determine template based on bank_name
+        template_name = f'professional_report_{valuation.bank_name}.html'
+        if not os.path.exists(os.path.join(app.root_path, 'templates', template_name)):
+            template_name = 'professional_report.html' # Fallback to default template
+
         # Render HTML template with base64 encoded photos
         html_content = render_template(
-            'professional_report.html',
+            template_name,
             valuation=valuation,
             encoded_photos=encoded_photos,
             logo_base64=LOGO_BASE64
@@ -796,13 +804,18 @@ def download_html_fallback(valuation_id, valuation):
 
     encoded_photos = convert_photos_to_base64(photo_paths)
     
+    # Determine template based on bank_name
+    template_name = f'professional_report_{valuation.bank_name}.html'
+    if not os.path.exists(os.path.join(app.root_path, 'templates', template_name)):
+        template_name = 'professional_report.html' # Fallback to default template
+
     # Render HTML template
     html_content = render_template(
-        'professional_report.html',
+        template_name,
         valuation=valuation,
-        encoded_photos=encoded_photos
+        encoded_photos=encoded_photos,
+        logo_base64=LOGO_BASE64
     )
-    
     # Create response with HTML content
     filename = f"Land_Valuation_Report_{valuation.case_number or valuation_id}_{valuation.client_name.replace(' ', '_')}.html"
     filename = secure_filename(filename)
@@ -833,10 +846,16 @@ def view_report(valuation_id):
 
     encoded_photos = convert_photos_to_base64(photo_paths)
 
+    # Determine template based on bank_name
+    template_name = f'professional_report_{valuation.bank_name}.html'
+    if not os.path.exists(os.path.join(app.root_path, 'templates', template_name)):
+        template_name = 'professional_report.html' # Fallback to default template
+
     return render_template(
-        'professional_report.html',
+        template_name,
         valuation=valuation,
-        encoded_photos=encoded_photos
+        encoded_photos=encoded_photos,
+        logo_base64=LOGO_BASE64
     )
 
 @app.route('/check-images/<int:valuation_id>')
