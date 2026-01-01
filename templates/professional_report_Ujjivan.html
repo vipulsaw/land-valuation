@@ -28,6 +28,8 @@
         th { background-color: #2c3e50; color: white; padding: 6px 8px; text-align: left; font-weight: 600; }
         td { padding: 4px 8px; border: 1px solid #ddd; vertical-align: top; }
         
+        .highlight-checked { background-color: #d4edda; font-weight: bold; }
+
         .no-border-table td { border: none; padding: 2px 5px; }
         .remarks { font-style: italic; color: #666; font-size: 8pt; }
         .page-break { page-break-before: always; }
@@ -63,9 +65,9 @@
     <table class="info-table">
         <tr>
             <th>Name of Vendor:</th>
-            <td>Mr. Prashant R Patil</td>
+            <td>{{ valuation.property_owner or 'N/A' }}</td>
             <th>Name Of Applicant:</th>
-            <td>Devanand Vasant Kolhe</td>
+            <td>{{ valuation.client_name or 'N/A' }}</td>
         </tr>
     </table>
 
@@ -74,57 +76,57 @@
     <table class="info-table">
         <tr>
             <th>Ref No:</th>
-            <td>VAL/Ujjivan / December / 2025</td>
+            <td>{{ valuation.case_number or 'N/A' }}</td>
             <th>Case Type</th>
-            <td>HL Purchase</td>
+            <td>{{ valuation.loan_type or 'N/A' }}</td>
         </tr>
         <tr>
             <th>Name of Contact Person:</th>
-            <td>Mr. Amit Kulkarni</td>
+            <td>{{ valuation.valuation_requested_by or 'N/A' }}</td>
             <th>Date</th>
-            <td>12/2025</td>
+            <td>{{ valuation.valuation_date.strftime('%m/%Y') if valuation.valuation_date else 'N/A' }}</td>
         </tr>
         <tr>
             <th>Date of Inspection & Valuation:</th>
             <td>{{ valuation.inspection_date.strftime('%d-%m-%Y') if valuation.inspection_date else 'N/A' }}</td>
             <th>Name of Borrower / Acquire by</th>
-            <td>Devanand Vasant Kolhe</td>
+            <td>{{ valuation.client_name or 'N/A' }}</td>
         </tr>
         <tr>
             <th>Name of Vendor</th>
-            <td>Mr. Sunil Anil Mali</td>
+            <td>{{ valuation.property_owner or 'N/A' }}</td>
             <th>Project Name (if any)</th>
-            <td>Not Available</td>
+            <td>{{ valuation.project_name or 'Not Available' }}</td>
         </tr>
         <tr>
             <th>Flat No. / Villa No. / B.T.R. No.</th>
-            <td>Plot no. 37 (South Part)</td>
+            <td>{{ valuation.plot_number or 'N/A' }}</td>
             <th>Property Address (Actual)</th>
-            <td>Gat No. 723/1, Plot No. 37 (South Part), NPH No. 3453/37/1, Rajmata Jijau Nagar, At. Jamner Tal. Jamner Dist. Jalgaon 424206</td>
+            <td>{{ valuation.property_address or 'N/A' }}</td>
         </tr>
         <tr>
             <th>Legal Access to Property is demarcated</th>
-            <td>Yes</td>
+            <td>{{ 'Yes' if valuation.property_identifiable else 'No' }}</td>
             <th>Plot Number</th>
-            <td>37</td>
+            <td>{{ valuation.plot_number or 'N/A' }}</td>
         </tr>
         <tr>
             <th>Nearest Land Mark</th>
-            <td>Near Gajanan Maharaj Mandir, Bhusawal Road</td>
+            <td>{{ valuation.access_road_name or 'N/A' }}</td>
             <th>All weather road for access to property</th>
-            <td>Yes</td>
+            <td>{{ 'Yes' if valuation.access_road_name else 'No' }}</td>
         </tr>
         <tr>
             <th>Locality Classification</th>
-            <td>Residential</td>
+            <td>{{ valuation.locality_classification or 'N/A' }}</td>
             <th>Jurisdiction</th>
-            <td>Within Jamner Municipal Council Limit.</td>
+            <td>{{ valuation.municipal_jurisdiction or 'N/A' }}</td>
         </tr>
         <tr>
             <th>Zonal Classification</th>
-            <td>Residential</td>
+            <td>{{ valuation.property_type or 'N/A' }}</td>
             <th>FSI</th>
-            <td>80%</td>
+            <td>{{ valuation.fsi_used or 'N/A' }}%</td>
         </tr>
     </table>
 
@@ -141,9 +143,9 @@
         <tbody>
             <tr>
                 <td>Yes</td>
-                <td>{{ 'Yes' if valuation.underground_drainage else 'No' }}</td>
-                <td>{{ 'Yes' if valuation.roads else 'No' }}</td>
-                <td>{{ 'Yes' if valuation.electricity else 'No' }}</td>
+                <td class="{{ 'highlight-checked' if valuation.underground_drainage else '' }}">{{ '✓' if valuation.underground_drainage else '' }}</td>
+                <td class="{{ 'highlight-checked' if valuation.access_road_name else '' }}">{{ '✓' if valuation.access_road_name else '' }}</td>
+                <td class="{{ 'highlight-checked' if valuation.electrical_fittings else '' }}">{{ '✓' if valuation.electrical_fittings else '' }}</td>
             </tr>
         </tbody>
     </table>
@@ -164,12 +166,12 @@
         <tbody>
             <tr>
                 <td></td>
-                <td></td>
-                <td></td>
-                <td>{{ '✓' if valuation.locality_classification == 'Middle Class' else '' }}</td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td class="{{ 'highlight-checked' if valuation.locality_classification == 'VIP / VVIP' else '' }}">{{ '✓' if valuation.locality_classification == 'VIP / VVIP' else '' }}</td>
+                <td class="{{ 'highlight-checked' if valuation.locality_classification == 'Push' else '' }}">{{ '✓' if valuation.locality_classification == 'Push' else '' }}</td>
+                <td class="{{ 'highlight-checked' if valuation.locality_classification == 'Upper Middle Class' else '' }}">{{ '✓' if valuation.locality_classification == 'Upper Middle Class' else '' }}</td>
+                <td class="{{ 'highlight-checked' if valuation.locality_classification == 'Middle Class' else '' }}">{{ '✓' if valuation.locality_classification == 'Middle Class' else '' }}</td>
+                <td class="{{ 'highlight-checked' if valuation.locality_classification == 'Lower' else '' }}">{{ '✓' if valuation.locality_classification == 'Lower' else '' }}</td>
+                <td class="{{ 'highlight-checked' if valuation.locality_classification == 'Negative' else '' }}">{{ '✓' if valuation.locality_classification == 'Negative' else '' }}</td>
             </tr>
         </tbody>
     </table>
@@ -188,10 +190,10 @@
         <tbody>
             <tr>
                 <td>Sale Marketability</td>
-                <td></td>
-                <td></td>
-                <td>{{ '✓' if valuation.sale_marketability == 'Good' else '' }}</td>
-                <td></td>
+                <td class="{{ 'highlight-checked' if valuation.sale_marketability == 'Excellent' else '' }}">{{ '✓' if valuation.sale_marketability == 'Excellent' else '' }}</td>
+                <td class="{{ 'highlight-checked' if valuation.sale_marketability == 'Very Good' else '' }}">{{ '✓' if valuation.sale_marketability == 'Very Good' else '' }}</td>
+                <td class="{{ 'highlight-checked' if valuation.sale_marketability == 'Good' else '' }}">{{ '✓' if valuation.sale_marketability == 'Good' else '' }}</td>
+                <td class="{{ 'highlight-checked' if valuation.sale_marketability == 'Poor' else '' }}">{{ '✓' if valuation.sale_marketability == 'Poor' else '' }}</td>
             </tr>
         </tbody>
     </table>
@@ -211,40 +213,38 @@
         <tr>
             <th>As per map</th>
             <td>East By</td>
-            <td>Open Space</td>
+            <td>{{ valuation.east_boundary or 'N/A' }}</td>
             <td>Gross Approved Area</td>
             <td>{{ valuation.plot_area_sqm or 'N/A' }} Sqm</td>
             <td>Carpet Area (in Sqft)</td>
-            <td>0.00</td>
+            <td>{{ valuation.carpet_area or 'N/A' }}</td>
         </tr>
         <tr>
             <td>West By</td>
-            <td>6.0 M.W Colony Road</td>
+            <td>{{ valuation.west_boundary or 'N/A' }}</td>
             <td>Gross Built Up Area</td>
             <td>{{ valuation.built_up_area or 'N/A' }}</td>
         </tr>
         <tr>
             <td>North By</td>
-            <td>Remaining part of Survey plot no. 37</td>
-            <td>Remaining part of Survey plot no. 37</td>
+            <td>{{ valuation.north_boundary or 'N/A' }}</td>
+            <td></td>
             <td>Boundaries are Matched</td>
         </tr>
         <tr>
             <td>South By</td>
-            <td>Plot No. 38</td>
-            <td>Plot No. 38</td>
+            <td>{{ valuation.south_boundary or 'N/A' }}</td>
+            <td></td>
             <td></td>
         </tr>
         <tr>
             <td>Site Dimensions</td>
-            <td>E – W – 7.75 M – 4.75 M</td>
-            <td>E – W – 7.75 M – 4.75 M</td>
+            <td colspan="2">E – W – {{ valuation.plot_area_sqft or 'N/A' }} Sqft</td>
             <td>Site Dimensions are Matched</td>
         </tr>
         <tr>
             <td></td>
-            <td>N – S – 15.00 M – 15.00 M</td>
-            <td>N – S – 15.00 M – 15.00 M</td>
+            <td colspan="2">N – S – {{ valuation.plot_area_sqm or 'N/A' }} Sqm</td>
             <td></td>
         </tr>
     </table>
@@ -275,78 +275,79 @@
     <table class="info-table">
         <tr>
             <th>Type of Construction</th>
-            <td>RCC Framed</td>
+            <td class="{{ 'highlight-checked' if valuation.construction_type == 'RCC Framed' else '' }}">RCC Framed {{ '✓' if valuation.construction_type == 'RCC Framed' else '' }}</td>
             <th>Load Bearing</th>
-            <td>Good</td>
+            <td class="{{ 'highlight-checked' if valuation.construction_type == 'Load Bearing' else '' }}">Good {{ '✓' if valuation.construction_type == 'Load Bearing' else '' }}</td>
             <th>Composite</th>
-            <td>Pre Engineered</td>
+            <td></td>
+            <th>Pre Engineered</th>
+            <td></td>
         </tr>
         <tr>
             <th>Quality of Construction</th>
-            <td>Very good</td>
-            <td>Standard</td>
-            <td>Good</td>
-            <td>Average</td>
-            <td>Poor</td>
-            <td>Dilapidated</td>
-            <td>Superior</td>
+            <td class="{{ 'highlight-checked' if valuation.present_condition == 'Very Good' else '' }}">Very good {{ '✓' if valuation.present_condition == 'Very Good' else '' }}</td>
+            <th>Standard</th>
+            <td class="{{ 'highlight-checked' if valuation.present_condition == 'Good' else '' }}">Good {{ '✓' if valuation.present_condition == 'Good' else '' }}</td>
+            <th>Average</th>
+            <td class="{{ 'highlight-checked' if valuation.present_condition == 'Average' else '' }}"></td>
+            <th>Poor</th>
+            <td class="{{ 'highlight-checked' if valuation.present_condition == 'Poor' else '' }}"></td>
+            <th>Dilapidated</th>
+            <td class="{{ 'highlight-checked' if valuation.present_condition == 'Dilapidated' else '' }}"></td>
+            <th>Superior</th>
+            <td class="{{ 'highlight-checked' if valuation.present_condition == 'Superior' else '' }}"></td>
         </tr>
         <tr>
             <th>Water Supply Facilities</th>
-            <td>Yes</td>
-            <td>No</td>
+            <td class="{{ 'highlight-checked' if valuation.plumbing_fittings else '' }}">Yes {{ '✓' if valuation.plumbing_fittings else '' }}</td>
+            <th>No</th>
+            <td class="{{ 'highlight-checked' if not valuation.plumbing_fittings else '' }}">No {{ '✓' if not valuation.plumbing_fittings else '' }}</td>
             <th>Sanitary Fittings</th>
-            <td>Standard</td>
-            <td>Superior</td>
+            <td class="{{ 'highlight-checked' if valuation.toilet_finishing == 'Standard' else '' }}">Standard {{ '✓' if valuation.toilet_finishing == 'Standard' else '' }}</td>
+            <td class="{{ 'highlight-checked' if valuation.toilet_finishing == 'Superior' else '' }}">Superior {{ '✓' if valuation.toilet_finishing == 'Superior' else '' }}</td>
         </tr>
         <tr>
             <th>Lifts</th>
             <td>Yes</td>
             <td>No</td>
             <th>Compound Wall</th>
-            <td>Yes</td>
-            <td>No</td>
+            <td class="{{ 'highlight-checked' if valuation.compound_wall else '' }}">Yes {{ '✓' if valuation.compound_wall else '' }}</td>
+            <td class="{{ 'highlight-checked' if not valuation.compound_wall else '' }}">No {{ '✓' if not valuation.compound_wall else '' }}</td>
         </tr>
         <tr>
             <th>Type of Structure</th>
-            <td colspan="7">RCC framed structure with BBM walls</td>
+            <td colspan="7">{{ valuation.construction_type or 'RCC framed structure with BBM walls' }}</td>
         </tr>
         <tr>
             <th>Roof</th>
-            <td colspan="7">RCC slab</td>
+            <td colspan="7">{{ valuation.roof_type or 'RCC slab' }}</td>
         </tr>
         <tr>
             <th>Doors & Windows</th>
-            <td colspan="7">Solid Shutters and Aluminium Frame Windows with grill</td>
+            <td colspan="7">{{ valuation.doors_windows or 'Solid Shutters and Aluminium Frame Windows with grill' }}</td>
         </tr>
         <tr>
             <th>Flooring</th>
-            <td colspan="7">Vitrified Tiles Flooring</td>
+            <td colspan="7">{{ valuation.flooring_type or 'Vitrified Tiles Flooring' }}</td>
         </tr>
         <tr>
             <th>Painting</th>
-            <td>Good</td>
-            <td>Bad</td>
-            <td>Poor</td>
+            <td class="{{ 'highlight-checked' if valuation.walls_plaster_painting == 'Good' else '' }}">Good {{ '✓' if valuation.walls_plaster_painting == 'Good' else '' }}</td>
+            <td class="{{ 'highlight-checked' if valuation.walls_plaster_painting == 'Bad' else '' }}">Bad {{ '✓' if valuation.walls_plaster_painting == 'Bad' else '' }}</td>
+            <td class="{{ 'highlight-checked' if valuation.walls_plaster_painting == 'Poor' else '' }}">Poor {{ '✓' if valuation.walls_plaster_painting == 'Poor' else '' }}</td>
             <td></td>
-            <td>Average</td>
-            <td>Very Good</td>
-            <td>Good</td>
-            <td>Satisfactory</td>
+            <td class="{{ 'highlight-checked' if valuation.walls_plaster_painting == 'Average' else '' }}">Average {{ '✓' if valuation.walls_plaster_painting == 'Average' else '' }}</td>
+            <td class="{{ 'highlight-checked' if valuation.walls_plaster_painting == 'Very Good' else '' }}">Very Good {{ '✓' if valuation.walls_plaster_painting == 'Very Good' else '' }}</td>
+            <td class="{{ 'highlight-checked' if valuation.walls_plaster_painting == 'Good' else '' }}">Good {{ '✓' if valuation.walls_plaster_painting == 'Good' else '' }}</td>
+            <td class="{{ 'highlight-checked' if valuation.walls_plaster_painting == 'Satisfactory' else '' }}">Satisfactory {{ '✓' if valuation.walls_plaster_painting == 'Satisfactory' else '' }}</td>
         </tr>
         <tr>
             <th>Other Amenities & special amenities</th>
-            <td colspan="7">N.A.</td>
+            <td colspan="7">{{ valuation.other_amenities or 'N.A.' }}</td>
         </tr>
         <tr>
             <th>External Condition</th>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td colspan="7">{{ valuation.present_condition or 'N/A' }}</td>
         </tr>
         <tr>
             <th>Age by the Building</th>
@@ -358,7 +359,7 @@
         </tr>
         <tr>
             <th>Structure/ Building is</th>
-            <td colspan="7"></td>
+            <td colspan="7">{{ valuation.construction_type or 'N/A' }}</td>
         </tr>
     </table>
 
@@ -436,7 +437,7 @@
         </tr>
         <tr>
             <th>If the Plot is Sub – Divided, then approved by the</th>
-            <td colspan="3"></td>
+            <td colspan="3">Not Provided</td>
         </tr>
         <tr>
             <th>FSI Consumed</th>
@@ -454,12 +455,12 @@
             <th>Approved No of Floors</th>
             <td>{{ valuation.no_of_floors or 'N/A' }}</td>
             <th>Whether the property and locality where the property is situated fall under Urban Development Management Authority (UDMA) guidelines</th>
-            <td>No</td>
+            <td class="{{ 'highlight-checked' if not valuation.municipal_jurisdiction == 'UDMA' else '' }}">No {{ '✓' if not valuation.municipal_jurisdiction == 'UDMA' else '' }}</td>
         </tr>
         <tr>
             <th>Whether the building adheres to the National building code/norms formulated by the Bureau of Indian Standards (BIS)</th>
-            <td>Yes</td>
-            <td>No</td>
+            <td class="{{ 'highlight-checked' if valuation.approvals_status == 'Yes' else '' }}">Yes {{ '✓' if valuation.approvals_status == 'Yes' else '' }}</td>
+            <td class="{{ 'highlight-checked' if valuation.approvals_status == 'No' else '' }}">No {{ '✓' if valuation.approvals_status == 'No' else '' }}</td>
             <th></th>
             <td></td>
         </tr>
@@ -481,21 +482,21 @@
         </tr>
         <tr>
             <td>Ground Floor Residential</td>
-            <td>{{ valuation.ground_floor_area or 'N/A' }}</td>
-            <td>{{ valuation.ground_floor_area or 'N/A' }}</td>
-            <td>{{ (valuation.ground_floor_area * 0.85)|round(2) if valuation.ground_floor_area else 'N/A' }}</td>
+            <td>{{ "{:.2f}".format(valuation.ground_floor_area) if valuation.ground_floor_area else '0.00' }}</td>
+            <td>{{ "{:.2f}".format(valuation.ground_floor_area) if valuation.ground_floor_area else '0.00' }}</td>
+            <td>{{ "{:.2f}".format(valuation.ground_floor_area * 0.85) if valuation.ground_floor_area else '0.00' }}</td>
         </tr>
         <tr>
             <td>First Floor Residential</td>
-            <td>{{ valuation.first_floor_area or 'N/A' }}</td>
-            <td>{{ valuation.first_floor_area or 'N/A' }}</td>
-            <td>{{ (valuation.first_floor_area * 0.85)|round(2) if valuation.first_floor_area else 'N/A' }}</td>
+            <td>{{ "{:.2f}".format(valuation.first_floor_area) if valuation.first_floor_area else '0.00' }}</td>
+            <td>{{ "{:.2f}".format(valuation.first_floor_area) if valuation.first_floor_area else '0.00' }}</td>
+            <td>{{ "{:.2f}".format(valuation.first_floor_area * 0.85) if valuation.first_floor_area else '0.00' }}</td>
         </tr>
         <tr>
             <td>Total</td>
-            <td>{{ (((valuation.ground_floor_area or 0) + (valuation.first_floor_area or 0)))|round(2) }}</td>
-            <td>{{ (((valuation.ground_floor_area or 0) + (valuation.first_floor_area or 0)))|round(2) }}</td>
-            <td>{{ ((((valuation.ground_floor_area or 0) + (valuation.first_floor_area or 0))) * 0.85)|round(2) }}</td>
+            <td>{{ "{:.2f}".format(valuation.ground_floor_area + valuation.first_floor_area) }}</td>
+            <td>{{ "{:.2f}".format(valuation.ground_floor_area + valuation.first_floor_area) }}</td>
+            <td>{{ "{:.2f}".format((valuation.ground_floor_area + valuation.first_floor_area) * 0.85) }}</td>
         </tr>
     </table>
 
@@ -511,10 +512,13 @@
     <table class="info-table">
         <tr>
             <th>Risk of Demolition</th>
-            <td>No</td>
+            <td class="{{ 'highlight-checked' if valuation.demolition_risk == 'No' else '' }}">No {{ '✓' if valuation.demolition_risk == 'No' else '' }}</td>
             <th>Low</th>
-            <td>Medium</td>
-            <td>High</td>
+            <td class="{{ 'highlight-checked' if valuation.demolition_risk == 'Low' else '' }}">Low {{ '✓' if valuation.demolition_risk == 'Low' else '' }}</td>
+            <th>Medium</th>
+            <td class="{{ 'highlight-checked' if valuation.demolition_risk == 'Medium' else '' }}">Medium {{ '✓' if valuation.demolition_risk == 'Medium' else '' }}</td>
+            <th>High</th>
+            <td class="{{ 'highlight-checked' if valuation.demolition_risk == 'High' else '' }}">High {{ '✓' if valuation.demolition_risk == 'High' else '' }}</td>
             <td>N.A.</td>
         </tr>
     </table>
@@ -523,13 +527,13 @@
     <table class="info-table">
         <tr>
             <th>Land Tenure</th>
-            <td>Free Hold</td>
+            <td>{{ valuation.land_ownership or 'N/A' }}</td>
             <th>Internal Composition</th>
             <td>{{ valuation.property_description or 'N/A' }}</td>
         </tr>
         <tr>
             <th>Present Occupancy (Owner Occupied or Tenanted)</th>
-            <td>{{ valuation.currently_occupied_by or 'Owner' }}</td>
+            <td>{{ valuation.currently_occupied_by or 'N/A' }}</td>
         </tr>
     </table>
 
@@ -561,7 +565,7 @@
     <table class="info-table">
         <tr>
             <td colspan="2">Present Market rates in the vicinity and surrounding area</td>
-            <td>Land Rate : Rs. 1800.00/- to Rs. 1800.00/- per sq.ft.</td>
+            <td>Land Rate : Rs. {{ "{:.2f}".format(valuation.market_rate_min) if valuation.market_rate_min else '0.00' }}/- to Rs. {{ "{:.2f}".format(valuation.market_rate_max) if valuation.market_rate_max else '0.00' }}/- per sq.ft.</td>
         </tr>
     </table>
 
@@ -582,9 +586,9 @@
         </tr>
         <tr>
             <td>Land Value</td>
-            <td>1076.00 Sqft</td>
-            <td>1200.00</td>
-            <td>1,291,200.00</td>
+            <td>{{ "{:.2f}".format(valuation.plot_area_sqft) if valuation.plot_area_sqft else 'N/A' }} Sqft</td>
+            <td>{{ "{:.2f}".format(valuation.rate_adopted) if valuation.rate_adopted else 'N/A' }}</td>
+            <td>{{ "{:.2f}".format(valuation.land_value) if valuation.land_value else 'N/A' }}</td>
         </tr>
         <tr>
             <td>Construction Cost:</td>
@@ -592,15 +596,15 @@
         </tr>
         <tr>
             <td>GF</td>
-            <td>515.633 Sqft</td>
+            <td>{{ "{:.2f}".format(valuation.ground_floor_area) if valuation.ground_floor_area else 'N/A' }} Sqft</td>
             <td>1400.00</td>
-            <td>749,886.20</td>
+            <td>{{ "{:.2f}".format(valuation.ground_floor_area * 1400) if valuation.ground_floor_area else '0.00' }}</td>
         </tr>
         <tr>
             <td>FF</td>
-            <td>515.633 Sqft</td>
+            <td>{{ "{:.2f}".format(valuation.first_floor_area) if valuation.first_floor_area else 'N/A' }} Sqft</td>
             <td>1400.00</td>
-            <td>749,886.20</td>
+            <td>{{ "{:.2f}".format(valuation.first_floor_area * 1400) if valuation.first_floor_area else '0.00' }}</td>
         </tr>
         <tr>
             <td>Others (Porch, Compound, Sump, Parapet, OHT</td>
@@ -618,34 +622,34 @@
             <th>Sub Total</th>
             <td></td>
             <td></td>
-            <td>1,499,772.40</td>
+            <td>{{ "{:.2f}".format((valuation.ground_floor_area or 0) * 1400 + (valuation.first_floor_area or 0) * 1400) }}</td>
         </tr>
         <tr>
             <th>Gross Construction Value</th>
-            <td>1071.27 Sqft</td>
+            <td>{{ "{:.2f}".format((valuation.ground_floor_area or 0) + (valuation.first_floor_area or 0)) }} Sqft</td>
             <td>0.6</td>
-            <td>1,499,772.40</td>
+            <td>{{ "{:.2f}".format((valuation.ground_floor_area or 0) * 1400 + (valuation.first_floor_area or 0) * 1400) }}</td>
         </tr>
         <tr>
             <th>Less for Depreciation @ 80%</th>
             <td></td>
             <td></td>
             <td></td>
-            <td>1,199,817.92</td>
+            <td>{{ "{:.2f}".format(((valuation.ground_floor_area or 0) * 1400 + (valuation.first_floor_area or 0) * 1400) * 0.8) }}</td>
         </tr>
         <tr>
             <th>Net Construction Value</th>
             <td></td>
             <td></td>
             <td></td>
-            <td>299,954.48</td>
+            <td>{{ "{:.2f}".format(((valuation.ground_floor_area or 0) * 1400 + (valuation.first_floor_area or 0) * 1400) * 0.2) }}</td>
         </tr>
         <tr>
             <th>Add Land (Less Building Land + Construction)</th>
             <td></td>
             <td></td>
             <td></td>
-            <td>1,591,154.48</td>
+            <td>{{ "{:.2f}".format((valuation.land_value or 0) + (((valuation.ground_floor_area or 0) * 1400 + (valuation.first_floor_area or 0) * 1400) * 0.2)) }}</td>
         </tr>
         <tr>
             <th>Others & Rounding Off</th>
@@ -659,14 +663,14 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>2,791,200.00</td>
+            <td>{{ "{:.2f}".format(valuation.total_value) if valuation.total_value else 'N/A' }}</td>
         </tr>
         <tr>
             <th>Forced/Distress Value</th>
             <td></td>
             <td></td>
             <td></td>
-            <td>2,093,250.00</td>
+            <td>{{ "{:.2f}".format(valuation.distress_sale_value) if valuation.distress_sale_value else 'N/A' }}</td>
         </tr>
     </table>
 
@@ -674,7 +678,7 @@
     <p style="font-size: 9pt;">
         1) Bup area as per site shows GF Commercial - 1140 sqft + GF Residential - 700.00 sqft + FF Residential - 350.00 Sqft, Total Bup area as per recodred Sanction building plan approved by muncipal council jamner. <br>
         2) GF + FF + SF + TF + Basement - 0.00 + 0.00 + 0.00 + 0.00 = 0.00. <br>
-        3) Area considered for valuation : Plot area as per Sanction Plan & Agreement - 1076.00 Sqft (100.00 Sqm) and B/up area as per sanction plan - GF + FF - 1071.27 Sqft (99.52 Sqm) is considered for valuation. <br>
+        3) Area considered for valuation : Plot area as per Sanction Plan & Agreement - {{ "{:.2f}".format(valuation.plot_area_sqft) if valuation.plot_area_sqft else 'N/A' }} Sqft ({{ "{:.2f}".format(valuation.plot_area_sqm) if valuation.plot_area_sqm else 'N/A' }} Sqm) and B/up area as per sanction plan - GF + FF - {{ "{:.2f}".format(valuation.built_up_area) if valuation.built_up_area else 'N/A' }} Sqft ({{ "{:.2f}".format(valuation.built_up_area * 0.092903) if valuation.built_up_area else 'N/A' }} Sqm) is considered for valuation. <br>
         4) GF Commercial : Front side towards 6.0 Mtr.wide road access. This is a commercial area which is excluded from valuation. <br>
         5) Porch area, First floor balcony, cantilever slab area etc. excluded from valuation.
     </p>
@@ -693,41 +697,41 @@
         </tr>
         <tr>
             <td>Plinth Level</td>
-            <td></td>
-            <td></td>
-            <td>Completed</td>
+            <td class="{{ 'highlight-checked' if valuation.construction_stage == 'To be Started' else '' }}">{{ '✓' if valuation.construction_stage == 'To be Started' else '' }}</td>
+            <td class="{{ 'highlight-checked' if valuation.construction_stage == 'Under Progress' else '' }}">{{ '✓' if valuation.construction_stage == 'Under Progress' else '' }}</td>
+            <td class="{{ 'highlight-checked' if valuation.construction_stage == 'Completed' else '' }}">Completed {{ '✓' if valuation.construction_stage == 'Completed' else '' }}</td>
             <td>Completed</td>
             <td></td>
         </tr>
         <tr>
             <td>Super Structure</td>
-            <td></td>
-            <td></td>
-            <td>Completed</td>
+            <td class="{{ 'highlight-checked' if valuation.construction_stage == 'To be Started' else '' }}">{{ '✓' if valuation.construction_stage == 'To be Started' else '' }}</td>
+            <td class="{{ 'highlight-checked' if valuation.construction_stage == 'Under Progress' else '' }}">{{ '✓' if valuation.construction_stage == 'Under Progress' else '' }}</td>
+            <td class="{{ 'highlight-checked' if valuation.construction_stage == 'Completed' else '' }}">Completed {{ '✓' if valuation.construction_stage == 'Completed' else '' }}</td>
             <td>Completed</td>
             <td></td>
         </tr>
         <tr>
             <td>Internal Finishing</td>
-            <td></td>
-            <td></td>
-            <td>Completed</td>
+            <td class="{{ 'highlight-checked' if valuation.construction_stage == 'To be Started' else '' }}">{{ '✓' if valuation.construction_stage == 'To be Started' else '' }}</td>
+            <td class="{{ 'highlight-checked' if valuation.construction_stage == 'Under Progress' else '' }}">{{ '✓' if valuation.construction_stage == 'Under Progress' else '' }}</td>
+            <td class="{{ 'highlight-checked' if valuation.construction_stage == 'Completed' else '' }}">Completed {{ '✓' if valuation.construction_stage == 'Completed' else '' }}</td>
             <td>Completed</td>
             <td></td>
         </tr>
         <tr>
             <td>Toilet Finishing</td>
-            <td></td>
-            <td></td>
-            <td>Completed</td>
+            <td class="{{ 'highlight-checked' if valuation.construction_stage == 'To be Started' else '' }}">{{ '✓' if valuation.construction_stage == 'To be Started' else '' }}</td>
+            <td class="{{ 'highlight-checked' if valuation.construction_stage == 'Under Progress' else '' }}">{{ '✓' if valuation.construction_stage == 'Under Progress' else '' }}</td>
+            <td class="{{ 'highlight-checked' if valuation.construction_stage == 'Completed' else '' }}">Completed {{ '✓' if valuation.construction_stage == 'Completed' else '' }}</td>
             <td>Completed</td>
             <td></td>
         </tr>
         <tr>
             <td>Electrical Fitting etc.</td>
-            <td></td>
-            <td></td>
-            <td>Completed</td>
+            <td class="{{ 'highlight-checked' if valuation.construction_stage == 'To be Started' else '' }}">{{ '✓' if valuation.construction_stage == 'To be Started' else '' }}</td>
+            <td class="{{ 'highlight-checked' if valuation.construction_stage == 'Under Progress' else '' }}">{{ '✓' if valuation.construction_stage == 'Under Progress' else '' }}</td>
+            <td class="{{ 'highlight-checked' if valuation.construction_stage == 'Completed' else '' }}">Completed {{ '✓' if valuation.construction_stage == 'Completed' else '' }}</td>
             <td>Completed</td>
             <td></td>
         </tr>
@@ -759,9 +763,9 @@
         </tr>
         <tr>
             <td>RCC Framed Structure with BBM Walls, internal and external plaster, Vitrified Tiles Flooring, Sliding Shutters & Aluminium windows, with all sanitary, plumbing and electrical fittings etc. Completed</td>
-            <td>Completed</td>
+            <td class="{{ 'highlight-checked' if valuation.construction_stage == 'Completed' else '' }}">Completed {{ '✓' if valuation.construction_stage == 'Completed' else '' }}</td>
             <td>Present Value of the Property</td>
-            <td>2,791,000.00</td>
+            <td>{{ "{:.2f}".format(valuation.total_value) if valuation.total_value else 'N/A' }}</td>
         </tr>
     </table>
 
@@ -774,17 +778,17 @@
         </tr>
         <tr>
             <td>Civil</td>
-            <td>100%</td>
+            <td class="{{ 'highlight-checked' if valuation.structural_survey_done else '' }}">100% {{ '✓' if valuation.structural_survey_done else '' }}</td>
             <td>100%</td>
         </tr>
         <tr>
             <td>Structure</td>
-            <td>100%</td>
+            <td class="{{ 'highlight-checked' if valuation.structural_survey_done else '' }}">100% {{ '✓' if valuation.structural_survey_done else '' }}</td>
             <td>100%</td>
         </tr>
         <tr>
             <td>Architectural</td>
-            <td>100%</td>
+            <td class="{{ 'highlight-checked' if valuation.structural_survey_done else '' }}">100% {{ '✓' if valuation.structural_survey_done else '' }}</td>
             <td>100%</td>
         </tr>
         <tr>
