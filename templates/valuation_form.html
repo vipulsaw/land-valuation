@@ -502,9 +502,16 @@
 // Show bank description
 function showBankInfo(select) {
     const selectedOption = select.options[select.selectedIndex];
+    const bankName = selectedOption.value;
     const description = selectedOption.getAttribute('data-description');
     const descBox = document.getElementById('bank-description');
     const descText = document.getElementById('bank-desc-text');
+    
+    // Redirect to Ujjivan form if Ujjivan is selected
+    if (bankName === 'Ujjivan Small Finance Bank') {
+        window.location.href = '/valuation/new?bank=ujjivan';
+        return;
+    }
     
     if (description) {
         descText.textContent = description;

@@ -163,6 +163,54 @@ class LandValuation(db.Model):
     # Declarations
     structural_survey_done = db.Column(db.Boolean, default=False)
     report_validity_days = db.Column(db.Integer, default=90)
+    
+    # Ujjivan-specific fields
+    vendor_name = db.Column(db.String(200))
+    borrower_name = db.Column(db.String(200))
+    developer_name = db.Column(db.String(200))
+    contact_person = db.Column(db.String(200))
+    property_demarcated = db.Column(db.String(50))
+    place = db.Column(db.String(100))
+    nearest_landmark = db.Column(db.String(200))
+    zonal_classification = db.Column(db.String(100))
+    habitation = db.Column(db.String(50))
+    water_facility = db.Column(db.String(50))
+    underground_drainage = db.Column(db.String(50))
+    tar_roads = db.Column(db.String(50))
+    electricity = db.Column(db.String(50))
+    surrounding_locality = db.Column(db.String(200))
+    nearby_amenities = db.Column(db.String(500))
+    site_dimension_ew = db.Column(db.String(50))
+    site_dimension_ns = db.Column(db.String(50))
+    sanitary_fittings = db.Column(db.String(100))
+    lifts = db.Column(db.String(50))
+    super_structure = db.Column(db.String(500))
+    roof_type = db.Column(db.String(200))
+    elevation_quality = db.Column(db.String(50))
+    interiors_quality = db.Column(db.String(50))
+    total_plot_area_schedule = db.Column(db.String(50))
+    buildup_area_schedule_sqm = db.Column(db.Float)
+    buildup_area_schedule_sqft = db.Column(db.Float)
+    statutory_approval = db.Column(db.String(500))
+    approval_number = db.Column(db.String(200))
+    fsi_permitted = db.Column(db.String(100))
+    occupation_certificate = db.Column(db.String(200))
+    land_area_valuation = db.Column(db.Float)
+    gf_rate = db.Column(db.Float)
+    gf_value = db.Column(db.Float)
+    ff_rate = db.Column(db.Float)
+    ff_value = db.Column(db.Float)
+    depreciation_percentage = db.Column(db.Float)
+    net_construction_value = db.Column(db.Float)
+    documents_provided = db.Column(db.Text)
+    plinth_level_status = db.Column(db.String(50))
+    framed_structure_status = db.Column(db.String(50))
+    super_structure_status = db.Column(db.String(50))
+    plastering_status = db.Column(db.String(50))
+    flooring_status = db.Column(db.String(50))
+    civil_progress = db.Column(db.String(50))
+    interiors_progress = db.Column(db.String(50))
+    report_prepared_by = db.Column(db.String(200))
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -361,6 +409,12 @@ def new_valuation():
     if request.method == 'GET':
         # Get all active templates for selection, ordered by bank name
         templates = ReportTemplate.query.filter_by(is_active=True).order_by(ReportTemplate.bank_name).all()
+        
+        # Check if a specific bank is requested
+        bank_param = request.args.get('bank')
+        if bank_param and bank_param.lower() == 'ujjivan':
+            return render_template('ujjivan_valuation_form.html', templates=templates)
+        
         return render_template('valuation_form.html', templates=templates)
     
     if request.method == 'POST':
@@ -522,7 +576,55 @@ def new_valuation():
 
             # Declarations
             structural_survey_done=False,
-            report_validity_days=90
+            report_validity_days=90,
+            
+            # Ujjivan-specific fields
+            vendor_name=request.form.get('vendor_name'),
+            borrower_name=request.form.get('borrower_name'),
+            developer_name=request.form.get('developer_name'),
+            contact_person=request.form.get('contact_person'),
+            property_demarcated=request.form.get('property_demarcated'),
+            place=request.form.get('place'),
+            nearest_landmark=request.form.get('nearest_landmark'),
+            zonal_classification=request.form.get('zonal_classification'),
+            habitation=request.form.get('habitation'),
+            water_facility=request.form.get('water_facility'),
+            underground_drainage=request.form.get('underground_drainage'),
+            tar_roads=request.form.get('tar_roads'),
+            electricity=request.form.get('electricity'),
+            surrounding_locality=request.form.get('surrounding_locality'),
+            nearby_amenities=request.form.get('nearby_amenities'),
+            site_dimension_ew=request.form.get('site_dimension_ew'),
+            site_dimension_ns=request.form.get('site_dimension_ns'),
+            sanitary_fittings=request.form.get('sanitary_fittings'),
+            lifts=request.form.get('lifts'),
+            super_structure=request.form.get('super_structure'),
+            roof_type=request.form.get('roof_type'),
+            elevation_quality=request.form.get('elevation_quality'),
+            interiors_quality=request.form.get('interiors_quality'),
+            total_plot_area_schedule=request.form.get('total_plot_area_schedule'),
+            buildup_area_schedule_sqm=float(request.form.get('buildup_area_schedule_sqm') or 0),
+            buildup_area_schedule_sqft=float(request.form.get('buildup_area_schedule_sqft') or 0),
+            statutory_approval=request.form.get('statutory_approval'),
+            approval_number=request.form.get('approval_number'),
+            fsi_permitted=request.form.get('fsi_permitted'),
+            occupation_certificate=request.form.get('occupation_certificate'),
+            land_area_valuation=float(request.form.get('land_area_valuation') or 0),
+            gf_rate=float(request.form.get('gf_rate') or 0),
+            gf_value=float(request.form.get('gf_value') or 0),
+            ff_rate=float(request.form.get('ff_rate') or 0),
+            ff_value=float(request.form.get('ff_value') or 0),
+            depreciation_percentage=float(request.form.get('depreciation_percentage') or 0),
+            net_construction_value=float(request.form.get('net_construction_value') or 0),
+            documents_provided=request.form.get('documents_provided'),
+            plinth_level_status=request.form.get('plinth_level_status'),
+            framed_structure_status=request.form.get('framed_structure_status'),
+            super_structure_status=request.form.get('super_structure_status'),
+            plastering_status=request.form.get('plastering_status'),
+            flooring_status=request.form.get('flooring_status'),
+            civil_progress=request.form.get('civil_progress'),
+            interiors_progress=request.form.get('interiors_progress'),
+            report_prepared_by=request.form.get('report_prepared_by')
         )
 
         db.session.add(valuation)
@@ -824,8 +926,15 @@ def view_report(valuation_id):
 
     encoded_photos = convert_photos_to_base64(photo_paths)
 
+    # Get the template to use
+    template_file = 'professional_report.html'  # Default template
+    if valuation.template_id:
+        template = ReportTemplate.query.get(valuation.template_id)
+        if template and template.is_active:
+            template_file = template.template_file
+
     return render_template(
-        'professional_report.html',
+        template_file,
         valuation=valuation,
         encoded_photos=encoded_photos,
         logo_base64=LOGO_BASE64

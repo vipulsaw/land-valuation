@@ -1,0 +1,879 @@
+{% extends "base.html" %}
+
+{% block title %}Ujjivan Small Finance Bank - Valuation Form{% endblock %}
+
+{% block content %}
+<div style="max-width: 1400px; margin: 0 auto;">
+    <div style="text-align: center; margin-bottom: 2rem; background: linear-gradient(135deg, #FF6B35, #E55A2B); padding: 2rem; border-radius: 15px; color: white;">
+        <i class="fas fa-university" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+        <h2 style="margin: 0; color: white;">Technical Report on Immovable Property</h2>
+        <h3 style="margin: 0.5rem 0 0 0; color: white; font-weight: 400;">To UJJIVAN SMALL FINANCE BANK</h3>
+    </div>
+
+    <form method="POST" enctype="multipart/form-data">
+        <!-- Hidden field for bank name -->
+        <input type="hidden" name="bank_name" value="Ujjivan Small Finance Bank">
+        
+        <!-- SECTION 1: Header Information -->
+        <div class="card" style="border-left: 5px solid #FF6B35;">
+            <h3 style="color: #FF6B35; margin-bottom: 1.5rem; font-size: 1.3rem;">
+                <i class="fas fa-info-circle"></i> Basic Information
+            </h3>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="vendor_name"><i class="fas fa-user"></i> Name of Vendor (Valuer)</label>
+                    <input type="text" id="vendor_name" name="vendor_name" value="Mr. Prashant R Patil" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="client_name"><i class="fas fa-user-tie"></i> Name of Applicant <span style="color: red;">*</span></label>
+                    <input type="text" id="client_name" name="client_name" required placeholder="e.g., Devanand Vasant Kolhe">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="valuation_purpose"><i class="fas fa-bullseye"></i> Purpose of Valuation</label>
+                <input type="text" id="valuation_purpose" name="valuation_purpose" value="To Ascertain fair market value of the property as on date" required>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="case_number"><i class="fas fa-hashtag"></i> File No.</label>
+                    <input type="text" id="case_number" name="case_number" placeholder="e.g., ... / Ujjivan / December / 2025">
+                </div>
+                
+                <div class="form-group">
+                    <label for="loan_type"><i class="fas fa-home"></i> Case Type</label>
+                    <select id="loan_type" name="loan_type" required>
+                        <option value="">Select Case Type</option>
+                        <option value="HL Purchase">HL Purchase</option>
+                        <option value="HL Construction">HL Construction</option>
+                        <option value="LAP">LAP (Loan Against Property)</option>
+                        <option value="BL">BL (Business Loan)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="contact_person"><i class="fas fa-phone"></i> Name of Contact Person</label>
+                    <input type="text" id="contact_person" name="contact_person" placeholder="e.g., Mr. Amit Kulkarni">
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="inspection_date"><i class="fas fa-calendar"></i> Date of Inspection & Valuation <span style="color: red;">*</span></label>
+                    <input type="date" id="inspection_date" name="inspection_date" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="valuation_date"><i class="fas fa-calendar-check"></i> Valuation Date <span style="color: red;">*</span></label>
+                    <input type="date" id="valuation_date" name="valuation_date" required>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 2: Property Identification -->
+        <div class="card" style="border-left: 5px solid #FF6B35;">
+            <h3 style="color: #FF6B35; margin-bottom: 1.5rem; font-size: 1.3rem;">
+                <i class="fas fa-building"></i> Property Identification
+            </h3>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="property_owner"><i class="fas fa-user-check"></i> Said to be Owned by (Deed/Sale Agreement) <span style="color: red;">*</span></label>
+                    <input type="text" id="property_owner" name="property_owner" required placeholder="e.g., Sunil Anil Mali">
+                </div>
+                
+                <div class="form-group">
+                    <label for="borrower_name"><i class="fas fa-user"></i> Name of Borrower / Acquired by</label>
+                    <input type="text" id="borrower_name" name="borrower_name" placeholder="Same as applicant or different">
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="developer_name"><i class="fas fa-hard-hat"></i> Developer Name</label>
+                    <input type="text" id="developer_name" name="developer_name" placeholder="Developer/Builder name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="project_name"><i class="fas fa-project-diagram"></i> Project Name (if any)</label>
+                    <input type="text" id="project_name" name="project_name" placeholder="Project/Society name or N/A">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="cts_number"><i class="fas fa-map-marked-alt"></i> Site No. / Villa No. / C.T.S. No. / Gat No.</label>
+                <input type="text" id="cts_number" name="cts_number" placeholder="e.g., Gat No. 723/1, Plot No. 37 (South Part), NPH No. 3453/37/1">
+            </div>
+        </div>
+
+        <!-- SECTION 3: Property Address -->
+        <div class="card" style="border-left: 5px solid #FF6B35;">
+            <h3 style="color: #FF6B35; margin-bottom: 1.5rem; font-size: 1.3rem;">
+                <i class="fas fa-map-marker-alt"></i> Property Address
+            </h3>
+            
+            <div class="form-group">
+                <label for="property_address"><i class="fas fa-address-card"></i> Property Address (As per Deed/Agreement) <span style="color: red;">*</span></label>
+                <textarea id="property_address" name="property_address" rows="3" required placeholder="Complete address with Gat No., Plot No., Area, Taluka, District, PIN"></textarea>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="property_demarcated"><i class="fas fa-check-circle"></i> Whether property is demarcated</label>
+                    <select id="property_demarcated" name="property_demarcated">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="place"><i class="fas fa-map-pin"></i> Place</label>
+                    <input type="text" id="place" name="place" placeholder="e.g., Jamner">
+                </div>
+                
+                <div class="form-group">
+                    <label for="nearest_landmark"><i class="fas fa-landmark"></i> Nearest Land Mark</label>
+                    <input type="text" id="nearest_landmark" name="nearest_landmark" placeholder="e.g., Near Gajanan Maharaj Mandir">
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="access_road_name"><i class="fas fa-road"></i> Name of the road for access</label>
+                    <input type="text" id="access_road_name" name="access_road_name" placeholder="e.g., 6.0 M W Road">
+                </div>
+                
+                <div class="form-group">
+                    <label for="property_type"><i class="fas fa-home"></i> Type of property <span style="color: red;">*</span></label>
+                    <select id="property_type" name="property_type" required>
+                        <option value="">Select Type</option>
+                        <option value="Residential">Residential</option>
+                        <option value="Commercial">Commercial</option>
+                        <option value="Industrial">Industrial</option>
+                        <option value="Agricultural">Agricultural</option>
+                        <option value="Mixed Use">Mixed Use</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="municipal_jurisdiction"><i class="fas fa-city"></i> Jurisdiction</label>
+                    <input type="text" id="municipal_jurisdiction" name="municipal_jurisdiction" placeholder="e.g., Within Jamner Municipal Council Limit">
+                </div>
+                
+                <div class="form-group">
+                    <label for="zonal_classification"><i class="fas fa-layer-group"></i> Zonal Classification</label>
+                    <select id="zonal_classification" name="zonal_classification">
+                        <option value="">Select Zone</option>
+                        <option value="Residential">Residential</option>
+                        <option value="Commercial">Commercial</option>
+                        <option value="Industrial">Industrial</option>
+                        <option value="Mixed">Mixed</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="habitation"><i class="fas fa-percentage"></i> Habitation (%)</label>
+                <input type="number" id="habitation" name="habitation" min="0" max="100" placeholder="e.g., 60">
+            </div>
+        </div>
+
+        <!-- SECTION 4: Basic Layout Amenities -->
+        <div class="card" style="border-left: 5px solid #FF6B35;">
+            <h3 style="color: #FF6B35; margin-bottom: 1.5rem; font-size: 1.3rem;">
+                <i class="fas fa-tools"></i> Basic Layout Amenities
+            </h3>
+            
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem;">
+                <div class="form-group">
+                    <label><i class="fas fa-tint"></i> Water Facility</label>
+                    <select name="water_facility">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-water"></i> Underground Drainage</label>
+                    <select name="underground_drainage">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-road"></i> Roads (TAR)</label>
+                    <select name="tar_roads">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-bolt"></i> Electricity</label>
+                    <select name="electricity">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem;">
+                <div class="form-group">
+                    <label for="locality_classification"><i class="fas fa-star"></i> Class of Locality</label>
+                    <select id="locality_classification" name="locality_classification">
+                        <option value="">Select Class</option>
+                        <option value="VIP / VVIP's">VIP / VVIP's</option>
+                        <option value="Posh">Posh</option>
+                        <option value="Upper Middle Class">Upper Middle Class</option>
+                        <option value="Middle Class">Middle Class</option>
+                        <option value="LIG">LIG</option>
+                        <option value="NEGATIVE">NEGATIVE</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="sale_marketability"><i class="fas fa-chart-line"></i> Marketability of the Property</label>
+                    <select id="sale_marketability" name="sale_marketability">
+                        <option value="">Select Marketability</option>
+                        <option value="EXCELLENT">EXCELLENT</option>
+                        <option value="VERY GOOD">VERY GOOD</option>
+                        <option value="GOOD">GOOD</option>
+                        <option value="POOR">POOR</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="surrounding_locality"><i class="fas fa-map"></i> Surrounding locality</label>
+                    <select id="surrounding_locality" name="surrounding_locality">
+                        <option value="">Select Status</option>
+                        <option value="Developed">Developed</option>
+                        <option value="Developing">Developing</option>
+                        <option value="Under Developed">Under Developed</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="nearby_amenities"><i class="fas fa-hospital"></i> Near by Civic Amenities</label>
+                    <input type="text" id="nearby_amenities" name="nearby_amenities" placeholder="e.g., Within 1.0 to 5.0 Km - Busstand, school, Hospital">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="branch_distance"><i class="fas fa-university"></i> Distance from Branch</label>
+                <input type="text" id="branch_distance" name="branch_distance" placeholder="e.g., 30.00 KM">
+            </div>
+        </div>
+
+        <!-- SECTION 5: Schedule of Property & Boundaries -->
+        <div class="card" style="border-left: 5px solid #FF6B35;">
+            <h3 style="color: #FF6B35; margin-bottom: 1.5rem; font-size: 1.3rem;">
+                <i class="fas fa-border-all"></i> Schedule of Property & Boundaries
+            </h3>
+            
+            <h4 style="margin-bottom: 1rem; color: #666;">Boundary Details</h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="east_boundary"><i class="fas fa-compass"></i> East By</label>
+                    <input type="text" id="east_boundary" name="east_boundary" placeholder="e.g., Open Space">
+                </div>
+                
+                <div class="form-group">
+                    <label for="west_boundary"><i class="fas fa-compass"></i> West By</label>
+                    <input type="text" id="west_boundary" name="west_boundary" placeholder="e.g., 6.0 M.W. Colony Road">
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="north_boundary"><i class="fas fa-compass"></i> North By</label>
+                    <input type="text" id="north_boundary" name="north_boundary" placeholder="e.g., Remaining part of same plot">
+                </div>
+                
+                <div class="form-group">
+                    <label for="south_boundary"><i class="fas fa-compass"></i> South By</label>
+                    <input type="text" id="south_boundary" name="south_boundary" placeholder="e.g., Plot No. 38">
+                </div>
+            </div>
+            
+            <h4 style="margin: 1.5rem 0 1rem 0; color: #666;">Site Dimensions</h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="site_dimension_ew"><i class="fas fa-arrows-alt-h"></i> East - West Dimension</label>
+                    <input type="text" id="site_dimension_ew" name="site_dimension_ew" placeholder="e.g., 7.75 M - 4.75 M">
+                </div>
+                
+                <div class="form-group">
+                    <label for="site_dimension_ns"><i class="fas fa-arrows-alt-v"></i> North - South Dimension</label>
+                    <input type="text" id="site_dimension_ns" name="site_dimension_ns" placeholder="e.g., 16.00 M - 16.00 M">
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 6: Technical Details -->
+        <div class="card" style="border-left: 5px solid #FF6B35;">
+            <h3 style="color: #FF6B35; margin-bottom: 1.5rem; font-size: 1.3rem;">
+                <i class="fas fa-hard-hat"></i> Technical Details
+            </h3>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="construction_type"><i class="fas fa-building"></i> Type of Construction</label>
+                    <select id="construction_type" name="construction_type">
+                        <option value="">Select Type</option>
+                        <option value="RCC Framed">RCC Framed</option>
+                        <option value="Load Bearing">Load Bearing</option>
+                        <option value="Composite">Composite</option>
+                        <option value="Pre Engineered">Pre Engineered</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="present_condition"><i class="fas fa-check-circle"></i> Quality of Construction</label>
+                    <select id="present_condition" name="present_condition">
+                        <option value="">Select Quality</option>
+                        <option value="Very Good">Very Good</option>
+                        <option value="Good">Good</option>
+                        <option value="Average">Average</option>
+                        <option value="Poor">Poor</option>
+                        <option value="Dilapidated">Dilapidated</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem;">
+                <div class="form-group">
+                    <label><i class="fas fa-bolt"></i> Electrical Fittings</label>
+                    <select name="electrical_fittings">
+                        <option value="Standard">Standard</option>
+                        <option value="Superior">Superior</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-toilet"></i> Sanitary Fittings</label>
+                    <select name="sanitary_fittings">
+                        <option value="Standard">Standard</option>
+                        <option value="Superior">Superior</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-elevator"></i> Lifts</label>
+                    <select name="lifts">
+                        <option value="No">No</option>
+                        <option value="Yes">Yes</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-border-style"></i> Compound Wall</label>
+                    <select name="compound_wall">
+                        <option value="No">No</option>
+                        <option value="Yes">Yes</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="super_structure"><i class="fas fa-layer-group"></i> Super Structure</label>
+                <input type="text" id="super_structure" name="super_structure" placeholder="e.g., RCC Framed structure with BBM walls">
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="roof_type"><i class="fas fa-home"></i> Roof</label>
+                    <input type="text" id="roof_type" name="roof_type" placeholder="e.g., RCC slab">
+                </div>
+                
+                <div class="form-group">
+                    <label for="doors_windows"><i class="fas fa-door-open"></i> Doors & Windows</label>
+                    <input type="text" id="doors_windows" name="doors_windows" placeholder="e.g., Sliding Shutters and Aluminium Frame Windows">
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="flooring_type"><i class="fas fa-th-large"></i> Flooring</label>
+                    <input type="text" id="flooring_type" name="flooring_type" placeholder="e.g., Vetrified Tiles Flooring">
+                </div>
+                
+                <div class="form-group">
+                    <label for="elevation_quality"><i class="fas fa-building"></i> Elevation</label>
+                    <select id="elevation_quality" name="elevation_quality">
+                        <option value="Very Good">Very Good</option>
+                        <option value="Good">Good</option>
+                        <option value="Poor">Poor</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="interiors_quality"><i class="fas fa-paint-roller"></i> Interiors</label>
+                    <select id="interiors_quality" name="interiors_quality">
+                        <option value="Very Good">Very Good</option>
+                        <option value="Good">Good</option>
+                        <option value="Satisfactory">Satisfactory</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="other_amenities"><i class="fas fa-plus-circle"></i> Other amenities & special features</label>
+                    <input type="text" id="other_amenities" name="other_amenities" placeholder="Special amenities or N.A.">
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="construction_year"><i class="fas fa-calendar"></i> Year of Construction</label>
+                    <input type="text" id="construction_year" name="construction_year" placeholder="e.g., 2018-19">
+                </div>
+                
+                <div class="form-group">
+                    <label for="property_age"><i class="fas fa-history"></i> Age of Building (Years)</label>
+                    <input type="number" id="property_age" name="property_age" placeholder="e.g., 06">
+                </div>
+                
+                <div class="form-group">
+                    <label for="estimated_future_life"><i class="fas fa-clock"></i> Future Life (Years)</label>
+                    <input type="number" id="estimated_future_life" name="estimated_future_life" placeholder="e.g., 54">
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 7: Statutory Details -->
+        <div class="card" style="border-left: 5px solid #FF6B35;">
+            <h3 style="color: #FF6B35; margin-bottom: 1.5rem; font-size: 1.3rem;">
+                <i class="fas fa-file-contract"></i> Statutory Details
+            </h3>
+            
+            <h4 style="margin-bottom: 1rem; color: #666;">Site Area as per Schedule</h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="total_plot_area_schedule"><i class="fas fa-square"></i> Total Plot Area (Sqm)</label>
+                    <input type="number" id="total_plot_area_schedule" name="total_plot_area_schedule" step="0.01" placeholder="e.g., 176.00">
+                </div>
+                
+                <div class="form-group">
+                    <label for="plot_area_sqm"><i class="fas fa-square"></i> Applicant Plot Area (Sqm) <span style="color: red;">*</span></label>
+                    <input type="number" id="plot_area_sqm" name="plot_area_sqm" step="0.01" required placeholder="e.g., 100.00">
+                </div>
+                
+                <div class="form-group">
+                    <label for="plot_area_sqft"><i class="fas fa-expand"></i> Plot Area (Sqft) <span style="color: red;">*</span></label>
+                    <input type="number" id="plot_area_sqft" name="plot_area_sqft" step="0.01" required placeholder="Auto-calculated">
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="buildup_area_schedule_sqm"><i class="fas fa-building"></i> Total B/up Area as per Schedule (Sqm)</label>
+                    <input type="number" id="buildup_area_schedule_sqm" name="buildup_area_schedule_sqm" step="0.01" placeholder="e.g., 99.56">
+                </div>
+                
+                <div class="form-group">
+                    <label for="buildup_area_schedule_sqft"><i class="fas fa-building"></i> Total B/up Area as per Schedule (Sqft)</label>
+                    <input type="number" id="buildup_area_schedule_sqft" name="buildup_area_schedule_sqft" step="0.01" placeholder="Auto-calculated">
+                </div>
+            </div>
+            
+            <h4 style="margin: 1.5rem 0 1rem 0; color: #666;">Site Area as per Actual</h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="built_up_area"><i class="fas fa-building"></i> Total B/up Area Actual (Sqft)</label>
+                    <input type="number" id="built_up_area" name="built_up_area" step="0.01" placeholder="e.g., 1364.00">
+                </div>
+                
+                <div class="form-group">
+                    <label for="carpet_area"><i class="fas fa-border-style"></i> Carpet Area Actual (Sqft)</label>
+                    <input type="number" id="carpet_area" name="carpet_area" step="0.01" placeholder="e.g., 1159.40">
+                </div>
+            </div>
+            
+            <h4 style="margin: 1.5rem 0 1rem 0; color: #666;">Approval Details</h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="statutory_approval"><i class="fas fa-stamp"></i> Statutory Approval Details</label>
+                    <input type="text" id="statutory_approval" name="statutory_approval" placeholder="e.g., Approved BY Jamner Municipal Council">
+                </div>
+                
+                <div class="form-group">
+                    <label for="approval_number"><i class="fas fa-hashtag"></i> Approval Number and Date</label>
+                    <input type="text" id="approval_number" name="approval_number" placeholder="e.g., No. 474/018 Dated - 07/06/2018">
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="fsi_permitted"><i class="fas fa-layer-group"></i> F.S.I Permitted</label>
+                    <input type="text" id="fsi_permitted" name="fsi_permitted" placeholder="e.g., 1.00 < 1.50">
+                </div>
+                
+                <div class="form-group">
+                    <label for="occupation_certificate"><i class="fas fa-certificate"></i> Occupation Certificate</label>
+                    <select id="occupation_certificate" name="occupation_certificate">
+                        <option value="Not Provided">Not Provided</option>
+                        <option value="Provided">Provided</option>
+                        <option value="Not Applicable">Not Applicable</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 8: Valuation Calculation -->
+        <div class="card" style="border-left: 5px solid #FF6B35;">
+            <h3 style="color: #FF6B35; margin-bottom: 1.5rem; font-size: 1.3rem;">
+                <i class="fas fa-calculator"></i> Valuation Calculation
+            </h3>
+            
+            <h4 style="margin-bottom: 1rem; color: #666;">1. Land Value</h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="land_area_valuation"><i class="fas fa-square"></i> Land Area (Sqft)</label>
+                    <input type="number" id="land_area_valuation" name="land_area_valuation" step="0.01" placeholder="Same as plot area">
+                </div>
+                
+                <div class="form-group">
+                    <label for="rate_adopted"><i class="fas fa-rupee-sign"></i> Rate per Sqft <span style="color: red;">*</span></label>
+                    <input type="number" id="rate_adopted" name="rate_adopted" step="0.01" required placeholder="e.g., 1200.00">
+                </div>
+                
+                <div class="form-group">
+                    <label for="land_value"><i class="fas fa-money-bill-wave"></i> Land Value (₹) <span style="color: red;">*</span></label>
+                    <input type="number" id="land_value" name="land_value" step="0.01" required placeholder="Auto-calculated">
+                </div>
+            </div>
+            
+            <h4 style="margin: 1.5rem 0 1rem 0; color: #666;">2. Construction Cost</h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="ground_floor_area"><i class="fas fa-home"></i> Ground Floor (Sqft)</label>
+                    <input type="number" id="ground_floor_area" name="ground_floor_area" step="0.01" placeholder="e.g., 535.633">
+                </div>
+                
+                <div class="form-group">
+                    <label for="gf_rate"><i class="fas fa-rupee-sign"></i> GF Rate per Sqft</label>
+                    <input type="number" id="gf_rate" name="gf_rate" step="0.01" placeholder="e.g., 1400.00">
+                </div>
+                
+                <div class="form-group">
+                    <label for="gf_value"><i class="fas fa-money-bill"></i> GF Value (₹)</label>
+                    <input type="number" id="gf_value" name="gf_value" step="0.01" placeholder="Auto-calculated">
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="first_floor_area"><i class="fas fa-building"></i> First Floor (Sqft)</label>
+                    <input type="number" id="first_floor_area" name="first_floor_area" step="0.01" placeholder="e.g., 535.633">
+                </div>
+                
+                <div class="form-group">
+                    <label for="ff_rate"><i class="fas fa-rupee-sign"></i> FF Rate per Sqft</label>
+                    <input type="number" id="ff_rate" name="ff_rate" step="0.01" placeholder="e.g., 1400.00">
+                </div>
+                
+                <div class="form-group">
+                    <label for="ff_value"><i class="fas fa-money-bill"></i> FF Value (₹)</label>
+                    <input type="number" id="ff_value" name="ff_value" step="0.01" placeholder="Auto-calculated">
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="building_value"><i class="fas fa-building"></i> Gross Construction Value (₹)</label>
+                    <input type="number" id="building_value" name="building_value" step="0.01" placeholder="Auto-calculated">
+                </div>
+                
+                <div class="form-group">
+                    <label for="depreciation_percentage"><i class="fas fa-percentage"></i> Depreciation (%)</label>
+                    <input type="number" id="depreciation_percentage" name="depreciation_percentage" step="0.01" value="0" placeholder="e.g., 0">
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="repairs_deduction"><i class="fas fa-wrench"></i> Less for Depreciation (₹)</label>
+                    <input type="number" id="repairs_deduction" name="repairs_deduction" step="0.01" value="0" placeholder="Auto-calculated">
+                </div>
+                
+                <div class="form-group">
+                    <label for="net_construction_value"><i class="fas fa-building"></i> Net Construction Value (₹)</label>
+                    <input type="number" id="net_construction_value" name="net_construction_value" step="0.01" placeholder="Auto-calculated">
+                </div>
+            </div>
+            
+            <div style="background: #f0f8ff; border: 2px solid #FF6B35; padding: 1.5rem; border-radius: 10px; margin-top: 1rem;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <div class="form-group">
+                        <label for="total_value" style="font-size: 1.1rem; font-weight: bold;"><i class="fas fa-calculator"></i> Fair Market Value (₹) <span style="color: red;">*</span></label>
+                        <input type="number" id="total_value" name="total_value" step="0.01" required placeholder="Auto-calculated" style="font-size: 1.2rem; font-weight: bold; border: 2px solid #FF6B35;">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="distress_sale_value" style="font-size: 1.1rem; font-weight: bold;"><i class="fas fa-exclamation-triangle"></i> Forced Sale Value (75%) (₹)</label>
+                        <input type="number" id="distress_sale_value" name="distress_sale_value" step="0.01" placeholder="Auto-calculated" style="font-size: 1.2rem; font-weight: bold;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 9: Technical Stage -->
+        <div class="card" style="border-left: 5px solid #FF6B35;">
+            <h3 style="color: #FF6B35; margin-bottom: 1.5rem; font-size: 1.3rem;">
+                <i class="fas fa-tasks"></i> Technical Stage / Work Status
+            </h3>
+            
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;">
+                <div class="form-group">
+                    <label><i class="fas fa-layer-group"></i> Plinth Level</label>
+                    <select name="plinth_level_status">
+                        <option value="To be Started">To be Started</option>
+                        <option value="Under Progress">Under Progress</option>
+                        <option value="Completed">Completed</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-building"></i> Framed Structure</label>
+                    <select name="framed_structure_status">
+                        <option value="To be Started">To be Started</option>
+                        <option value="Under Progress">Under Progress</option>
+                        <option value="Completed">Completed</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-building"></i> Super structure</label>
+                    <select name="super_structure_status">
+                        <option value="To be Started">To be Started</option>
+                        <option value="Under Progress">Under Progress</option>
+                        <option value="Completed">Completed</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;">
+                <div class="form-group">
+                    <label><i class="fas fa-paint-roller"></i> Plastering and finishing</label>
+                    <select name="plastering_status">
+                        <option value="To be Started">To be Started</option>
+                        <option value="Under Progress">Under Progress</option>
+                        <option value="Completed">Completed</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-th-large"></i> Flooring</label>
+                    <select name="flooring_status">
+                        <option value="To be Started">To be Started</option>
+                        <option value="Under Progress">Under Progress</option>
+                        <option value="Completed">Completed</option>
+                    </select>
+                </div>
+            </div>
+            
+            <h4 style="margin: 1.5rem 0 1rem 0; color: #666;">Work Progress Percentage</h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="civil_progress"><i class="fas fa-percentage"></i> Civil Progress (%)</label>
+                    <input type="number" id="civil_progress" name="civil_progress" min="0" max="100" value="100" placeholder="e.g., 100">
+                </div>
+                
+                <div class="form-group">
+                    <label for="interiors_progress"><i class="fas fa-percentage"></i> Interiors Progress (%)</label>
+                    <input type="number" id="interiors_progress" name="interiors_progress" min="0" max="100" value="100" placeholder="e.g., 100">
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 10: GPS & Photos -->
+        <div class="card" style="border-left: 5px solid #FF6B35;">
+            <h3 style="color: #FF6B35; margin-bottom: 1.5rem; font-size: 1.3rem;">
+                <i class="fas fa-map-marked-alt"></i> Geographical Location & Photos
+            </h3>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="geo_latitude"><i class="fas fa-globe"></i> Latitude</label>
+                    <input type="text" id="geo_latitude" name="geo_latitude" placeholder="e.g., 20.818543">
+                </div>
+                
+                <div class="form-group">
+                    <label for="geo_longitude"><i class="fas fa-globe"></i> Longitude</label>
+                    <input type="text" id="geo_longitude" name="geo_longitude" placeholder="e.g., 75.783767">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="land_photos"><i class="fas fa-camera"></i> Property Photos</label>
+                <input type="file" id="land_photos" name="land_photos" accept="image/*" multiple>
+                <small style="color: #666; display: block; margin-top: 0.5rem;">
+                    <i class="fas fa-info-circle"></i> Upload multiple photos (Internal - 2, External - 2, max 16MB each)
+                </small>
+            </div>
+            
+            <div class="form-group">
+                <label for="additional_notes"><i class="fas fa-sticky-note"></i> Remarks / Comments</label>
+                <textarea id="additional_notes" name="additional_notes" rows="4" placeholder="Any additional remarks, observations, or special notes..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="documents_provided"><i class="fas fa-file-alt"></i> Documents Provided</label>
+                <input type="text" id="documents_provided" name="documents_provided" placeholder="e.g., Sale Agreement, Sanction Plan & Permission, NA Order, Layout etc.">
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div style="display: flex; gap: 1.5rem; justify-content: center; margin-top: 2rem;">
+            <button type="submit" class="btn btn-success" style="padding: 1.2rem 3rem; font-size: 1.1rem; background: linear-gradient(135deg, #FF6B35, #E55A2B);">
+                <i class="fas fa-file-pdf"></i> Generate Ujjivan Report
+            </button>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary" style="padding: 1.2rem 2rem; font-size: 1.1rem;">
+                <i class="fas fa-times"></i> Cancel
+            </a>
+        </div>
+    </form>
+</div>
+
+<script>
+// Auto-calculate plot area sqft from sqm
+document.getElementById('plot_area_sqm').addEventListener('input', function() {
+    const sqm = parseFloat(this.value) || 0;
+    const sqft = sqm * 10.7639;
+    document.getElementById('plot_area_sqft').value = sqft.toFixed(2);
+    document.getElementById('land_area_valuation').value = sqft.toFixed(2);
+});
+
+// Auto-calculate plot area sqm from sqft
+document.getElementById('plot_area_sqft').addEventListener('input', function() {
+    const sqft = parseFloat(this.value) || 0;
+    const sqm = sqft / 10.7639;
+    document.getElementById('plot_area_sqm').value = sqm.toFixed(2);
+    document.getElementById('land_area_valuation').value = sqft.toFixed(2);
+});
+
+// Auto-calculate buildup area sqft from sqm
+document.getElementById('buildup_area_schedule_sqm').addEventListener('input', function() {
+    const sqm = parseFloat(this.value) || 0;
+    const sqft = sqm * 10.7639;
+    document.getElementById('buildup_area_schedule_sqft').value = sqft.toFixed(2);
+});
+
+// Calculate land value
+function calculateLandValue() {
+    const area = parseFloat(document.getElementById('land_area_valuation').value) || 0;
+    const rate = parseFloat(document.getElementById('rate_adopted').value) || 0;
+    const landValue = area * rate;
+    document.getElementById('land_value').value = landValue.toFixed(2);
+    calculateTotalValue();
+}
+
+document.getElementById('land_area_valuation').addEventListener('input', calculateLandValue);
+document.getElementById('rate_adopted').addEventListener('input', calculateLandValue);
+
+// Calculate GF value
+function calculateGFValue() {
+    const area = parseFloat(document.getElementById('ground_floor_area').value) || 0;
+    const rate = parseFloat(document.getElementById('gf_rate').value) || 0;
+    const value = area * rate;
+    document.getElementById('gf_value').value = value.toFixed(2);
+    calculateConstructionValue();
+}
+
+document.getElementById('ground_floor_area').addEventListener('input', calculateGFValue);
+document.getElementById('gf_rate').addEventListener('input', calculateGFValue);
+
+// Calculate FF value
+function calculateFFValue() {
+    const area = parseFloat(document.getElementById('first_floor_area').value) || 0;
+    const rate = parseFloat(document.getElementById('ff_rate').value) || 0;
+    const value = area * rate;
+    document.getElementById('ff_value').value = value.toFixed(2);
+    calculateConstructionValue();
+}
+
+document.getElementById('first_floor_area').addEventListener('input', calculateFFValue);
+document.getElementById('ff_rate').addEventListener('input', calculateFFValue);
+
+// Calculate total construction value
+function calculateConstructionValue() {
+    const gfValue = parseFloat(document.getElementById('gf_value').value) || 0;
+    const ffValue = parseFloat(document.getElementById('ff_value').value) || 0;
+    const grossValue = gfValue + ffValue;
+    document.getElementById('building_value').value = grossValue.toFixed(2);
+    
+    // Calculate depreciation
+    const depPercentage = parseFloat(document.getElementById('depreciation_percentage').value) || 0;
+    const depAmount = (grossValue * depPercentage) / 100;
+    document.getElementById('repairs_deduction').value = depAmount.toFixed(2);
+    
+    // Net construction value
+    const netValue = grossValue - depAmount;
+    document.getElementById('net_construction_value').value = netValue.toFixed(2);
+    
+    calculateTotalValue();
+}
+
+document.getElementById('depreciation_percentage').addEventListener('input', calculateConstructionValue);
+
+// Calculate total value
+function calculateTotalValue() {
+    const landValue = parseFloat(document.getElementById('land_value').value) || 0;
+    const netConstructionValue = parseFloat(document.getElementById('net_construction_value').value) || 0;
+    const totalValue = landValue + netConstructionValue;
+    document.getElementById('total_value').value = totalValue.toFixed(2);
+    
+    // Calculate distress sale value (75%)
+    const distressValue = totalValue * 0.75;
+    document.getElementById('distress_sale_value').value = distressValue.toFixed(2);
+}
+
+// Auto-fill borrower name same as applicant if empty
+document.getElementById('client_name').addEventListener('blur', function() {
+    const borrowerField = document.getElementById('borrower_name');
+    if (!borrowerField.value) {
+        borrowerField.value = this.value;
+    }
+});
+
+// Set today's date as default
+document.addEventListener('DOMContentLoaded', function() {
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('inspection_date').value = today;
+    document.getElementById('valuation_date').value = today;
+});
+</script>
+
+<style>
+.form-group label {
+    font-weight: 600;
+    color: #333;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #FF6B35;
+    box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+}
+
+.card {
+    margin-bottom: 2rem;
+    transition: all 0.3s;
+}
+
+.card:hover {
+    box-shadow: 0 8px 25px rgba(255, 107, 53, 0.15);
+}
+</style>
+{% endblock %}
+
