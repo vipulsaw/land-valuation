@@ -6,35 +6,35 @@
     <style>
         @page { 
             size: A4; 
-            margin: 1cm 1.5cm;
+            margin: 0.8cm 1.2cm;
         }
         
         body { 
             font-family: Arial, sans-serif; 
-            line-height: 1.4; 
+            line-height: 1.2; 
             color: #000; 
-            font-size: 9pt;
+            font-size: 8.5pt;
         }
         
         /* Header */
         .report-header {
             background: linear-gradient(135deg, #FF6B35, #E55A2B);
             color: white;
-            padding: 15px;
+            padding: 10px;
             text-align: center;
-            margin-bottom: 10px;
-            border-radius: 5px;
+            margin-bottom: 8px;
+            border-radius: 3px;
         }
         
         .report-header h1 {
             margin: 0;
-            font-size: 16pt;
+            font-size: 14pt;
             font-weight: bold;
         }
         
         .report-header h2 {
-            margin: 5px 0 0 0;
-            font-size: 14pt;
+            margin: 3px 0 0 0;
+            font-size: 12pt;
             font-weight: normal;
         }
         
@@ -43,7 +43,7 @@
             display: table;
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 10px;
+            margin-bottom: 6px;
         }
         
         .info-row {
@@ -53,7 +53,7 @@
         .info-label {
             display: table-cell;
             font-weight: bold;
-            padding: 5px;
+            padding: 3px 5px;
             border: 1px solid #000;
             background: #f0f0f0;
             width: 30%;
@@ -61,7 +61,7 @@
         
         .info-value {
             display: table-cell;
-            padding: 5px;
+            padding: 3px 5px;
             border: 1px solid #000;
             width: 70%;
         }
@@ -70,21 +70,21 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            margin: 10px 0;
-            font-size: 9pt;
+            margin: 6px 0;
+            font-size: 8.5pt;
         }
         
         th {
             background: #FF6B35;
             color: white;
-            padding: 6px;
+            padding: 4px 5px;
             text-align: left;
             font-weight: bold;
             border: 1px solid #000;
         }
         
         td {
-            padding: 5px;
+            padding: 3px 5px;
             border: 1px solid #000;
             vertical-align: top;
         }
@@ -92,18 +92,19 @@
         .section-title {
             background: #FF6B35;
             color: white;
-            padding: 8px;
+            padding: 5px 8px;
             font-weight: bold;
-            margin: 15px 0 5px 0;
-            font-size: 11pt;
+            margin: 8px 0 4px 0;
+            font-size: 10pt;
         }
         
         .sub-section {
             background: #f0f0f0;
-            padding: 5px 8px;
+            padding: 3px 6px;
             font-weight: bold;
-            margin: 10px 0 5px 0;
-            border-left: 4px solid #FF6B35;
+            margin: 6px 0 3px 0;
+            border-left: 3px solid #FF6B35;
+            font-size: 9pt;
         }
         
         /* Valuation Table */
@@ -125,7 +126,7 @@
         .highlight-value {
             background: #ffe6d9;
             font-weight: bold;
-            font-size: 11pt;
+            font-size: 9.5pt;
             text-align: right;
         }
         
@@ -150,58 +151,63 @@
         
         /* Declaration */
         .declaration {
-            margin-top: 15px;
-            padding: 10px;
+            margin-top: 8px;
+            padding: 6px 8px;
             background: #f9f9f9;
             border: 1px solid #ddd;
-            font-size: 8pt;
+            font-size: 7.5pt;
         }
         
         .declaration h3 {
-            margin: 0 0 10px 0;
-            font-size: 11pt;
+            margin: 0 0 5px 0;
+            font-size: 9.5pt;
             color: #FF6B35;
         }
         
         .declaration ol {
-            margin: 5px 0;
-            padding-left: 20px;
+            margin: 3px 0;
+            padding-left: 18px;
         }
         
         .declaration li {
-            margin-bottom: 5px;
+            margin-bottom: 3px;
         }
         
         /* Signature */
         .signature-section {
-            margin-top: 30px;
+            margin-top: 15px;
             page-break-inside: avoid;
         }
         
         .signature-box {
             text-align: center;
-            margin-top: 50px;
+            margin-top: 25px;
         }
         
         /* Photos */
         .photo-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin: 10px 0;
+            gap: 8px;
+            margin: 8px 0;
             page-break-inside: avoid;
         }
         
         .photo-item {
             text-align: center;
             border: 1px solid #ddd;
-            padding: 5px;
+            padding: 3px;
         }
         
         .photo-item img {
             max-width: 100%;
             height: auto;
-            max-height: 200px;
+            max-height: 180px;
+        }
+        
+        .photo-item p {
+            margin: 2px 0;
+            font-size: 7.5pt;
         }
         
         /* Page break */
@@ -215,10 +221,10 @@
             bottom: 0;
             width: 100%;
             text-align: center;
-            font-size: 7pt;
+            font-size: 6.5pt;
             color: #666;
             border-top: 1px solid #ddd;
-            padding: 5px 0;
+            padding: 3px 0;
             background: white;
         }
     </style>
@@ -231,7 +237,7 @@
     </div>
 
     <!-- Basic Information Table -->
-    <table style="margin-bottom: 10px;">
+    <table style="margin-bottom: 6px;">
         <tr>
             <td style="width: 50%; font-weight: bold;">Name of Vendor: {{ valuation.vendor_name or 'Mr. Prashant R Patil' }}</td>
             <td style="width: 50%; font-weight: bold;">Name Of Applicant: {{ valuation.client_name }}</td>
@@ -560,7 +566,7 @@
 
     <!-- Valuation Calculation -->
     <div class="section-title">Valuation Calculation</div>
-    
+
     <div class="sub-section">1. Land Value</div>
     <table class="valuation-table">
         <tr>
@@ -669,14 +675,14 @@
 
     <!-- Remarks -->
     {% if valuation.additional_notes %}
-    <div style="margin: 15px 0; padding: 10px; background: #fffde7; border-left: 4px solid #FF6B35;">
+    <div style="margin: 6px 0; padding: 5px 8px; background: #fffde7; border-left: 3px solid #FF6B35; font-size: 8.5pt;">
         <strong>Remarks / Comments:</strong> {{ valuation.additional_notes }}
     </div>
     {% endif %}
 
     <!-- Documents Provided -->
     {% if valuation.documents_provided %}
-    <div style="margin: 10px 0;">
+    <div style="margin: 5px 0; font-size: 8.5pt;">
         <strong>Documents Provided:</strong> {{ valuation.documents_provided }}
     </div>
     {% endif %}
@@ -743,7 +749,7 @@
 
     <!-- Geographical Location -->
     {% if valuation.geo_latitude or valuation.geo_longitude %}
-    <div style="margin: 10px 0;">
+    <div style="margin: 5px 0; font-size: 8.5pt;">
         <strong>Geographical Location:</strong> 
         Latitude: {{ valuation.geo_latitude or 'N/A' }}, 
         Longitude: {{ valuation.geo_longitude or 'N/A' }}
@@ -755,12 +761,12 @@
     <div class="page-break"></div>
     <div class="section-title">Property Photographs</div>
     <div class="photo-grid">
-        {% for photo in encoded_photos %}
+            {% for photo in encoded_photos %}
         <div class="photo-item">
             <img src="{{ photo }}" alt="Property Photo {{ loop.index }}">
-            <p style="margin: 5px 0; font-size: 8pt;">Photo {{ loop.index }}</p>
-        </div>
-        {% endfor %}
+            <p style="margin: 2px 0; font-size: 7.5pt;">Photo {{ loop.index }}</p>
+                </div>
+            {% endfor %}
     </div>
     {% endif %}
 
@@ -792,7 +798,7 @@
     <div class="signature-section">
         <p><strong>Report Prepared BY:</strong></p>
         <p>{{ valuation.report_prepared_by or 'Mr. Yuvraj B. Borwankar [B.E.Civil]' }}</p>
-        
+
         <div class="signature-box">
             <p>_______________________________</p>
             <p><strong>Date:</strong> {{ valuation.valuation_date.strftime('%d/%m/%Y') if valuation.valuation_date else 'N/A' }}</p>
