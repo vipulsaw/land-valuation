@@ -9,6 +9,10 @@
             margin: 0.8cm 1.2cm;
         }
         
+        @page :first {
+            margin-top: 0.5cm;
+        }
+        
         body { 
             font-family: Arial, sans-serif; 
             line-height: 1.2; 
@@ -16,8 +20,73 @@
             font-size: 8.5pt;
         }
         
-        /* Header */
-        .report-header {
+        /* Custom Header - Only on first page */
+        .custom-header {
+            width: 100%;
+            border-bottom: 3px solid #2C3E50;
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .custom-header .logo-section {
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
+        
+        .custom-header .logo {
+            width: 80px;
+            height: auto;
+            margin-right: 15px;
+        }
+        
+        .custom-header .company-name {
+            flex: 1;
+        }
+        
+        .custom-header .company-name h1 {
+            margin: 0;
+            font-size: 32pt;
+            font-weight: bold;
+            color: #2C3E50;
+            letter-spacing: -1px;
+        }
+        
+        .custom-header .company-name p {
+            margin: 2px 0 0 0;
+            font-size: 11pt;
+            color: #7F8C8D;
+            font-weight: normal;
+        }
+        
+        .custom-header .contact-info {
+            text-align: right;
+            color: #2C3E50;
+        }
+        
+        .custom-header .contact-info h2 {
+            margin: 0;
+            font-size: 13pt;
+            font-weight: bold;
+        }
+        
+        .custom-header .contact-info p {
+            margin: 2px 0;
+            font-size: 9pt;
+            color: #7F8C8D;
+        }
+        
+        .custom-header .contact-info .phone {
+            font-size: 11pt;
+            font-weight: bold;
+            color: #2C3E50;
+        }
+        
+        /* Report Title - Only on first page */
+        .report-title {
             background: linear-gradient(135deg, #FF6B35, #E55A2B);
             color: white;
             padding: 10px;
@@ -26,13 +95,13 @@
             border-radius: 3px;
         }
         
-        .report-header h1 {
+        .report-title h1 {
             margin: 0;
             font-size: 14pt;
             font-weight: bold;
         }
         
-        .report-header h2 {
+        .report-title h2 {
             margin: 3px 0 0 0;
             font-size: 12pt;
             font-weight: normal;
@@ -215,23 +284,44 @@
             page-break-before: always;
         }
         
-        /* Footer */
+        /* Footer - Only on first page */
         .footer {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
             text-align: center;
             font-size: 6.5pt;
             color: #666;
-            border-top: 1px solid #ddd;
-            padding: 3px 0;
-            background: white;
+            border-top: 1px solid #2C3E50;
+            padding: 5px 0;
+            margin-top: 10px;
+        }
+        
+        /* Hide header and footer on subsequent pages */
+        .first-page-only {
+            page-break-after: always;
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <div class="report-header">
+    <!-- Custom Header with Logo - First Page Only -->
+    <div class="custom-header">
+        <div class="logo-section">
+            <svg class="logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20,80 Q30,20 50,50 Q70,80 80,20" stroke="#D4AF37" stroke-width="8" fill="none" stroke-linecap="round"/>
+                <text x="50" y="55" font-family="Arial" font-size="36" font-weight="bold" fill="#D4AF37" text-anchor="middle">J</text>
+            </svg>
+            <div class="company-name">
+                <h1>Jogeshwari</h1>
+                <p>Consultancy</p>
+            </div>
+        </div>
+        <div class="contact-info">
+            <h2>PRASHANT R.PATIL(M.E.)</h2>
+            <p>CONSULTING ENGINEER</p>
+            <p class="phone">9371218146</p>
+        </div>
+    </div>
+    
+    <!-- Report Title -->
+    <div class="report-title">
         <h1>Technical Report on Immovable Property</h1>
         <h2>To UJJIVAN SMALL FINANCE BANK</h2>
     </div>
@@ -253,6 +343,16 @@
             <td colspan="2"><strong>Name of Contact Person:</strong> {{ valuation.contact_person or 'N/A' }}</td>
         </tr>
     </table>
+
+    <!-- Footer - First Page Only -->
+    <div class="footer">
+        Register no. with CBDT / CCIT: - [66/13(Imm.Prop.)]/CAT-I/2013-14, FIV-14202, FCET, MIE.<br>
+        PLANING / DESIGN / VALUER<br>
+        Viththal Mandir Ward, Deshmukh Building, Bhusawal 425 201 (O) 221594 E-Mail: jogeshwari2@yahoo.com
+    </div>
+
+    <!-- Page Break after first page -->
+    <div style="page-break-before: always;"></div>
 
     <!-- Property Identification -->
     <table>
@@ -808,11 +908,5 @@
         </div>
     </div>
 
-    <!-- Footer -->
-    <div class="footer">
-        Register no. with CBDT / CCIT: - [66/13(Imm.Prop.)]/CAT-I/2013-14, FIV-14202, FCET, MIE.<br>
-        PLANING / DESIGN / VALUER<br>
-        Viththal Mandir Ward, Deshmukh Building, Bhusawal 425 201 (O) 221594 E-Mail: jogeshwari2@yahoo.com
-    </div>
 </body>
 </html>
