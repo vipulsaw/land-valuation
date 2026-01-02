@@ -32,9 +32,16 @@
                 </div>
             </div>
             
-            <div class="form-group">
-                <label for="valuation_purpose"><i class="fas fa-bullseye"></i> Purpose of Valuation</label>
-                <input type="text" id="valuation_purpose" name="valuation_purpose" value="To Ascertain fair market value of the property as on date" required>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="valuation_purpose"><i class="fas fa-bullseye"></i> Purpose of Valuation <span style="color: red;">*</span></label>
+                    <input type="text" id="valuation_purpose" name="valuation_purpose" value="To Ascertain fair market value of the property as on date" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="valuation_requested_by"><i class="fas fa-building"></i> Valuation Requested By <span style="color: red;">*</span></label>
+                    <input type="text" id="valuation_requested_by" name="valuation_requested_by" value="Ujjivan Small Finance Bank" required>
+                </div>
             </div>
             
             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem;">
