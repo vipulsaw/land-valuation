@@ -418,20 +418,28 @@ def new_valuation():
         return render_template('valuation_form.html', templates=templates)
     
     if request.method == 'POST':
-        photos = request.files.getlist('land_photos')
-        photo_paths = []
+        try:
+            photos = request.files.getlist('land_photos')
+            photo_paths = []
 
-        # Handle multiple photo uploads
-        for photo in photos:
-            if photo and photo.filename:
-                filename = secure_filename(f"{current_user.id}_{datetime.now().timestamp()}_{photo.filename}")
-                photo_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-                photo.save(photo_path)
-                photo_paths.append(photo_path)
+            # Handle multiple photo uploads
+            for photo in photos:
+                if photo and photo.filename:
+                    filename = secure_filename(f"{current_user.id}_{datetime.now().timestamp()}_{photo.filename}")
+                    photo_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                    photo.save(photo_path)
+                    photo_paths.append(photo_path)
 
-        # Convert date strings to date objects
-        inspection_date = datetime.strptime(request.form.get('inspection_date'), '%Y-%m-%d').date()
-        valuation_date = datetime.strptime(request.form.get('valuation_date'), '%Y-%m-%d').date()
+            # Convert date strings to date objects
+            inspection_date = datetime.strptime(request.form.get('inspection_date'), '%Y-%m-%d').date()
+            valuation_date = datetime.strptime(request.form.get('valuation_date'), '%Y-%m-%d').date()
+        except Exception as e:
+            flash(f'Error processing dates or photos: {str(e)}', 'error')
+            templates = ReportTemplate.query.filter_by(is_active=True).order_by(ReportTemplate.bank_name).all()
+            bank_param = request.args.get('bank')
+            if bank_param and bank_param.lower() == 'ujjivan':
+                return render_template('ujjivan_valuation_form.html', templates=templates)
+            return render_template('valuation_form.html', templates=templates)
 
         # Calculate total built up area
         ground_floor = float(request.form.get('ground_floor_area') or 0)
@@ -627,11 +635,19 @@ def new_valuation():
             report_prepared_by=request.form.get('report_prepared_by')
         )
 
-        db.session.add(valuation)
-        db.session.commit()
-
-        flash('Valuation submitted successfully! Report is ready for download.', 'success')
-        return redirect(url_for('dashboard'))
+        try:
+            db.session.add(valuation)
+            db.session.commit()
+            flash('Valuation submitted successfully! Report is ready for download.', 'success')
+            return redirect(url_for('dashboard'))
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Error saving valuation: {str(e)}. Please check all required fields are filled.', 'error')
+            templates = ReportTemplate.query.filter_by(is_active=True).order_by(ReportTemplate.bank_name).all()
+            bank_param = request.args.get('bank')
+            if bank_param and bank_param.lower() == 'ujjivan':
+                return render_template('ujjivan_valuation_form.html', templates=templates)
+            return render_template('valuation_form.html', templates=templates)
 
     # This line is now handled in the GET method above
     pass
