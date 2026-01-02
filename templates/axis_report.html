@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Professional Valuation Report</title>
+    <style>
+        /* ALL YOUR ORIGINAL CSS STYLES HERE - KEEP THEM AS IS */
+        @page { size: A4; margin: 1.5cm; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.4; color: #333; font-size: 11pt; }
+        .letterhead { border-bottom: 3px solid #2c3e50; padding-bottom: 10px; margin-bottom: 15px; position: relative; }
+        .company-name { font-size: 22pt; font-weight: bold; color: #2c3e50; margin: 0; }
+        .professional-title { font-size: 10pt; color: #7f8c8d; margin: 3px 0; }
+        .contact-info { text-align: right; position: absolute; top: 0; right: 0; font-size: 9pt; }
+        .report-title { text-align: center; margin: 20px 0; padding: 10px; background-color: #f8f9fa; border-left: 5px solid #3498db; }
+        .report-title h1 { font-size: 18pt; color: #2c3e50; margin: 0; text-transform: uppercase; }
+        .reference-section { display: flex; justify-content: space-between; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #ecf0f1; }
+        .reference-item { font-size: 10pt; }
+        .reference-label { font-weight: bold; color: #7f8c8d; }
+        table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 10pt; }
+        th { background-color: #2c3e50; color: white; padding: 8px; text-align: left; font-weight: 600; }
+        td { padding: 6px 8px; border-bottom: 1px solid #ecf0f1; vertical-align: top; }
+        tr:nth-child(even) { background-color: #f8f9fa; }
+        .section-title { background-color: #3498db; color: white; padding: 8px 15px; margin: 20px 0 8px 0; font-size: 13pt; font-weight: bold; border-radius: 4px; }
+        .sub-section { margin-left: 20px; color: #2c3e50; font-weight: bold; margin-top: 15px; margin-bottom: 8px; }
+        .valuation-table th { background-color: #27ae60; }
+        .financial-table { border: 2px solid #2c3e50; }
+        .financial-table th { background-color: #2c3e50; }
+        .financial-table td { text-align: right; font-family: 'Courier New', monospace; }
+        .financial-table .total-row { font-weight: bold; background-color: #e8f4fc; border-top: 2px solid #3498db; }
+        .remarks-box { background-color: #fffde7; border-left: 4px solid #f1c40f; padding: 15px; margin: 15px 0; font-style: italic; }
+        .declaration-section { margin-top: 30px; padding: 20px; background-color: #f8f9fa; border: 1px solid #bdc3c7; }
+        .declaration-item { margin-bottom: 10px; padding-left: 20px; position: relative; }
+        .declaration-item:before { content: "✓"; position: absolute; left: 0; color: #27ae60; font-weight: bold; }
+        .signature-section { margin-top: 30px; padding-top: 20px; border-top: 1px solid #7f8c8d; }
+        .signature-box { width: 200px; float: left; margin-right: 50px; }
+        .signature-line { border-top: 1px solid #2c3e50; margin-top: 50px; width: 100%; }
+        .clear { clear: both; }
+        .page-break { page-break-before: always; margin-top: 20px; }
+        .currency { font-family: 'Courier New', monospace; font-weight: bold; }
+        .status-good { color: #27ae60; font-weight: bold; }
+        .status-poor { color: #e74c3c; font-weight: bold; }
+        .na { color: #7f8c8d; font-style: italic; }
+        .footer { position: fixed; bottom: 0; width: 100%; text-align: center; font-size: 9pt; color: #7f8c8d; border-top: 1px solid #ecf0f1; padding: 5px; background-color: white; }
+        .page-number:after { content: "Page " counter(page); }
+    </style>
+</head>
+<body>
+    <!-- Page 1: Cover and Basic Information -->
+    <div class="letterhead" style="display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center;">
+            <!-- Placeholder for Logo Image -->
+            <!-- Please provide the path to your logo image (e.g., static/logo.png) -->
+                        <img src="{{ logo_base64 }}" alt="Jogeshwari Logo" style="height: 80px; margin-right: 15px;">
+            <div>
+                <div class="company-name" style="font-size: 24pt; font-weight: bold; color: #2c3e50; margin: 0;">Jogeshwari</div>
+                <div class="professional-title" style="font-size: 11pt; color: #7f8c8d; margin: 5px 0;">Consultancy</div>
+            </div>
+        </div>
+        <div style="text-align: right;">
+            <div style="font-size: 11pt; font-weight: bold; color: #2c3e50;">PRASHANT R.PATIL(M.E.)</div>
+            <div style="font-size: 11pt; color: #7f8c8d; margin-top: 5px;">CONSULTING ENGINEER</div>
+            <div style="font-size: 11pt; color: #7f8c8d;">9371218146</div>
+        </div>
+    </div>
+    <div style="border-bottom: 1px solid #ddd; margin-top: 15px; margin-bottom: 25px;"></div>
+
+    <div class="report-title">
+        <h1>VALUATION REPORT</h1>
+        <div style="font-size: 11pt; color: #7f8c8d;">Confidential Report Prepared For Banking Purpose</div>
+    </div>
+
+    <div class="reference-section">
+        <div class="reference-item">
+            <span class="reference-label">Ref. No.:</span> VAL/{{ "%04d" % valuation.id }}/{{ valuation.valuation_date.year if valuation.valuation_date else valuation.submission_date.year if valuation.submission_date else '2025' }}
+        </div>
+        <div class="reference-item">
+            <span class="reference-label">Date:</span> {{ valuation.valuation_date.strftime('%d/%m/%Y') if valuation.valuation_date else valuation.submission_date.strftime('%d/%m/%Y') if valuation.submission_date else 'N/A' }}
+        </div>
+        <div class="reference-item">
+            <span class="reference-label">Report No.:</span> {{ valuation.id }}
+        </div>
+    </div>
+
+    <div class="section-title">I. PROPERTY & CLIENT DETAILS</div>
+
+    <table>
+        <tr>
+            <th style="width: 40%;">Particulars</th>
+            <th style="width: 60%;">Details</th>
+        </tr>
+        <tr>
+            <td>Purpose of Valuation</td>
+            <td>{{ valuation.valuation_purpose or 'N/A' }}</td>
+        </tr>
+        <tr>
+            <td>Date of Inspection</td>
+            <td>{{ valuation.inspection_date.strftime('%d/%m/%Y') if valuation.inspection_date else 'N/A' }}</td>
+        </tr>
+        <tr>
+            <td>Valuation Requested By</td>
+            <td>{{ valuation.valuation_requested_by or 'N/A' }}</td>
+        </tr>
+        <tr>
+            <td>Client Name</td>
+            <td>{{ valuation.client_name or 'N/A' }}</td>
+        </tr>
+        <tr>
+            <td>Case/Loan Reference No.</td>
+            <td>{{ valuation.case_number or 'N/A' }}</td>
+        </tr>
+        <tr>
+            <td>Type of Loan</td>
+            <td>{{ valuation.loan_type or 'N/A' }}</td>
+        </tr>
+        <tr>
+            <td>Property Owner (as per documents)</td>
+            <td>{{ valuation.property_owner or 'N/A' }}</td>
+        </tr>
+    </table>
+
+    <div class="section-title">II. PROPERTY DESCRIPTION</div>
+
+    <table>
+        <tr>
+            <td><strong>Project Name</strong></td>
+            <td>{{ valuation.project_name or 'N/A' }}</td>
+            <td><strong>Property Type</strong></td>
+            <td>{{ valuation.property_type or 'N/A' }}</td>
+        </tr>
+        <tr>
+            <td><strong>Property Address</strong></td>
+            <td colspan="3">{{ valuation.property_address or 'N/A' }}</td>
+        </tr>
+        <tr>
+            <td><strong>Brief Description</strong></td>
+            <td colspan="3">{{ valuation.property_description or valuation.property_type or 'N/A' }}</td>
+        </tr>
+        <tr>
+            <td><strong>Survey/Gat/Plot/CTS No.</strong></td>
+            <td colspan="3">
+                {% if valuation.survey_number or valuation.plot_number or valuation.cts_number %}
+                    Survey: {{ valuation.survey_number or 'N/A' }},
+                    Plot: {{ valuation.plot_number or 'N/A' }},
+                    CTS: {{ valuation.cts_number or 'N/A' }}
+                {% else %}
+                    N/A
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Locality Classification</strong></td>
+            <td>{{ valuation.locality_classification or 'N/A' }}</td>
+            <td><strong>Land Tenure</strong></td>
+            <td>{{ valuation.land_ownership or 'Freehold' }}</td>
+        </tr>
+        <tr>
+            <td><strong>Municipal Jurisdiction</strong></td>
+            <td colspan="3">{{ valuation.municipal_jurisdiction or 'N/A' }}</td>
+        </tr>
+    </table>
+
+    <!-- Page Break for Page 2 -->
+    <div class="page-break"></div>
+
+    <div class="section-title">III. SITE DETAILS & BOUNDARIES</div>
+
+    <div class="sub-section">Boundary Details</div>
+    <table>
+        <tr>
+            <th>Direction</th>
+            <th>As Per Document (ft/m)</th>
+            <th>As Per Site (ft/m)</th>
+            <th>Remarks</th>
+        </tr>
+        <tr>
+            <td>East</td>
+            <td>{{ valuation.east_boundary or 'N/A' }}</td>
+            <td>{{ valuation.east_boundary or 'N/A' }}</td>
+            <td>✓ Matches</td>
+        </tr>
+        <tr>
+            <td>West</td>
+            <td>{{ valuation.west_boundary or 'N/A' }}</td>
+            <td>{{ valuation.west_boundary or 'N/A' }}</td>
+            <td>✓ Matches</td>
+        </tr>
+        <tr>
+            <td>North</td>
+            <td>{{ valuation.north_boundary or 'N/A' }}</td>
+            <td>{{ valuation.north_boundary or 'N/A' }}</td>
+            <td>✓ Matches</td>
+        </tr>
+        <tr>
+            <td>South</td>
+            <td>{{ valuation.south_boundary or 'N/A' }}</td>
+            <td>{{ valuation.south_boundary or 'N/A' }}</td>
+            <td>✓ Matches</td>
+        </tr>
+    </table>
+
+    <div style="margin-top: 15px;">
+        <strong>Property Identification:</strong> {{ 'Easily Identifiable ✓' if valuation.property_identifiable else 'Not Easily Identifiable' }}<br>
+        <strong>Geo-coordinates:</strong>
+        {% if valuation.geo_latitude or valuation.geo_longitude %}
+            Latitude: {{ valuation.geo_latitude or 'N/A' }}, Longitude: {{ valuation.geo_longitude or 'N/A' }}
+        {% else %}
+            N/A
+        {% endif %}
+    </div>
+
+    <div class="section-title">IV. CONSTRUCTION DETAILS</div>
+
+    <table>
+        <tr>
+            <td><strong>Year of Construction</strong></td>
+            <td>{{ valuation.construction_year or 'N/A' }}</td>
+            <td><strong>Age of Property</strong></td>
+            <td>{{ valuation.property_age or '0' }} Years</td>
+        </tr>
+        <tr>
+            <td><strong>Estimated Future Life</strong></td>
+            <td>{{ valuation.estimated_future_life or '0' }} Years</td>
+            <td><strong>Present Condition</strong></td>
+            <td class="status-good">{{ valuation.present_condition or 'Good' }}</td>
+        </tr>
+        <tr>
+            <td><strong>Immediate Repairs Required</strong></td>
+            <td>{{ valuation.repairs_required or 'No' }}</td>
+            <td><strong>Type of Construction</strong></td>
+            <td>{{ valuation.construction_type or 'N/A' }}</td>
+        </tr>
+        <tr>
+            <td><strong>No. of Floors</strong></td>
+            <td>{{ valuation.no_of_floors or '1' }}</td>
+            <td><strong>Compound Wall & Gate</strong></td>
+            <td>{{ 'Yes' if valuation.compound_wall else 'No' }}</td>
+        </tr>
+        <tr>
+            <td><strong>Permitted Use</strong></td>
+            <td>{{ valuation.permitted_use or 'Residential' }}</td>
+            <td><strong>Actual Use</strong></td>
+            <td>{{ valuation.actual_use or 'Residential' }}</td>
+        </tr>
+    </table>
+
+    <div class="sub-section">Accommodation Details</div>
+    <table class="financial-table">
+        <tr>
+            <th>Floor</th>
+            <th>As Per Sanction Plan (sq.ft.)</th>
+            <th>As Per Site (sq.ft.)</th>
+            <th>Variance</th>
+        </tr>
+        <tr>
+            <td>Ground Floor</td>
+            <td>N/A</td>
+            <td class="currency">{{ "%.2f"|format(valuation.ground_floor_area) if valuation.ground_floor_area else '0.00' }}</td>
+            <td>N/A</td>
+        </tr>
+        <tr>
+            <td>First Floor</td>
+            <td>N/A</td>
+            <td class="currency">{{ "%.2f"|format(valuation.first_floor_area) if valuation.first_floor_area else '0.00' }}</td>
+            <td>N/A</td>
+        </tr>
+        <tr>
+            <td>Second Floor</td>
+            <td>N/A</td>
+            <td class="currency">{{ "%.2f"|format(valuation.second_floor_area) if valuation.second_floor_area else '0.00' }}</td>
+            <td>N/A</td>
+        </tr>
+        <tr>
+            <td>Third Floor</td>
+            <td>N/A</td>
+            <td class="currency">{{ "%.2f"|format(valuation.third_floor_area) if valuation.third_floor_area else '0.00' }}</td>
+            <td>N/A</td>
+        </tr>
+        <tr>
+            <td>Basement</td>
+            <td>N/A</td>
+            <td class="currency">{{ "%.2f"|format(valuation.basement_area) if valuation.basement_area else '0.00' }}</td>
+            <td>N/A</td>
+        </tr>
+        <tr class="total-row">
+            <td><strong>TOTAL AREA</strong></td>
+            <td><strong>N/A</strong></td>
+            <td class="currency"><strong>
+                {% set total_area = (valuation.ground_floor_area or 0) + (valuation.first_floor_area or 0) +
+                                    (valuation.second_floor_area or 0) + (valuation.third_floor_area or 0) +
+                                    (valuation.basement_area or 0) %}
+                {{ "%.2f"|format(total_area) }} sq.ft.
+            </strong></td>
+            <td><strong>N/A</strong></td>
+        </tr>
+    </table>
+
+    <!-- Page Break for Page 3 -->
+    <div class="page-break"></div>
+
+    <div class="section-title">V. VALUATION CALCULATION</div>
+
+    <div class="sub-section">A. Land Valuation</div>
+    <table class="financial-table">
+        <tr>
+            <th>Particulars</th>
+            <th>Area</th>
+            <th>Rate</th>
+            <th>Value (₹)</th>
+        </tr>
+        <tr>
+            <td>Land Area</td>
+            <td>{{ "%.2f"|format(valuation.plot_area_sqft) if valuation.plot_area_sqft else '0.00' }} sq.ft.</td>
+            <td>₹{{ "%.2f"|format(valuation.rate_adopted) if valuation.rate_adopted else '0.00' }}/sq.ft.</td>
+            <td class="currency">₹{{ "%.2f"|format(valuation.land_value) if valuation.land_value else '0.00' }}</td>
+        </tr>
+    </table>
+
+    <div class="sub-section">B. Building Valuation</div>
+    <table class="financial-table">
+        <tr>
+            <th>Particulars</th>
+            <th>Built-up Area</th>
+            <th>Rate (after depreciation)</th>
+            <th>Value (₹)</th>
+        </tr>
+        <tr>
+            <td>Building Value</td>
+            <td>{{ "%.2f"|format(valuation.built_up_area) if valuation.built_up_area else '0.00' }} sq.ft.</td>
+            <td>
+                {% if valuation.built_up_area and valuation.built_up_area > 0 %}
+                    ₹{{ "%.2f"|format((valuation.building_value or 0) / valuation.built_up_area) }}/sq.ft.
+                {% else %}
+                    ₹0.00/sq.ft.
+                {% endif %}
+            </td>
+            <td class="currency">₹{{ "%.2f"|format(valuation.building_value) if valuation.building_value else '0.00' }}</td>
+        </tr>
+        <tr>
+            <td>Less: Repairs Required</td>
+            <td>-</td>
+            <td>-</td>
+            <td class="currency">(₹{{ "%.2f"|format(valuation.repairs_deduction) if valuation.repairs_deduction else '0.00' }})</td>
+        </tr>
+        <tr class="total-row">
+            <td><strong>TOTAL BUILDING VALUE</strong></td>
+            <td></td>
+            <td></td>
+            <td class="currency"><strong>
+                {% set net_building_value = (valuation.building_value or 0) - (valuation.repairs_deduction or 0) %}
+                ₹{{ "%.2f"|format(net_building_value) if net_building_value > 0 else '0.00' }}
+            </strong></td>
+        </tr>
+    </table>
+
+    <div class="sub-section">C. Summary of Values</div>
+    <table class="financial-table">
+        <tr class="total-row">
+            <td><strong>TOTAL PROPERTY VALUE</strong></td>
+            <td class="currency"><strong>₹{{ "%.2f"|format(valuation.total_value) if valuation.total_value else '0.00' }}</strong></td>
+        </tr>
+        <tr>
+            <td>Insurance Value</td>
+            <td class="currency">₹{{ "%.2f"|format(valuation.insurance_value) if valuation.insurance_value else '0.00' }}</td>
+        </tr>
+        <tr>
+            <td>Forced/Distress Sale Value (approx.)</td>
+            <td class="currency">₹{{ "%.2f"|format(valuation.distress_sale_value) if valuation.distress_sale_value else '0.00' }}</td>
+        </tr>
+    </table>
+
+    <div style="margin-top: 20px;">
+        <strong>Percentage of Completion:</strong> {{ "%.0f"|format(valuation.percentage_completion) if valuation.percentage_completion else '100' }}%<br>
+        <strong>Stage of Construction:</strong> <span class="status-good">{{ valuation.construction_stage or 'Completed' }}</span><br>
+        <strong>Risk of Demolition:</strong> <span class="status-good">{{ valuation.demolition_risk or 'Low' }}</span>
+    </div>
+
+    <div class="section-title">VI. MARKET ANALYSIS</div>
+
+    <table>
+        <tr>
+            <th>Aspect</th>
+            <th>Assessment</th>
+            <th>Remarks</th>
+        </tr>
+        <tr>
+            <td>Marketability for Sale</td>
+            <td class="status-good">{{ valuation.sale_marketability or 'Good' }}</td>
+            <td>Property in acceptable condition</td>
+        </tr>
+        <tr>
+            <td>Rental Potential</td>
+            <td class="status-poor">{{ valuation.lease_marketability or 'Average' }}</td>
+            <td>Limited rental demand in area</td>
+        </tr>
+        <tr>
+            <td>Local Market Rates</td>
+            <td colspan="2">
+                {% if valuation.market_rate_min or valuation.market_rate_max %}
+                    ₹{{ "%.2f"|format(valuation.market_rate_min) if valuation.market_rate_min else '0.00' }}/-
+                    to ₹{{ "%.2f"|format(valuation.market_rate_max) if valuation.market_rate_max else '0.00' }}/- per sq.ft.
+                {% else %}
+                    N/A
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+
+    <!-- Page Break for Page 4 -->
+    <div class="page-break"></div>
+
+    <div class="section-title">VII. PROPERTY SPECIFICATIONS</div>
+
+    <table>
+        <tr>
+            <td><strong>Walls, Plaster & Painting</strong></td>
+            <td>{{ valuation.walls_plaster_painting or 'N/A' }}</td>
+        </tr>
+        <tr>
+            <td><strong>Doors & Windows</strong></td>
+            <td>{{ valuation.doors_windows or 'N/A' }}</td>
+        </tr>
+        <tr>
+            <td><strong>Type of Flooring</strong></td>
+            <td>{{ valuation.flooring_type or 'N/A' }}</td>
+        </tr>
+        <tr>
+            <td><strong>Toilet/W.C. Finishing</strong></td>
+            <td>{{ valuation.toilet_finishing or 'N/A' }}</td>
+        </tr>
+        <tr>
+            <td><strong>Kitchen Platform & Sink</strong></td>
+            <td>{{ valuation.kitchen_platform or 'N/A' }}</td>
+        </tr>
+        <tr>
+            <td><strong>Plumbing Fittings</strong></td>
+            <td>{{ valuation.plumbing_fittings or 'N/A' }}</td>
+        </tr>
+        <tr>
+            <td><strong>Electrical Fittings</strong></td>
+            <td>{{ valuation.electrical_fittings or 'N/A' }}</td>
+        </tr>
+        <tr>
+            <td><strong>Currently Occupied By</strong></td>
+            <td>{{ valuation.currently_occupied_by or 'Owner' }}</td>
+        </tr>
+        <tr>
+            <td><strong>Other Amenities</strong></td>
+            <td>{{ valuation.other_amenities or 'N/A' }}</td>
+        </tr>
+    </table>
+
+    <div class="section-title">VIII. LOCATION DETAILS</div>
+
+    <table>
+        <tr>
+            <td><strong>Distance from Railway Station</strong></td>
+            <td>{{ valuation.railway_distance or 'N/A' }}</td>
+        </tr>
+        <tr>
+            <td><strong>Distance from Bus Stand</strong></td>
+            <td>{{ valuation.bus_stand_distance or 'N/A' }}</td>
+        </tr>
+        <tr>
+            <td><strong>Distance from Hospital</strong></td>
+            <td>{{ valuation.hospital_distance or 'N/A' }}</td>
+        </tr>
+        <tr>
+            <td><strong>Distance from Bank Branch</strong></td>
+            <td>{{ valuation.branch_distance or 'N/A' }}</td>
+        </tr>
+        <tr>
+            <td><strong>Access Road Name</strong></td>
+            <td>{{ valuation.access_road_name or 'N/A' }}</td>
+        </tr>
+    </table>
+
+    <div class="page-break"></div>
+
+    <div class="section-title">XI. PROPERTY IMAGES</div>
+    <div class="image-gallery" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 20px;">
+        {% if encoded_photos %}
+            {% for photo in encoded_photos %}
+                <div style="border: 1px solid #eee; padding: 10px; text-align: center;">
+                    <img src="{{ photo }}" style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
+                    <p style="margin-top: 10px; font-size: 10pt; color: #555;">Image {{ loop.index }}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No images uploaded for this property.</p>
+        {% endif %}
+    </div>
+
+    <div class="section-title">IX. VALUATION ASSUMPTIONS & LIMITATIONS</div>
+
+    <div class="remarks-box">
+        <strong>Important Remarks:</strong><br>
+        {{ valuation.additional_notes or 'No additional remarks provided.' }}<br><br>
+
+        <strong>Key Assumptions:</strong>
+        <ul>
+            <li>Title documents are clear and marketable</li>
+            <li>No encumbrances or legal disputes</li>
+            <li>Property is free from any statutory violations</li>
+            <li>All municipal taxes and charges are paid up-to-date</li>
+            <li>Market rates considered: ₹{{ "%.2f"|format(valuation.market_rate_min) if valuation.market_rate_min else '0.00' }} to ₹{{ "%.2f"|format(valuation.market_rate_max) if valuation.market_rate_max else '0.00' }} per sq.ft.</li>
+        </ul>
+
+        <strong>Limitations:</strong>
+        <ul>
+            <li>Valuation based on visual inspection only</li>
+            <li>No structural audit conducted</li>
+            <li>Title verification to be done by the bank</li>
+            <li>Values valid for {{ valuation.report_validity_days or '90' }} days from report date</li>
+        </ul>
+    </div>
+
+    <div class="section-title">X. DECLARATION & CERTIFICATION</div>
+
+    <div class="declaration-section">
+        <div class="declaration-item">I have no direct or indirect interest in the property valued.</div>
+        <div class="declaration-item">Information furnished in the report is true and correct to the best of my knowledge and belief.</div>
+        <div class="declaration-item">Ownership papers/Sale deed may please be verified at your end to ascertain the right title & areas.</div>
+        <div class="declaration-item">Fair market value indicated in the report is an opinion of the value prevailing on the date of the said report.</div>
+        <div class="declaration-item">No structural survey was conducted by us.</div>
+        <div class="declaration-item">Validity of this report is for {{ valuation.report_validity_days or '90' }} days from the date of inspection.</div>
+        <div class="declaration-item">This opinion doesn't attract/warrant any violation of any law either civil/criminal nature.</div>
+        <div class="declaration-item">Structure has been constructed using standard construction techniques which generally ensure structural stability.</div>
+    </div>
+
+    <div class="signature-section">
+        <div class="signature-box">
+            <strong>Report Prepared By:</strong><br>
+            <div style="margin-top: 50px;">_________________________</div>
+            <div>{{ current_user.username if current_user else 'VIPUL' }}</div>
+            <div>Consulting Engineer & Approved Valuer</div>
+            <div>Registration No.: [Your Registration No.]</div>
+        </div>
+
+        <div class="signature-box">
+            <strong>Report Verified By:</strong><br>
+            <div style="margin-top: 50px;">_________________________</div>
+            <div>[Authorized Signatory]</div>
+            <div>[Designation]</div>
+        </div>
+
+        <div class="clear"></div>
+
+        <div style="text-align: center; margin-top: 40px;">
+            <strong>Place:</strong> Jalgaon<br>
+            <!-- FIXED: Use existing dates instead of datetime.now() -->
+            <strong>Date:</strong> {{ valuation.submission_date.strftime('%d/%m/%Y') if valuation.submission_date else valuation.valuation_date.strftime('%d/%m/%Y') if valuation.valuation_date else 'N/A' }}
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        Register no. with CBDT / CCIT: - [66/13(Imm.Prop.)]/CAT-I/2013-14, FIV-14202, FCET, MIE.<br>
+        PLANING / DESIGN / VALUER<br>
+        Viththal Mandir Ward, Deshmukh Building, Bhusawal 425 201 (O) 221594 E-Mail: jogeshwari2@yahoo.com<br>
+        <div class="page-number"></div>
+    </div>
+</body>
+</html>

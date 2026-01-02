@@ -33,7 +33,8 @@ class User(UserMixin, db.Model):
 
 class ReportTemplate(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False, unique=True)
+    name = db.Column(db.String(100), nullable=False)
+    bank_name = db.Column(db.String(200), nullable=False)  # Bank name for template
     description = db.Column(db.String(500))
     template_file = db.Column(db.String(200), nullable=False)  # Template filename
     is_active = db.Column(db.Boolean, default=True)
@@ -56,6 +57,7 @@ class LandValuation(db.Model):
     inspection_date = db.Column(db.Date, nullable=False)
     valuation_date = db.Column(db.Date, nullable=False)
     valuation_requested_by = db.Column(db.String(100), nullable=False)
+    bank_name = db.Column(db.String(200))  # Bank name for template selection
     client_name = db.Column(db.String(100), nullable=False)
     case_number = db.Column(db.String(50))
     loan_type = db.Column(db.String(100))
@@ -322,9 +324,12 @@ def dashboard():
 @app.route('/templates')
 @login_required
 def list_templates():
-    """List all available report templates"""
-    templates = ReportTemplate.query.filter_by(is_active=True).all()
-    return render_template('templates_list.html', templates=templates)
+    """List all available bank-specific report templates"""
+    templates = ReportTemplate.query.filter_by(is_active=True).order_by(ReportTemplate.bank_name).all()
+    # Get unique bank names
+    banks = db.session.query(ReportTemplate.bank_name).filter_by(is_active=True).distinct().all()
+    banks = [bank[0] for bank in banks]
+    return render_template('templates_list.html', templates=templates, banks=banks)
 
 @app.route('/templates/preview/<int:template_id>')
 @login_required
@@ -389,10 +394,18 @@ def new_valuation():
         else:
             built_up_area = float(request.form.get('built_up_area') or 0)
 
-        # Get selected template
-        template_id = request.form.get('template_id')
+        # Get bank name and find matching template
+        bank_name = request.form.get('bank_name')
+        template_id = None
+        
+        if bank_name:
+            # Find template for selected bank
+            bank_template = ReportTemplate.query.filter_by(bank_name=bank_name, is_active=True).first()
+            if bank_template:
+                template_id = bank_template.id
+        
+        # If no template found, use default
         if not template_id:
-            # Get default template
             default_template = ReportTemplate.query.filter_by(is_default=True).first()
             template_id = default_template.id if default_template else None
         
@@ -405,6 +418,7 @@ def new_valuation():
             inspection_date=inspection_date,
             valuation_date=valuation_date,
             valuation_requested_by=request.form.get('valuation_requested_by'),
+            bank_name=bank_name,
             client_name=request.form.get('client_name'),
             case_number=request.form.get('case_number'),
             loan_type=request.form.get('loan_type'),
@@ -853,61 +867,82 @@ if __name__ == '__main__':
     app.run(debug=False, host='0.0.0.0', port=5000)
 
 def initialize_default_templates():
-    """Initialize default templates if they don't exist"""
+    """Initialize default bank-specific templates if they don't exist"""
     # Check if templates already exist
     if ReportTemplate.query.count() == 0:
-        # Create default professional template
-        default_template = ReportTemplate(
-            name='Professional Banking Report',
-            description='Standard professional report for banking and financial institutions',
-            template_file='professional_report.html',
-            is_active=True,
-            is_default=True
-        )
-        db.session.add(default_template)
+        # Bank-specific templates
+        banks = [
+            {
+                'bank': 'Ujjivan Small Finance Bank',
+                'template': 'ujjivan_report.html',
+                'description': 'Professional report format for Ujjivan Small Finance Bank'
+            },
+            {
+                'bank': 'Bank of Maharashtra',
+                'template': 'bank_of_maharashtra_report.html',
+                'description': 'Standard report format for Bank of Maharashtra'
+            },
+            {
+                'bank': 'DCB Bank',
+                'template': 'dcb_bank_report.html',
+                'description': 'Professional report format for DCB Bank'
+            },
+            {
+                'bank': 'State Bank of India',
+                'template': 'sbi_report.html',
+                'description': 'Comprehensive report format for State Bank of India'
+            },
+            {
+                'bank': 'HDFC Bank',
+                'template': 'hdfc_report.html',
+                'description': 'Professional report format for HDFC Bank'
+            },
+            {
+                'bank': 'ICICI Bank',
+                'template': 'icici_report.html',
+                'description': 'Standard report format for ICICI Bank'
+            },
+            {
+                'bank': 'Axis Bank',
+                'template': 'axis_report.html',
+                'description': 'Professional report format for Axis Bank'
+            },
+            {
+                'bank': 'Punjab National Bank',
+                'template': 'pnb_report.html',
+                'description': 'Standard report format for Punjab National Bank'
+            },
+            {
+                'bank': 'Bank of Baroda',
+                'template': 'bob_report.html',
+                'description': 'Professional report format for Bank of Baroda'
+            },
+            {
+                'bank': 'Kotak Mahindra Bank',
+                'template': 'kotak_report.html',
+                'description': 'Standard report format for Kotak Mahindra Bank'
+            },
+            {
+                'bank': 'Other Banks',
+                'template': 'professional_report.html',
+                'description': 'Generic professional report for other banks',
+                'is_default': True
+            }
+        ]
         
-        # Create compact template
-        compact_template = ReportTemplate(
-            name='Compact Report',
-            description='Shorter, single-page format for quick valuations',
-            template_file='compact_report.html',
-            is_active=True,
-            is_default=False
-        )
-        db.session.add(compact_template)
-        
-        # Create detailed template
-        detailed_template = ReportTemplate(
-            name='Detailed Technical Report',
-            description='Comprehensive report with technical specifications and detailed analysis',
-            template_file='detailed_report.html',
-            is_active=True,
-            is_default=False
-        )
-        db.session.add(detailed_template)
-        
-        # Create residential template
-        residential_template = ReportTemplate(
-            name='Residential Property Report',
-            description='Specialized template for residential properties',
-            template_file='residential_report.html',
-            is_active=True,
-            is_default=False
-        )
-        db.session.add(residential_template)
-        
-        # Create commercial template
-        commercial_template = ReportTemplate(
-            name='Commercial Property Report',
-            description='Specialized template for commercial properties',
-            template_file='commercial_report.html',
-            is_active=True,
-            is_default=False
-        )
-        db.session.add(commercial_template)
+        for idx, bank_info in enumerate(banks):
+            template = ReportTemplate(
+                name=f"{bank_info['bank']} Report",
+                bank_name=bank_info['bank'],
+                description=bank_info['description'],
+                template_file=bank_info['template'],
+                is_active=True,
+                is_default=bank_info.get('is_default', False)
+            )
+            db.session.add(template)
         
         db.session.commit()
-        print("✓ Default templates initialized successfully!")
+        print(f"✓ {len(banks)} bank-specific templates initialized successfully!")
 
 if __name__ == '__main__':
     with app.app_context():

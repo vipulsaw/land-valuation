@@ -5,9 +5,9 @@
 {% block content %}
 <div style="max-width: 1200px; margin: 0 auto;">
     <div style="text-align: center; margin-bottom: 3rem;">
-        <i class="fas fa-file-alt" style="font-size: 4rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
-        <h2 style="margin-top: 1.5rem;">Available Report Templates</h2>
-        <p style="color: #666; font-size: 1.1rem;">Choose the perfect template for your valuation report</p>
+        <i class="fas fa-university" style="font-size: 4rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
+        <h2 style="margin-top: 1.5rem;">Bank-Specific Report Templates</h2>
+        <p style="color: #666; font-size: 1.1rem;">Each bank has its own customized report format</p>
     </div>
 
     {% if templates %}
@@ -24,9 +24,10 @@
                     <i class="fas fa-file-pdf" style="font-size: 3rem; color: var(--primary);"></i>
                 </div>
                 
-                <h3 style="color: var(--dark); margin-bottom: 1rem; font-size: 1.3rem;">
-                    {{ template.name }}
+                <h3 style="color: var(--dark); margin-bottom: 0.5rem; font-size: 1.3rem;">
+                    <i class="fas fa-university"></i> {{ template.bank_name }}
                 </h3>
+                <p style="color: #888; font-size: 0.9rem; margin-bottom: 1rem;">{{ template.name }}</p>
                 
                 <p style="color: #666; line-height: 1.6; margin-bottom: 1.5rem; min-height: 60px;">
                     {{ template.description }}

@@ -11,36 +11,52 @@
     </div>
 
     <form method="POST" enctype="multipart/form-data">
-        <!-- SECTION 0: Template Selection -->
+        <!-- SECTION 0: Bank Selection -->
         <div class="card" style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); border: 2px solid var(--primary);">
             <h3 style="margin-bottom: 1.5rem; color: var(--dark); font-size: 1.5rem; border-bottom: 2px solid var(--primary); padding-bottom: 0.5rem;">
-                <i class="fas fa-file-alt"></i> Select Report Template
+                <i class="fas fa-university"></i> Select Bank / Financial Institution
             </h3>
             
             <div class="form-group">
-                <label for="template_id"><i class="fas fa-palette"></i> Report Template <span style="color: var(--danger);">*</span></label>
-                <select id="template_id" name="template_id" required onchange="showTemplateInfo(this)">
-                    <option value="">-- Select a Template --</option>
+                <label for="bank_name"><i class="fas fa-building"></i> Bank Name <span style="color: var(--danger);">*</span></label>
+                <select id="bank_name" name="bank_name" required onchange="showBankInfo(this)">
+                    <option value="">-- Select Bank / Financial Institution --</option>
                     {% if templates %}
                         {% for template in templates %}
-                            <option value="{{ template.id }}" 
+                            <option value="{{ template.bank_name }}" 
                                     data-description="{{ template.description }}"
                                     {% if template.is_default %}selected{% endif %}>
-                                {{ template.name }}{% if template.is_default %} (Default){% endif %}
+                                {{ template.bank_name }}{% if template.is_default %} (Default){% endif %}
                             </option>
                         {% endfor %}
                     {% else %}
-                        <option value="">Professional Banking Report (Default)</option>
+                        <option value="Ujjivan Small Finance Bank">Ujjivan Small Finance Bank</option>
+                        <option value="Bank of Maharashtra">Bank of Maharashtra</option>
+                        <option value="DCB Bank">DCB Bank</option>
+                        <option value="State Bank of India">State Bank of India</option>
+                        <option value="HDFC Bank">HDFC Bank</option>
+                        <option value="ICICI Bank">ICICI Bank</option>
+                        <option value="Axis Bank">Axis Bank</option>
+                        <option value="Punjab National Bank">Punjab National Bank</option>
+                        <option value="Bank of Baroda">Bank of Baroda</option>
+                        <option value="Kotak Mahindra Bank">Kotak Mahindra Bank</option>
+                        <option value="Other Banks" selected>Other Banks</option>
                     {% endif %}
                 </select>
-                <div id="template-description" style="margin-top: 10px; padding: 10px; background: white; border-left: 4px solid var(--secondary); border-radius: 5px; display: none;">
-                    <small style="color: #555;"><i class="fas fa-info-circle"></i> <span id="template-desc-text"></span></small>
+                <div id="bank-description" style="margin-top: 10px; padding: 10px; background: white; border-left: 4px solid var(--secondary); border-radius: 5px; display: none;">
+                    <small style="color: #555;"><i class="fas fa-info-circle"></i> <span id="bank-desc-text"></span></small>
                 </div>
+            </div>
+            
+            <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px; border-radius: 5px; margin-top: 1rem;">
+                <small style="color: #856404;">
+                    <i class="fas fa-lightbulb"></i> <strong>Note:</strong> The report format will be automatically selected based on the bank's requirements.
+                </small>
             </div>
             
             <div style="display: flex; gap: 1rem; margin-top: 1rem;">
                 <a href="{{ url_for('list_templates') }}" class="btn btn-secondary" style="padding: 0.7rem 1.5rem; font-size: 0.9rem;" target="_blank">
-                    <i class="fas fa-eye"></i> Preview Templates
+                    <i class="fas fa-eye"></i> View Bank Templates
                 </a>
             </div>
         </div>
@@ -483,12 +499,12 @@
 </div>
 
 <script>
-// Show template description
-function showTemplateInfo(select) {
+// Show bank description
+function showBankInfo(select) {
     const selectedOption = select.options[select.selectedIndex];
     const description = selectedOption.getAttribute('data-description');
-    const descBox = document.getElementById('template-description');
-    const descText = document.getElementById('template-desc-text');
+    const descBox = document.getElementById('bank-description');
+    const descText = document.getElementById('bank-desc-text');
     
     if (description) {
         descText.textContent = description;
@@ -498,11 +514,11 @@ function showTemplateInfo(select) {
     }
 }
 
-// Show default template description on page load
+// Show default bank description on page load
 document.addEventListener('DOMContentLoaded', function() {
-    const templateSelect = document.getElementById('template_id');
-    if (templateSelect) {
-        showTemplateInfo(templateSelect);
+    const bankSelect = document.getElementById('bank_name');
+    if (bankSelect) {
+        showBankInfo(bankSelect);
     }
 });
 
