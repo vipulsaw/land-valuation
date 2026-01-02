@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Compact Valuation Report</title>
+    <style>
+        @page { size: A4; margin: 1cm; }
+        body { 
+            font-family: 'Arial', sans-serif; 
+            line-height: 1.3; 
+            color: #333; 
+            font-size: 10pt; 
+        }
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #2c3e50;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        .logo { height: 60px; margin-bottom: 10px; }
+        .company-name { font-size: 20pt; font-weight: bold; color: #2c3e50; margin: 5px 0; }
+        .report-title { 
+            background: #3498db; 
+            color: white; 
+            padding: 10px; 
+            text-align: center; 
+            font-size: 16pt; 
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .info-box {
+            border: 1px solid #ddd;
+            padding: 8px;
+            background: #f9f9f9;
+        }
+        .info-label { 
+            font-weight: bold; 
+            color: #555; 
+            font-size: 9pt;
+            margin-bottom: 3px;
+        }
+        .info-value { 
+            color: #000; 
+            font-size: 10pt;
+        }
+        .section-header {
+            background: #34495e;
+            color: white;
+            padding: 8px 12px;
+            font-weight: bold;
+            margin: 15px 0 10px 0;
+            font-size: 11pt;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            font-size: 9pt;
+        }
+        th {
+            background: #2c3e50;
+            color: white;
+            padding: 6px;
+            text-align: left;
+        }
+        td {
+            padding: 5px 6px;
+            border-bottom: 1px solid #ddd;
+        }
+        .value-box {
+            background: #e8f4fc;
+            border: 2px solid #3498db;
+            padding: 15px;
+            text-align: center;
+            margin: 15px 0;
+        }
+        .value-amount {
+            font-size: 20pt;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .signature-section {
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .signature-box {
+            width: 45%;
+            text-align: center;
+        }
+        .signature-line {
+            border-top: 1px solid #000;
+            margin-top: 40px;
+            padding-top: 5px;
+        }
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 8pt;
+            color: #777;
+            border-top: 1px solid #ddd;
+            padding: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        {% if logo_base64 %}
+        <img src="{{ logo_base64 }}" alt="Logo" class="logo">
+        {% endif %}
+        <div class="company-name">Jogeshwari Consultancy</div>
+        <div style="font-size: 10pt; color: #7f8c8d;">PRASHANT R.PATIL (M.E.) - CONSULTING ENGINEER</div>
+        <div style="font-size: 9pt; color: #7f8c8d;">Phone: 9371218146 | Email: jogeshwari2@yahoo.com</div>
+    </div>
+
+    <div class="report-title">COMPACT VALUATION REPORT</div>
+
+    <!-- Reference Info -->
+    <div style="display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 9pt;">
+        <div><strong>Ref:</strong> VAL/{{ "%04d" % valuation.id }}/{{ valuation.valuation_date.year if valuation.valuation_date else '2025' }}</div>
+        <div><strong>Date:</strong> {{ valuation.valuation_date.strftime('%d/%m/%Y') if valuation.valuation_date else 'N/A' }}</div>
+        <div><strong>Case:</strong> {{ valuation.case_number or 'N/A' }}</div>
+    </div>
+
+    <!-- Basic Information Grid -->
+    <div class="info-grid">
+        <div class="info-box">
+            <div class="info-label">CLIENT NAME</div>
+            <div class="info-value">{{ valuation.client_name or 'N/A' }}</div>
+        </div>
+        <div class="info-box">
+            <div class="info-label">PROPERTY OWNER</div>
+            <div class="info-value">{{ valuation.property_owner or 'N/A' }}</div>
+        </div>
+        <div class="info-box">
+            <div class="info-label">PROPERTY TYPE</div>
+            <div class="info-value">{{ valuation.property_type or 'N/A' }}</div>
+        </div>
+        <div class="info-box">
+            <div class="info-label">LOAN TYPE</div>
+            <div class="info-value">{{ valuation.loan_type or 'N/A' }}</div>
+        </div>
+    </div>
+
+    <!-- Property Address -->
+    <div class="section-header">PROPERTY LOCATION</div>
+    <div style="padding: 10px; background: #f9f9f9; border-left: 4px solid #3498db;">
+        {{ valuation.property_address or 'N/A' }}
+    </div>
+
+    <!-- Area Details -->
+    <div class="section-header">AREA DETAILS</div>
+    <table>
+        <tr>
+            <th>Particulars</th>
+            <th style="text-align: right;">Measurement</th>
+        </tr>
+        <tr>
+            <td>Plot Area</td>
+            <td style="text-align: right;">{{ "%.2f"|format(valuation.plot_area_sqft) if valuation.plot_area_sqft else '0.00' }} sq.ft. ({{ "%.2f"|format(valuation.plot_area_sqm) if valuation.plot_area_sqm else '0.00' }} sq.m.)</td>
+        </tr>
+        <tr>
+            <td>Built-up Area</td>
+            <td style="text-align: right;">{{ "%.2f"|format(valuation.built_up_area) if valuation.built_up_area else '0.00' }} sq.ft.</td>
+        </tr>
+        <tr>
+            <td>Carpet Area</td>
+            <td style="text-align: right;">{{ "%.2f"|format(valuation.carpet_area) if valuation.carpet_area else '0.00' }} sq.ft.</td>
+        </tr>
+    </table>
+
+    <!-- Construction Details -->
+    <div class="section-header">CONSTRUCTION & CONDITION</div>
+    <div class="info-grid">
+        <div class="info-box">
+            <div class="info-label">YEAR OF CONSTRUCTION</div>
+            <div class="info-value">{{ valuation.construction_year or 'N/A' }}</div>
+        </div>
+        <div class="info-box">
+            <div class="info-label">AGE OF PROPERTY</div>
+            <div class="info-value">{{ valuation.property_age or '0' }} Years</div>
+        </div>
+        <div class="info-box">
+            <div class="info-label">PRESENT CONDITION</div>
+            <div class="info-value">{{ valuation.present_condition or 'Good' }}</div>
+        </div>
+        <div class="info-box">
+            <div class="info-label">NO. OF FLOORS</div>
+            <div class="info-value">{{ valuation.no_of_floors or '1' }}</div>
+        </div>
+    </div>
+
+    <!-- Valuation Summary -->
+    <div class="section-header">VALUATION SUMMARY</div>
+    <table>
+        <tr>
+            <th>Component</th>
+            <th style="text-align: right;">Value (₹)</th>
+        </tr>
+        <tr>
+            <td>Land Value</td>
+            <td style="text-align: right; font-family: monospace;">{{ "%.2f"|format(valuation.land_value) if valuation.land_value else '0.00' }}</td>
+        </tr>
+        <tr>
+            <td>Building Value</td>
+            <td style="text-align: right; font-family: monospace;">{{ "%.2f"|format(valuation.building_value) if valuation.building_value else '0.00' }}</td>
+        </tr>
+        <tr>
+            <td>Less: Repairs</td>
+            <td style="text-align: right; font-family: monospace;">({{ "%.2f"|format(valuation.repairs_deduction) if valuation.repairs_deduction else '0.00' }})</td>
+        </tr>
+        <tr style="background: #e8f4fc; font-weight: bold;">
+            <td><strong>TOTAL PROPERTY VALUE</strong></td>
+            <td style="text-align: right; font-family: monospace;"><strong>{{ "%.2f"|format(valuation.total_value) if valuation.total_value else '0.00' }}</strong></td>
+        </tr>
+    </table>
+
+    <!-- Value Highlight Box -->
+    <div class="value-box">
+        <div style="font-size: 11pt; color: #555; margin-bottom: 5px;">FAIR MARKET VALUE</div>
+        <div class="value-amount">₹ {{ "{:,.2f}".format(valuation.total_value) if valuation.total_value else '0.00' }}</div>
+        <div style="font-size: 9pt; color: #555; margin-top: 5px;">
+            (Rupees {{ valuation.total_value|int }} Only)
+        </div>
+    </div>
+
+    <!-- Market Analysis -->
+    <div class="section-header">MARKET ANALYSIS</div>
+    <div class="info-grid">
+        <div class="info-box">
+            <div class="info-label">MARKET RATE RANGE</div>
+            <div class="info-value">
+                ₹{{ "%.2f"|format(valuation.market_rate_min) if valuation.market_rate_min else '0' }} - 
+                ₹{{ "%.2f"|format(valuation.market_rate_max) if valuation.market_rate_max else '0' }} /sq.ft.
+            </div>
+        </div>
+        <div class="info-box">
+            <div class="info-label">RATE ADOPTED</div>
+            <div class="info-value">₹{{ "%.2f"|format(valuation.rate_adopted) if valuation.rate_adopted else '0' }} /sq.ft.</div>
+        </div>
+        <div class="info-box">
+            <div class="info-label">MARKETABILITY (SALE)</div>
+            <div class="info-value">{{ valuation.sale_marketability or 'Good' }}</div>
+        </div>
+        <div class="info-box">
+            <div class="info-label">MARKETABILITY (LEASE)</div>
+            <div class="info-value">{{ valuation.lease_marketability or 'Average' }}</div>
+        </div>
+    </div>
+
+    <!-- Property Images (if available) -->
+    {% if encoded_photos %}
+    <div class="section-header">PROPERTY IMAGES</div>
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 10px 0;">
+        {% for photo in encoded_photos[:4] %}
+        <div style="text-align: center;">
+            <img src="{{ photo }}" style="max-width: 100%; height: auto; border: 1px solid #ddd;">
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Remarks -->
+    {% if valuation.additional_notes %}
+    <div class="section-header">REMARKS</div>
+    <div style="padding: 10px; background: #fffde7; border-left: 4px solid #f1c40f; font-size: 9pt;">
+        {{ valuation.additional_notes }}
+    </div>
+    {% endif %}
+
+    <!-- Declaration -->
+    <div style="margin-top: 20px; padding: 10px; background: #f9f9f9; border: 1px solid #ddd; font-size: 8pt;">
+        <strong>Declaration:</strong> This valuation is based on visual inspection. Title verification to be done by the bank. 
+        No structural survey conducted. Valid for {{ valuation.report_validity_days or '90' }} days from inspection date.
+    </div>
+
+    <!-- Signatures -->
+    <div class="signature-section">
+        <div class="signature-box">
+            <div class="signature-line">
+                <strong>Valuer's Signature</strong><br>
+                {{ current_user.username if current_user else 'Authorized Valuer' }}<br>
+                Registration No.: [Reg. No.]
+            </div>
+        </div>
+        <div class="signature-box">
+            <div class="signature-line">
+                <strong>Date & Place</strong><br>
+                {{ valuation.valuation_date.strftime('%d/%m/%Y') if valuation.valuation_date else 'N/A' }}<br>
+                Jalgaon
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        Jogeshwari Consultancy | Viththal Mandir Ward, Deshmukh Building, Bhusawal 425 201 | (O) 221594
+    </div>
+</body>
+</html>
+

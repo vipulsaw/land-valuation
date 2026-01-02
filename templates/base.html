@@ -462,6 +462,7 @@
             {% if current_user.is_authenticated %}
                 <a href="{{ url_for('dashboard') }}"><i class="fas fa-chart-bar"></i> Dashboard</a>
                 <a href="{{ url_for('new_valuation') }}"><i class="fas fa-plus-circle"></i> New Valuation</a>
+                <a href="{{ url_for('list_templates') }}"><i class="fas fa-file-alt"></i> Templates</a>
                 <a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout ({{ current_user.username }})</a>
             {% else %}
                 <a href="{{ url_for('index') }}"><i class="fas fa-home"></i> Home</a>

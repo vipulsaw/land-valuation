@@ -31,9 +31,25 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(200), nullable=False)
     valuations = db.relationship('LandValuation', backref='user', lazy=True)
 
+# Add relationship for templates
+LandValuation.template = db.relationship('ReportTemplate', backref='valuations', lazy=True)
+
+class ReportTemplate(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False, unique=True)
+    description = db.Column(db.String(500))
+    template_file = db.Column(db.String(200), nullable=False)  # Template filename
+    is_active = db.Column(db.Boolean, default=True)
+    is_default = db.Column(db.Boolean, default=False)
+    created_date = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    # Customization options (stored as JSON)
+    custom_fields = db.Column(db.Text)  # JSON string for template-specific fields
+    
 class LandValuation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    template_id = db.Column(db.Integer, db.ForeignKey('report_template.id'), nullable=True)
 
     # Client/Request Information
     valuation_purpose = db.Column(db.String(200), nullable=False)
@@ -303,9 +319,45 @@ def dashboard():
     valuations = LandValuation.query.filter_by(user_id=current_user.id).order_by(LandValuation.submission_date.desc()).all()
     return render_template('dashboard.html', valuations=valuations)
 
+@app.route('/templates')
+@login_required
+def list_templates():
+    """List all available report templates"""
+    templates = ReportTemplate.query.filter_by(is_active=True).all()
+    return render_template('templates_list.html', templates=templates)
+
+@app.route('/templates/preview/<int:template_id>')
+@login_required
+def preview_template(template_id):
+    """Preview a template with sample data"""
+    template = ReportTemplate.query.get_or_404(template_id)
+    
+    # Create sample valuation data for preview
+    sample_valuation = type('obj', (object,), {
+        'id': 1,
+        'client_name': 'Sample Client Name',
+        'property_address': 'Sample Property Address, City, State - 425001',
+        'property_type': 'Independent House',
+        'plot_area_sqft': 1000.00,
+        'total_value': 5000000.00,
+        'valuation_date': datetime.now().date(),
+        'submission_date': datetime.now(),
+        'valuation_purpose': 'For Bank Loan',
+        'case_number': 'SAMPLE/001/2025',
+        # Add more sample fields as needed
+    })()
+    
+    return render_template(template.template_file, valuation=sample_valuation, 
+                         encoded_photos=[], logo_base64=LOGO_BASE64, preview_mode=True)
+
 @app.route('/valuation/new', methods=['GET', 'POST'])
 @login_required
 def new_valuation():
+    if request.method == 'GET':
+        # Get all active templates for selection
+        templates = ReportTemplate.query.filter_by(is_active=True).all()
+        return render_template('valuation_form.html', templates=templates)
+    
     if request.method == 'POST':
         photos = request.files.getlist('land_photos')
         photo_paths = []
@@ -337,8 +389,16 @@ def new_valuation():
         else:
             built_up_area = float(request.form.get('built_up_area') or 0)
 
+        # Get selected template
+        template_id = request.form.get('template_id')
+        if not template_id:
+            # Get default template
+            default_template = ReportTemplate.query.filter_by(is_default=True).first()
+            template_id = default_template.id if default_template else None
+        
         valuation = LandValuation(
             user_id=current_user.id,
+            template_id=template_id,
 
             # Client/Request Information
             valuation_purpose=request.form.get('valuation_purpose'),
@@ -457,7 +517,8 @@ def new_valuation():
         flash('Valuation submitted successfully! Report is ready for download.', 'success')
         return redirect(url_for('dashboard'))
 
-    return render_template('valuation_form.html')
+    # This line is now handled in the GET method above
+    pass
 
 @app.route('/valuation/<int:valuation_id>/edit', methods=['GET', 'POST'])
 @login_required
@@ -656,9 +717,16 @@ def download_pdf(valuation_id):
         # Convert photos to base64 for embedding in PDF
         encoded_photos = convert_photos_to_base64(photo_paths)
 
+        # Get the template to use
+        template_file = 'professional_report.html'  # Default template
+        if valuation.template_id:
+            template = ReportTemplate.query.get(valuation.template_id)
+            if template and template.is_active:
+                template_file = template.template_file
+        
         # Render HTML template with base64 encoded photos
         html_content = render_template(
-            'professional_report.html',
+            template_file,
             valuation=valuation,
             encoded_photos=encoded_photos,
             logo_base64=LOGO_BASE64
@@ -784,92 +852,65 @@ if __name__ == '__main__':
         db.create_all()
     app.run(debug=False, host='0.0.0.0', port=5000)
 
-def download_html_fallback(valuation_id, valuation):
-    """Fallback function to download HTML version when PDF generation fails"""
-    # Get photo paths and convert to base64
-    photo_paths = []
-    if valuation.photos_path:
-        try:
-            photo_paths = json.loads(valuation.photos_path)
-        except:
-            pass
-
-    encoded_photos = convert_photos_to_base64(photo_paths)
-    
-    # Render HTML template
-    html_content = render_template(
-        'professional_report.html',
-        valuation=valuation,
-        encoded_photos=encoded_photos
-    )
-    
-    # Create response with HTML content
-    filename = f"Land_Valuation_Report_{valuation.case_number or valuation_id}_{valuation.client_name.replace(' ', '_')}.html"
-    filename = secure_filename(filename)
-    
-    response = make_response(html_content)
-    response.headers['Content-Type'] = 'text/html'
-    response.headers['Content-Disposition'] = f'attachment; filename="{filename}"'
-    
-    return response
-
-@app.route('/view-report/<int:valuation_id>')
-@login_required
-def view_report(valuation_id):
-    """View report in browser (HTML version)"""
-    valuation = LandValuation.query.get_or_404(valuation_id)
-
-    if valuation.user_id != current_user.id:
-        flash('Unauthorized access', 'error')
-        return redirect(url_for('dashboard'))
-
-    # Get photo paths and convert to base64 for HTML viewing
-    photo_paths = []
-    if valuation.photos_path:
-        try:
-            photo_paths = json.loads(valuation.photos_path)
-        except:
-            pass
-
-    encoded_photos = convert_photos_to_base64(photo_paths)
-
-    return render_template(
-        'professional_report.html',
-        valuation=valuation,
-        encoded_photos=encoded_photos
-    )
-
-@app.route('/check-images/<int:valuation_id>')
-@login_required
-def check_images(valuation_id):
-    valuation = LandValuation.query.get_or_404(valuation_id)
-
-    if valuation.user_id != current_user.id:
-        return "Unauthorized", 403
-
-    result = f"""
-    <h1>Image Debug for Valuation #{valuation_id}</h1>
-    <p>Client: {valuation.client_name}</p>
-    <p>Photos Path: {valuation.photos_path}</p>
-    """
-
-    if valuation.photos_path:
-        try:
-            photos = json.loads(valuation.photos_path)
-            result += f"<p>Number of photos: {len(photos)}</p>"
-            result += "<ul>"
-            for i, photo_path in enumerate(photos):
-                exists = "✅ EXISTS" if os.path.exists(photo_path) else "❌ MISSING"
-                result += f"<li>Photo {i+1}: {photo_path} - {exists}</li>"
-            result += "</ul>"
-        except Exception as e:
-            result += f"<p>Error parsing photos: {str(e)}</p>"
-    else:
-        result += "<p>No photos found</p>"
-
-    return result
+def initialize_default_templates():
+    """Initialize default templates if they don't exist"""
+    # Check if templates already exist
+    if ReportTemplate.query.count() == 0:
+        # Create default professional template
+        default_template = ReportTemplate(
+            name='Professional Banking Report',
+            description='Standard professional report for banking and financial institutions',
+            template_file='professional_report.html',
+            is_active=True,
+            is_default=True
+        )
+        db.session.add(default_template)
+        
+        # Create compact template
+        compact_template = ReportTemplate(
+            name='Compact Report',
+            description='Shorter, single-page format for quick valuations',
+            template_file='compact_report.html',
+            is_active=True,
+            is_default=False
+        )
+        db.session.add(compact_template)
+        
+        # Create detailed template
+        detailed_template = ReportTemplate(
+            name='Detailed Technical Report',
+            description='Comprehensive report with technical specifications and detailed analysis',
+            template_file='detailed_report.html',
+            is_active=True,
+            is_default=False
+        )
+        db.session.add(detailed_template)
+        
+        # Create residential template
+        residential_template = ReportTemplate(
+            name='Residential Property Report',
+            description='Specialized template for residential properties',
+            template_file='residential_report.html',
+            is_active=True,
+            is_default=False
+        )
+        db.session.add(residential_template)
+        
+        # Create commercial template
+        commercial_template = ReportTemplate(
+            name='Commercial Property Report',
+            description='Specialized template for commercial properties',
+            template_file='commercial_report.html',
+            is_active=True,
+            is_default=False
+        )
+        db.session.add(commercial_template)
+        
+        db.session.commit()
+        print("✓ Default templates initialized successfully!")
 
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
+        initialize_default_templates()
     app.run(debug=False, host='0.0.0.0', port=5000)

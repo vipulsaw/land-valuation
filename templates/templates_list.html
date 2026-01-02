@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Report Templates - Land Valuation System{% endblock %}
+
+{% block content %}
+<div style="max-width: 1200px; margin: 0 auto;">
+    <div style="text-align: center; margin-bottom: 3rem;">
+        <i class="fas fa-file-alt" style="font-size: 4rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
+        <h2 style="margin-top: 1.5rem;">Available Report Templates</h2>
+        <p style="color: #666; font-size: 1.1rem;">Choose the perfect template for your valuation report</p>
+    </div>
+
+    {% if templates %}
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem; margin-top: 2rem;">
+            {% for template in templates %}
+            <div class="card" style="position: relative; {% if template.is_default %}border: 3px solid var(--success);{% endif %}">
+                {% if template.is_default %}
+                <div style="position: absolute; top: -10px; right: 20px; background: var(--success); color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: bold;">
+                    <i class="fas fa-star"></i> DEFAULT
+                </div>
+                {% endif %}
+                
+                <div style="text-align: center; margin-bottom: 1.5rem;">
+                    <i class="fas fa-file-pdf" style="font-size: 3rem; color: var(--primary);"></i>
+                </div>
+                
+                <h3 style="color: var(--dark); margin-bottom: 1rem; font-size: 1.3rem;">
+                    {{ template.name }}
+                </h3>
+                
+                <p style="color: #666; line-height: 1.6; margin-bottom: 1.5rem; min-height: 60px;">
+                    {{ template.description }}
+                </p>
+                
+                <div style="border-top: 1px solid #eee; padding-top: 1rem; margin-top: 1rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <span style="color: #888; font-size: 0.9rem;"><i class="fas fa-calendar"></i> Created:</span>
+                        <span style="font-weight: 600;">{{ template.created_date.strftime('%d/%m/%Y') if template.created_date else 'N/A' }}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="color: #888; font-size: 0.9rem;"><i class="fas fa-check-circle"></i> Status:</span>
+                        <span style="color: var(--success); font-weight: 600;">
+                            {% if template.is_active %}Active{% else %}Inactive{% endif %}
+                        </span>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 1.5rem; display: flex; gap: 0.5rem;">
+                    <a href="{{ url_for('preview_template', template_id=template.id) }}" 
+                       class="btn" 
+                       style="flex: 1; padding: 0.8rem; font-size: 0.9rem; background: var(--secondary);"
+                       target="_blank">
+                        <i class="fas fa-eye"></i> Preview
+                    </a>
+                    <a href="{{ url_for('new_valuation') }}?template={{ template.id }}" 
+                       class="btn btn-success" 
+                       style="flex: 1; padding: 0.8rem; font-size: 0.9rem;">
+                        <i class="fas fa-plus"></i> Use Template
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div style="text-align: center; padding: 4rem 2rem; color: #666;">
+            <i class="fas fa-folder-open" style="font-size: 5rem; color: #ddd; margin-bottom: 1.5rem;"></i>
+            <h3 style="margin-bottom: 1rem; color: #555;">No templates available</h3>
+            <p style="margin-bottom: 2rem; font-size: 1.1rem;">Please contact administrator to add templates</p>
+        </div>
+    {% endif %}
+    
+    <div style="text-align: center; margin-top: 3rem;">
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
+    </div>
+</div>
+
+<style>
+.card {
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15) !important;
+}
+</style>
+{% endblock %}
+

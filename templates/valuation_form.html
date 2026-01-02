@@ -11,6 +11,40 @@
     </div>
 
     <form method="POST" enctype="multipart/form-data">
+        <!-- SECTION 0: Template Selection -->
+        <div class="card" style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); border: 2px solid var(--primary);">
+            <h3 style="margin-bottom: 1.5rem; color: var(--dark); font-size: 1.5rem; border-bottom: 2px solid var(--primary); padding-bottom: 0.5rem;">
+                <i class="fas fa-file-alt"></i> Select Report Template
+            </h3>
+            
+            <div class="form-group">
+                <label for="template_id"><i class="fas fa-palette"></i> Report Template <span style="color: var(--danger);">*</span></label>
+                <select id="template_id" name="template_id" required onchange="showTemplateInfo(this)">
+                    <option value="">-- Select a Template --</option>
+                    {% if templates %}
+                        {% for template in templates %}
+                            <option value="{{ template.id }}" 
+                                    data-description="{{ template.description }}"
+                                    {% if template.is_default %}selected{% endif %}>
+                                {{ template.name }}{% if template.is_default %} (Default){% endif %}
+                            </option>
+                        {% endfor %}
+                    {% else %}
+                        <option value="">Professional Banking Report (Default)</option>
+                    {% endif %}
+                </select>
+                <div id="template-description" style="margin-top: 10px; padding: 10px; background: white; border-left: 4px solid var(--secondary); border-radius: 5px; display: none;">
+                    <small style="color: #555;"><i class="fas fa-info-circle"></i> <span id="template-desc-text"></span></small>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                <a href="{{ url_for('list_templates') }}" class="btn btn-secondary" style="padding: 0.7rem 1.5rem; font-size: 0.9rem;" target="_blank">
+                    <i class="fas fa-eye"></i> Preview Templates
+                </a>
+            </div>
+        </div>
+
         <!-- SECTION 1: Header Information -->
         <div class="card">
             <h3 style="margin-bottom: 1.5rem; color: var(--dark); font-size: 1.5rem; border-bottom: 2px solid var(--primary); padding-bottom: 0.5rem;">
@@ -449,6 +483,29 @@
 </div>
 
 <script>
+// Show template description
+function showTemplateInfo(select) {
+    const selectedOption = select.options[select.selectedIndex];
+    const description = selectedOption.getAttribute('data-description');
+    const descBox = document.getElementById('template-description');
+    const descText = document.getElementById('template-desc-text');
+    
+    if (description) {
+        descText.textContent = description;
+        descBox.style.display = 'block';
+    } else {
+        descBox.style.display = 'none';
+    }
+}
+
+// Show default template description on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const templateSelect = document.getElementById('template_id');
+    if (templateSelect) {
+        showTemplateInfo(templateSelect);
+    }
+});
+
 // Auto-calculate plot area in sqft when sqm is entered
 document.getElementById('plot_area_sqm').addEventListener('input', function() {
     const sqm = parseFloat(this.value) || 0;

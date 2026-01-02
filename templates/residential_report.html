@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Residential Property Valuation Report</title>
+    <style>
+        @page { size: A4; margin: 1.5cm; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.4; color: #333; font-size: 10.5pt; }
+        .header { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .logo { height: 70px; margin-bottom: 10px; }
+        .company-name { font-size: 24pt; font-weight: bold; margin: 5px 0; }
+        .report-title { 
+            background: #667eea; 
+            color: white; 
+            padding: 15px; 
+            text-align: center; 
+            font-size: 18pt; 
+            font-weight: bold;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .section-title {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 10px 15px;
+            margin: 20px 0 10px 0;
+            font-size: 12pt;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+        .info-card {
+            background: #f8f9fa;
+            border-left: 5px solid #667eea;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .info-label { font-weight: bold; color: #555; }
+        .info-value { color: #000; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            font-size: 10pt;
+        }
+        th {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 10px;
+            text-align: left;
+        }
+        td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        tr:nth-child(even) { background: #f8f9fa; }
+        .value-highlight {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .value-amount {
+            font-size: 28pt;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .amenities-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .amenity-item {
+            background: #f8f9fa;
+            padding: 10px;
+            border-left: 3px solid #667eea;
+            border-radius: 3px;
+        }
+        .floor-breakdown {
+            background: #fff;
+            border: 2px solid #667eea;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .signature-section {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #667eea;
+        }
+        .signature-box {
+            width: 45%;
+            float: left;
+            margin-right: 5%;
+        }
+        .signature-line {
+            border-top: 2px solid #333;
+            margin-top: 50px;
+            padding-top: 5px;
+            text-align: center;
+        }
+        .clear { clear: both; }
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 8pt;
+            color: #777;
+            border-top: 1px solid #ddd;
+            padding: 5px 0;
+            background: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        {% if logo_base64 %}
+        <img src="{{ logo_base64 }}" alt="Logo" class="logo">
+        {% endif %}
+        <div class="company-name">Jogeshwari Consultancy</div>
+        <div style="font-size: 11pt;">PRASHANT R.PATIL (M.E.) - CONSULTING ENGINEER</div>
+        <div style="font-size: 10pt;">📞 9371218146 | ✉ jogeshwari2@yahoo.com</div>
+    </div>
+
+    <div class="report-title">🏠 RESIDENTIAL PROPERTY VALUATION REPORT</div>
+
+    <!-- Reference Information -->
+    <div class="info-card">
+        <div class="info-row">
+            <span class="info-label">Reference No:</span>
+            <span class="info-value">VAL/{{ "%04d" % valuation.id }}/{{ valuation.valuation_date.year if valuation.valuation_date else '2025' }}</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Valuation Date:</span>
+            <span class="info-value">{{ valuation.valuation_date.strftime('%d %B, %Y') if valuation.valuation_date else 'N/A' }}</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Inspection Date:</span>
+            <span class="info-value">{{ valuation.inspection_date.strftime('%d %B, %Y') if valuation.inspection_date else 'N/A' }}</span>
+        </div>
+        <div class="info-row" style="border-bottom: none;">
+            <span class="info-label">Purpose:</span>
+            <span class="info-value">{{ valuation.valuation_purpose or 'N/A' }}</span>
+        </div>
+    </div>
+
+    <!-- Client & Property Owner Details -->
+    <div class="section-title">📋 CLIENT & PROPERTY DETAILS</div>
+    <table>
+        <tr>
+            <th style="width: 40%;">Particulars</th>
+            <th style="width: 60%;">Details</th>
+        </tr>
+        <tr>
+            <td>Client Name</td>
+            <td><strong>{{ valuation.client_name or 'N/A' }}</strong></td>
+        </tr>
+        <tr>
+            <td>Property Owner</td>
+            <td><strong>{{ valuation.property_owner or 'N/A' }}</strong></td>
+        </tr>
+        <tr>
+            <td>Case/Loan Reference</td>
+            <td>{{ valuation.case_number or 'N/A' }}</td>
+        </tr>
+        <tr>
+            <td>Type of Loan</td>
+            <td>{{ valuation.loan_type or 'N/A' }}</td>
+        </tr>
+        <tr>
+            <td>Requested By</td>
+            <td>{{ valuation.valuation_requested_by or 'N/A' }}</td>
+        </tr>
+    </table>
+
+    <!-- Property Location -->
+    <div class="section-title">📍 PROPERTY LOCATION</div>
+    <div class="info-card">
+        <div style="font-size: 11pt; line-height: 1.6;">
+            <strong>Address:</strong><br>
+            {{ valuation.property_address or 'N/A' }}
+        </div>
+        <div style="margin-top: 15px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+            <div>
+                <strong>Survey/Plot No:</strong> {{ valuation.survey_number or 'N/A' }} / {{ valuation.plot_number or 'N/A' }}
+            </div>
+            <div>
+                <strong>CTS No:</strong> {{ valuation.cts_number or 'N/A' }}
+            </div>
+            <div>
+                <strong>Locality:</strong> {{ valuation.locality_classification or 'N/A' }}
+            </div>
+            <div>
+                <strong>Ownership:</strong> {{ valuation.land_ownership or 'Freehold' }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Residential Amenities & Connectivity -->
+    <div class="section-title">🚗 CONNECTIVITY & AMENITIES</div>
+    <div class="amenities-grid">
+        <div class="amenity-item">
+            <strong>🚂 Railway Station:</strong> {{ valuation.railway_distance or 'N/A' }}
+        </div>
+        <div class="amenity-item">
+            <strong>🚌 Bus Stand:</strong> {{ valuation.bus_stand_distance or 'N/A' }}
+        </div>
+        <div class="amenity-item">
+            <strong>🏥 Hospital:</strong> {{ valuation.hospital_distance or 'N/A' }}
+        </div>
+        <div class="amenity-item">
+            <strong>🏦 Bank Branch:</strong> {{ valuation.branch_distance or 'N/A' }}
+        </div>
+    </div>
+
+    <!-- Property Specifications -->
+    <div class="section-title">🏗️ RESIDENTIAL SPECIFICATIONS</div>
+    <table>
+        <tr>
+            <td><strong>Type of Property</strong></td>
+            <td>{{ valuation.property_type or 'N/A' }}</td>
+        </tr>
+        <tr>
+            <td><strong>Year of Construction</strong></td>
+            <td>{{ valuation.construction_year or 'N/A' }} (Age: {{ valuation.property_age or '0' }} years)</td>
+        </tr>
+        <tr>
+            <td><strong>Number of Floors</strong></td>
+            <td>{{ valuation.no_of_floors or '1' }}</td>
+        </tr>
+        <tr>
+            <td><strong>Present Condition</strong></td>
+            <td style="color: #27ae60; font-weight: bold;">{{ valuation.present_condition or 'Good' }}</td>
+        </tr>
+        <tr>
+            <td><strong>Construction Type</strong></td>
+            <td>{{ valuation.construction_type or 'N/A' }}</td>
+        </tr>
+        <tr>
+            <td><strong>Walls & Painting</strong></td>
+            <td>{{ valuation.walls_plaster_painting or 'N/A' }}</td>
+        </tr>
+        <tr>
+            <td><strong>Flooring</strong></td>
+            <td>{{ valuation.flooring_type or 'N/A' }}</td>
+        </tr>
+        <tr>
+            <td><strong>Doors & Windows</strong></td>
+            <td>{{ valuation.doors_windows or 'N/A' }}</td>
+        </tr>
+        <tr>
+            <td><strong>Kitchen Platform</strong></td>
+            <td>{{ valuation.kitchen_platform or 'N/A' }}</td>
+        </tr>
+        <tr>
+            <td><strong>Toilet Finishing</strong></td>
+            <td>{{ valuation.toilet_finishing or 'N/A' }}</td>
+        </tr>
+        <tr>
+            <td><strong>Electrical Fittings</strong></td>
+            <td>{{ valuation.electrical_fittings or 'N/A' }}</td>
+        </tr>
+        <tr>
+            <td><strong>Plumbing Fittings</strong></td>
+            <td>{{ valuation.plumbing_fittings or 'N/A' }}</td>
+        </tr>
+        <tr>
+            <td><strong>Compound Wall</strong></td>
+            <td>{{ 'Yes ✓' if valuation.compound_wall else 'No' }}</td>
+        </tr>
+        <tr>
+            <td><strong>Currently Occupied By</strong></td>
+            <td>{{ valuation.currently_occupied_by or 'Owner' }}</td>
+        </tr>
+    </table>
+
+    <!-- Area Breakdown -->
+    <div class="section-title">📐 AREA MEASUREMENTS</div>
+    <div class="floor-breakdown">
+        <table>
+            <tr>
+                <th>Floor</th>
+                <th style="text-align: right;">Area (sq.ft.)</th>
+            </tr>
+            <tr>
+                <td>Ground Floor</td>
+                <td style="text-align: right;">{{ "%.2f"|format(valuation.ground_floor_area) if valuation.ground_floor_area else '0.00' }}</td>
+            </tr>
+            <tr>
+                <td>First Floor</td>
+                <td style="text-align: right;">{{ "%.2f"|format(valuation.first_floor_area) if valuation.first_floor_area else '0.00' }}</td>
+            </tr>
+            <tr>
+                <td>Second Floor</td>
+                <td style="text-align: right;">{{ "%.2f"|format(valuation.second_floor_area) if valuation.second_floor_area else '0.00' }}</td>
+            </tr>
+            <tr>
+                <td>Third Floor</td>
+                <td style="text-align: right;">{{ "%.2f"|format(valuation.third_floor_area) if valuation.third_floor_area else '0.00' }}</td>
+            </tr>
+            <tr>
+                <td>Basement</td>
+                <td style="text-align: right;">{{ "%.2f"|format(valuation.basement_area) if valuation.basement_area else '0.00' }}</td>
+            </tr>
+            <tr style="background: #667eea; color: white; font-weight: bold;">
+                <td>TOTAL BUILT-UP AREA</td>
+                <td style="text-align: right;">{{ "%.2f"|format(valuation.built_up_area) if valuation.built_up_area else '0.00' }}</td>
+            </tr>
+        </table>
+        
+        <div style="margin-top: 15px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+            <div class="info-card" style="margin: 0;">
+                <strong>Plot Area:</strong> {{ "%.2f"|format(valuation.plot_area_sqft) if valuation.plot_area_sqft else '0.00' }} sq.ft.
+            </div>
+            <div class="info-card" style="margin: 0;">
+                <strong>Carpet Area:</strong> {{ "%.2f"|format(valuation.carpet_area) if valuation.carpet_area else '0.00' }} sq.ft.
+            </div>
+        </div>
+    </div>
+
+    <!-- Valuation Details -->
+    <div class="section-title">💰 VALUATION CALCULATION</div>
+    <table>
+        <tr>
+            <th>Component</th>
+            <th style="text-align: right;">Rate/Area</th>
+            <th style="text-align: right;">Value (₹)</th>
+        </tr>
+        <tr>
+            <td>Land Value</td>
+            <td style="text-align: right;">₹{{ "%.2f"|format(valuation.rate_adopted) if valuation.rate_adopted else '0' }}/sq.ft.</td>
+            <td style="text-align: right; font-family: monospace;">{{ "%.2f"|format(valuation.land_value) if valuation.land_value else '0.00' }}</td>
+        </tr>
+        <tr>
+            <td>Building Value (after depreciation)</td>
+            <td style="text-align: right;">{{ "%.2f"|format(valuation.built_up_area) if valuation.built_up_area else '0' }} sq.ft.</td>
+            <td style="text-align: right; font-family: monospace;">{{ "%.2f"|format(valuation.building_value) if valuation.building_value else '0.00' }}</td>
+        </tr>
+        <tr>
+            <td>Less: Repairs & Maintenance</td>
+            <td style="text-align: right;">-</td>
+            <td style="text-align: right; font-family: monospace;">({{ "%.2f"|format(valuation.repairs_deduction) if valuation.repairs_deduction else '0.00' }})</td>
+        </tr>
+        <tr style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; font-weight: bold; font-size: 11pt;">
+            <td><strong>TOTAL PROPERTY VALUE</strong></td>
+            <td></td>
+            <td style="text-align: right; font-family: monospace;"><strong>{{ "%.2f"|format(valuation.total_value) if valuation.total_value else '0.00' }}</strong></td>
+        </tr>
+    </table>
+
+    <!-- Value Highlight -->
+    <div class="value-highlight">
+        <div style="font-size: 12pt; opacity: 0.9;">FAIR MARKET VALUE OF RESIDENTIAL PROPERTY</div>
+        <div class="value-amount">₹ {{ "{:,.2f}".format(valuation.total_value) if valuation.total_value else '0.00' }}</div>
+        <div style="font-size: 10pt; opacity: 0.9; margin-top: 10px;">
+            Insurance Value: ₹{{ "{:,.2f}".format(valuation.insurance_value) if valuation.insurance_value else '0.00' }}<br>
+            Distress Sale Value: ₹{{ "{:,.2f}".format(valuation.distress_sale_value) if valuation.distress_sale_value else '0.00' }}
+        </div>
+    </div>
+
+    <!-- Market Analysis -->
+    <div class="section-title">📊 MARKET ANALYSIS</div>
+    <div class="amenities-grid">
+        <div class="amenity-item">
+            <strong>Market Rate Range:</strong><br>
+            ₹{{ "%.2f"|format(valuation.market_rate_min) if valuation.market_rate_min else '0' }} - 
+            ₹{{ "%.2f"|format(valuation.market_rate_max) if valuation.market_rate_max else '0' }} /sq.ft.
+        </div>
+        <div class="amenity-item">
+            <strong>Rate Adopted:</strong><br>
+            ₹{{ "%.2f"|format(valuation.rate_adopted) if valuation.rate_adopted else '0' }} /sq.ft.
+        </div>
+        <div class="amenity-item">
+            <strong>Marketability (Sale):</strong><br>
+            {{ valuation.sale_marketability or 'Good' }}
+        </div>
+        <div class="amenity-item">
+            <strong>Marketability (Lease):</strong><br>
+            {{ valuation.lease_marketability or 'Average' }}
+        </div>
+    </div>
+
+    <!-- Property Images -->
+    {% if encoded_photos %}
+    <div class="section-title">📷 PROPERTY PHOTOGRAPHS</div>
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 15px 0;">
+        {% for photo in encoded_photos %}
+        <div style="text-align: center; border: 2px solid #667eea; padding: 5px; border-radius: 5px;">
+            <img src="{{ photo }}" style="max-width: 100%; height: auto;">
+            <p style="margin-top: 5px; font-size: 9pt; color: #555;">View {{ loop.index }}</p>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Remarks -->
+    {% if valuation.additional_notes %}
+    <div class="section-title">📝 REMARKS & OBSERVATIONS</div>
+    <div class="info-card">
+        {{ valuation.additional_notes }}
+    </div>
+    {% endif %}
+
+    <!-- Declaration -->
+    <div style="margin-top: 20px; padding: 15px; background: #fff3cd; border-left: 5px solid #ffc107; border-radius: 5px; font-size: 9pt;">
+        <strong>Declaration:</strong> This valuation is based on visual inspection of the residential property. 
+        Title verification and legal due diligence to be conducted by the financial institution. 
+        No structural engineering survey has been conducted. This report is valid for {{ valuation.report_validity_days or '90' }} days 
+        from the date of inspection.
+    </div>
+
+    <!-- Signatures -->
+    <div class="signature-section">
+        <div class="signature-box">
+            <div class="signature-line">
+                <strong>Authorized Valuer</strong><br>
+                {{ current_user.username if current_user else 'PRASHANT R. PATIL' }}<br>
+                Consulting Engineer<br>
+                Registration No.: [Reg. No.]
+            </div>
+        </div>
+        <div class="signature-box">
+            <div class="signature-line">
+                <strong>Date & Stamp</strong><br>
+                {{ valuation.valuation_date.strftime('%d/%m/%Y') if valuation.valuation_date else 'N/A' }}<br>
+                Place: Jalgaon
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        Jogeshwari Consultancy | Viththal Mandir Ward, Deshmukh Building, Bhusawal 425 201 | Phone: (O) 221594 | Email: jogeshwari2@yahoo.com
+    </div>
+</body>
+</html>
+
