@@ -31,9 +31,6 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(200), nullable=False)
     valuations = db.relationship('LandValuation', backref='user', lazy=True)
 
-# Add relationship for templates
-LandValuation.template = db.relationship('ReportTemplate', backref='valuations', lazy=True)
-
 class ReportTemplate(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False, unique=True)
@@ -50,6 +47,9 @@ class LandValuation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     template_id = db.Column(db.Integer, db.ForeignKey('report_template.id'), nullable=True)
+    
+    # Relationship to template
+    template = db.relationship('ReportTemplate', backref='valuations', lazy=True)
 
     # Client/Request Information
     valuation_purpose = db.Column(db.String(200), nullable=False)
