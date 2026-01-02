@@ -359,8 +359,8 @@ def preview_template(template_id):
 @login_required
 def new_valuation():
     if request.method == 'GET':
-        # Get all active templates for selection
-        templates = ReportTemplate.query.filter_by(is_active=True).all()
+        # Get all active templates for selection, ordered by bank name
+        templates = ReportTemplate.query.filter_by(is_active=True).order_by(ReportTemplate.bank_name).all()
         return render_template('valuation_form.html', templates=templates)
     
     if request.method == 'POST':
