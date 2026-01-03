@@ -637,7 +637,6 @@
 
     <!-- Footer - First Page Only -->
     <div class="footer" style="margin-top: 3px;">
-        Register no. with CBDT / CCIT: - [66/13(Imm.Prop.)]/CAT-I/2013-14, FIV-14202, FCET, MIE.<br>
         PLANING / DESIGN / VALUER<br>
         Viththal Mandir Ward, Deshmukh Building, Bhusawal 425 201 (O) 221594 E-Mail: jogeshwari2@yahoo.com
     </div>
@@ -698,8 +697,8 @@
         </tr>
     </table>
 
-    <!-- Page Break -->
-    <div class="page-break"></div>
+    <!-- SPACING BETWEEN SECTIONS vipul lines-->
+    <div style="height: 15px;"></div>
 
     <!-- Valuation Calculation -->
     <div class="section-title">Valuation Calculation</div>
@@ -810,6 +809,9 @@
         </tr>
     </table>
 
+    <!-- SPACING BETWEEN SECTIONS vipul lines-->
+    <div style="height: 10px;"></div>
+
     <!-- Remarks -->
     {% if valuation.additional_notes %}
     <div style="margin: 3px 0; padding: 3px 5px; background: #fffde7; border-left: 2px solid #FF6B35; font-size: 7.5pt;">
@@ -817,12 +819,20 @@
     </div>
     {% endif %}
 
+    <!-- SPACING BETWEEN SECTIONS vipul lines-->
+    <div style="height: 10px;"></div>
+
     <!-- Documents Provided -->
     {% if valuation.documents_provided %}
     <div style="margin: 3px 0; font-size: 7.5pt;">
         <strong>Documents Provided:</strong> {{ valuation.documents_provided }}
     </div>
     {% endif %}
+
+    
+
+    <!-- Page Break for Declaration -->
+    <div class="page-break"></div>
 
     <!-- Technical Stage -->
     <div class="section-title">Technical Stage</div>
@@ -865,6 +875,9 @@
         </tr>
     </table>
 
+    <!-- SPACING BETWEEN SECTIONS vipul lines-->
+    <div style="height: 10px;"></div>
+
     <!-- Work Status -->
     <div class="sub-section">Work Status of the Property as on date</div>
     <table>
@@ -893,22 +906,7 @@
     </div>
     {% endif %}
 
-    <!-- Page Break for Photos -->
-    {% if encoded_photos %}
-    <div class="page-break"></div>
-    <div class="section-title">Property Photographs</div>
-    <div class="photo-grid">
-            {% for photo in encoded_photos %}
-        <div class="photo-item">
-            <img src="{{ photo }}" alt="Property Photo {{ loop.index }}">
-            <p style="margin: 1px 0; font-size: 7pt;">Photo {{ loop.index }}</p>
-                </div>
-            {% endfor %}
-    </div>
-    {% endif %}
-
-    <!-- Page Break for Declaration -->
-    <div class="page-break"></div>
+    
 
     <!-- Fair Market Value Definition -->
     <div class="declaration">
@@ -944,6 +942,24 @@
             <p>{{ valuation.vendor_name or 'Mr. Prashant Patil' }}, F-14202</p>
         </div>
     </div>
+
+
+    <!-- Page Break for Photos -->
+    {% if encoded_photos %}
+    <div class="page-break"></div>
+    <div class="section-title">Property Photographs</div>
+    <div class="photo-grid">
+            {% for photo in encoded_photos %}
+        <div class="photo-item">
+            <img src="{{ photo }}" alt="Property Photo {{ loop.index }}">
+            <p style="margin: 1px 0; font-size: 7pt;">Photo {{ loop.index }}</p>
+                </div>
+            {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Page Break for Declaration -->
+    <div class="page-break"></div>
 
 </body>
 </html>
